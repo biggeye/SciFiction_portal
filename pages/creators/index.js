@@ -15,6 +15,7 @@ import {
     useColorModeValue,
     useDisclosure,
   } from "@chakra-ui/react";
+  import { RiBriefcase2Line, RiChatVoiceLine, RiBallPenLine, RiVipCrown2Line, RiSlideshowLine } from "react-icons/ri";
   import { FaBell, FaClipboardCheck, FaRss } from "react-icons/fa";
   import { AiFillGift } from "react-icons/ai";
   import { BsGearFill } from "react-icons/bs";
@@ -105,10 +106,10 @@ import {
           aria-label="Main Navigation"
         >
           <NavItem icon={MdHome}>Home</NavItem>
-          <NavItem icon={FaRss}>Voices</NavItem>
-          <NavItem icon={HiCollection}>Avatars</NavItem>
-          <NavItem icon={FaClipboardCheck}>Scripts</NavItem>
-          <NavItem icon={HiCode} onClick={integrations.onToggle}>
+          <NavItem icon={RiChatVoiceLine}>Voices</NavItem>
+          <NavItem icon={RiVipCrown2Line}>Avatars</NavItem>
+          <NavItem icon={RiBallPenLine}>Scripts</NavItem>
+          <NavItem icon={RiBriefcase2Line} onClick={integrations.onToggle}>
             Renderings
             <Icon
               as={MdKeyboardArrowRight}
@@ -124,7 +125,7 @@ import {
               ElevenLabs
             </NavItem>
           </Collapse>
-          <NavItem icon={AiFillGift}>Social Media</NavItem>
+          <NavItem icon={RiSlideshowLine}>Social Media</NavItem>
           <NavItem icon={BsGearFill}>Settings</NavItem>
         </Flex>
       </Box>

@@ -86,7 +86,7 @@ import {
         {...props}
       >
         <Flex px="4" py="5" align="center">
-          <Logo />
+          
           <Text
             fontSize="2xl"
             ml="2"

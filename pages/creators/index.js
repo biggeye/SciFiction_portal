@@ -15,6 +15,7 @@ import {
     useColorModeValue,
     useDisclosure,
   } from "@chakra-ui/react";
+  import { RiBriefcase2Line, RiChatVoiceLine, RiBallPenLine, RiVipCrown2Line, RiSlideshowLine } from "react-icons/ri";
   import { FaBell, FaClipboardCheck, FaRss } from "react-icons/fa";
   import { AiFillGift } from "react-icons/ai";
   import { BsGearFill } from "react-icons/bs";
@@ -85,8 +86,8 @@ import {
         w="60"
         {...props}
       >
-        <Flex px="4" py="5" align="center">
-     
+        <Flex px="2" py="3" align="center">
+          
           <Text
             fontSize="2xl"
             ml="2"
@@ -94,7 +95,7 @@ import {
             _dark={{ color: "white" }}
             fontWeight="semibold"
           >
-            Choc UI
+            SciFiction
           </Text>
         </Flex>
         <Flex
@@ -105,11 +106,11 @@ import {
           aria-label="Main Navigation"
         >
           <NavItem icon={MdHome}>Home</NavItem>
-          <NavItem icon={FaRss}>Articles</NavItem>
-          <NavItem icon={HiCollection}>Collections</NavItem>
-          <NavItem icon={FaClipboardCheck}>Checklists</NavItem>
-          <NavItem icon={HiCode} onClick={integrations.onToggle}>
-            Integrations
+          <NavItem icon={RiChatVoiceLine}>Voices</NavItem>
+          <NavItem icon={RiVipCrown2Line}>Avatars</NavItem>
+          <NavItem icon={RiBallPenLine}>Scripts</NavItem>
+          <NavItem icon={RiBriefcase2Line} onClick={integrations.onToggle}>
+            Renderings
             <Icon
               as={MdKeyboardArrowRight}
               ml="auto"
@@ -117,22 +118,20 @@ import {
             />
           </NavItem>
           <Collapse in={integrations.isOpen}>
-            <NavItem pl="12" py="2">
-              Shopify
+            <NavItem pl="6" py="1">
+              D-ID
             </NavItem>
-            <NavItem pl="12" py="2">
-              Slack
-            </NavItem>
-            <NavItem pl="12" py="2">
-              Zapier
+            <NavItem pl="6" py="1">
+              ElevenLabs
             </NavItem>
           </Collapse>
-          <NavItem icon={AiFillGift}>Changelog</NavItem>
+          <NavItem icon={RiSlideshowLine}>Social Media</NavItem>
           <NavItem icon={BsGearFill}>Settings</NavItem>
         </Flex>
       </Box>
     );
     return (
+        <Layout>
       <Box as="section" bg="gray.50" _dark={{ bg: "gray.700" }} minH="100vh">
         <SidebarContent display={{ base: "none", md: "unset" }} />
         <Drawer
@@ -169,7 +168,7 @@ import {
               <InputLeftElement color="gray.500">
                 <FiSearch />
               </InputLeftElement>
-              <Input placeholder="Search for articles..." />
+              <Input placeholder="Search for assets..." />
             </InputGroup>
   
             <Flex align="center">
@@ -190,6 +189,7 @@ import {
           </Box>
         </Box>
       </Box>
+</Layout>
     );
   };
   

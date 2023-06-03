@@ -1,127 +1,162 @@
 import Layout from "../components/Layout";
-import {
-  Center,
-  Container,
-  Grid,
-  Image,
-  Flex,
-  Heading,
-  Text,
-  Stack,
-  StackDivider,
-  Icon,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import {
-  IoAnalyticsSharp,
-  IoLogoBitcoin,
-  IoSearchSharp,
-} from "react-icons/io5";
-import { ReactElement } from "react";
-import { AtSignIcon, HamburgerIcon } from "@chakra-ui/icons";
-import { useState } from "react";
-
-const Feature = ({ text, icon, iconBg }) => {
-  return (
-    <Stack direction={"row"} align={"center"}>
-      <Flex
-        w={8}
-        h={8}
-        align={"center"}
-        justify={"center"}
-        rounded={"full"}
-        bg={iconBg}
-      >
-        {icon}
-      </Flex>
-      <Text fontWeight={600}>{text}</Text>
-    </Stack>
-  );
-};
+import { chakra, Box, Icon, Image, useColorModeValue } from "@chakra-ui/react";
 
 export default function Home() {
+  const bg = useColorModeValue("white", "gray.800");
+
+  const followTwitter = () => {
+    window.open("https://twitter.com/scifiction");
+  };
+
+  const handleTweetButtonClick = () => {
+    // Replace the tweetId with the desired ID
+    const tweetId = "1664838272894353408";
+    window.open(`https://twitter.com/intent/retweet?tweet_id=${tweetId}`);
+  };
   return (
     <Layout>
-      <Container 
-      bgGradient="linear(to-b, white 0%, gray.200 40%, white 60%, white 100%)"
-      maxH="100vh"
-      maxW="100vw"
-      py={12}>
-        <Center>
-        <Grid   templateAreas={
-                `"header header"
-                  "main image"`}
-  gridTemplateColumns={'70% 30%'}
-        spacing={10} 
-        w="80vw"
-        padding="1rem">
-          <Stack spacing={4}>
-            <Text
-              textTransform={"uppercase"}
-              color={"blue.400"}
-              fontWeight={600}
-              fontSize={"sm"}
-              bg={useColorModeValue("blue.50", "blue.900")}
-              p={2}
-              alignSelf={"flex-start"}
-              rounded={"md"}
-            >
-              Giveaway Contest
-            </Text>
-            <Heading>$25 STEAM Gift Card Giveaway!</Heading>
-            <Text color={"gray.500"} fontSize={"lg"}>
-              🚀🎮 SciFiction Giveaway Alert! 🎉
-            </Text>
-            <Stack
-              spacing={4}
-              divider={
-                <StackDivider
-                  borderColor={useColorModeValue("gray.100", "gray.700")}
-                />
-              }
-            >
-              <Text>
-                <h3><b>Requirements:</b></h3>
-                          <ol>
-                  <li>Follow <a href="https://twitter.com/SciFiction?s=20">@scifiction</a> on Twitter</li>
-                  <li>
-                    Re-Tweet the <a href="https://twitter.com/SciFiction/status/1664838272894353408?s=20">message contest</a>, make sure to tag
-                    **@scifiction** and at least **5** of your friends!
-                  </li>
-                </ol>
-                </Text>
-                <Text>
-                <aside>
-                  💡 You now have a chance to WIN a $25 Steam gift card! 🎁
-                </aside>
-                   <h2>
-                  🌌 Explore limitless gaming possibilities fueled by your
-                  passion for science fiction. Don't miss out on this incredible
-                  opportunity!
-                </h2>
-                </Text>
-                <Text>
-                <code>📆 Contest ends on Friday, June 9th.</code>
-                <code>#SciFictionGiveaway #Gaming #Steam</code>
-              </Text>
-            </Stack>
-          </Stack>
-          <Flex>
-            <Image
-              rounded={"md"}
-              alt={"feature image"}
-              src={
-                "/contest_vertical.png"
-              }
-              objectFit={"cover"}
-              maxH="50vh"
+      <Box pos="relative" overflow="hidden" bg={bg}>
+        <Box maxW="7xl" mx="auto">
+          <Box
+            pos="relative"
+            pb={{ base: 8, sm: 16, md: 20, lg: 28, xl: 32 }}
+            maxW={{ lg: "2xl" }}
+            w={{ lg: "full" }}
+            zIndex={1}
+            bg={bg}
+            border="solid 1px transparent"
+          >
+            <Icon
               display={{ base: "none", lg: "block" }}
-            />
-          </Flex>
-        </Grid>
-        </Center>
+              position="absolute"
+              right={0}
+              top={0}
+              bottom={0}
+              h="full"
+              w={48}
+              color={bg}
+              transform="translateX(50%)"
+              fill="currentColor"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <polygon points="50,0 100,0 50,100 0,100" />
+            </Icon>
+            <Box
+              mx="auto"
+              maxW={{ base: "7xl" }}
+              px={{ base: 4, sm: 6, lg: 8 }}
+              mt={{ base: 10, sm: 12, md: 16, lg: 20, xl: 28 }}
+            >
+              <Box
+                w="full"
+                textAlign={{ sm: "center", lg: "left" }}
+                justifyContent="center"
+                alignItems="center"
+              >
+                <chakra.h1
+                  fontSize={{ base: "3xl", sm: "4xl", md: "5xl" }}
+                  letterSpacing="tight"
+                  lineHeight="short"
+                  fontWeight="bold"
+                  color="gray.900"
+                  _dark={{ color: "white" }}
+                >
+                  <chakra.span display={{ base: "block", xl: "inline" }}>
+                    STEAM Gift Card {" "}
+                  </chakra.span>
+                  <chakra.span
+                    display={{ base: "block", xl: "inline" }}
+                    color="brand.600"
+                    _dark={{ color: "brand.400" }}
+                  >
+                    give-away alert!
+                                      </chakra.span>
+                </chakra.h1>
+                <chakra.p
+                  mt={{ base: 3, sm: 5, md: 5 }}
+                  fontSize={{ sm: "lg", md: "xl" }}
+                  maxW={{ sm: "xl" }}
+                  mx={{ sm: "auto", lg: 0 }}
+                  color="gray.500"
+                >
+                  Friday June 9th, the winner of a $25 STEAM Gift Card will be
+                  announced!
+                  <br />
+                  To enter the contest, simply:
+                </chakra.p>
+                <Box
+                  mt={{ base: 5, sm: 8 }}
+                  display={{ sm: "flex" }}
+                  justifyContent={{ sm: "center", lg: "start" }}
+                  fontWeight="extrabold"
+                  fontFamily="fantasy"
+                >
+                  <Box rounded="full" shadow="md">
+                    <chakra.a
+                      w="full"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      border="solid 1px transparent"
+                      fontSize={{ base: "md", md: "lg" }}
+                      rounded="md"
+                      color="white"
+                      bg="brand.600"
+                      _hover={{ bg: "brand.700" }}
+                      px={{ base: 8, md: 10 }}
+                      py={{ base: 3, md: 4 }}
+                      cursor="pointer"
+                      onClick={followTwitter}
+                    >
+                      Follow @SciFiction!
+                    </chakra.a>
+                  </Box>
+                  <Box mt={[3, 0]} ml={[null, 3]}>
+                    <chakra.a
+                      w="full"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      px={{ base: 8, md: 10 }}
+                      py={{ base: 3, md: 4 }}
+                      border="solid 1px transparent"
+                      fontSize={{ base: "md", md: "lg" }}
+                      rounded="md"
+                      color="brand.700"
+                      bg="brand.100"
+                      _hover={{ bg: "brand.200" }}
+                      cursor="pointer"
+                      onClick={handleTweetButtonClick}
+                    >
+                      Re-Tweet!
+                    </chakra.a>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
 
-      </Container>
+      <Box
+        position={{ lg: "absolute" }}
+        top={{ lg: 0 }}
+        bottom={{ lg: 0 }}
+        right={{ lg: 0 }}
+        w={{ lg: "50%" }}
+        border="solid 1px transparent"
+      >
+        <Image
+          h={["full"]}
+          w="full"
+          fit="cover"
+          src="https://promo.scifiction.com/contest_vertical.png"
+          alt=""
+          loading="lazy"
+        />
+      </Box>
     </Layout>
   );
 }

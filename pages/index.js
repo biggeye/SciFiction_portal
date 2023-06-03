@@ -83,9 +83,9 @@ export default function Home() {
               <Text>
                 <h3><b>Requirements:</b></h3>
                           <ol>
-                  <li>Follow **@scifiction** on Twitter</li>
+                  <li>Follow <a href="https://twitter.com/SciFiction?s=20">@scifiction</a> on Twitter</li>
                   <li>
-                    Re-Tweet the message contest, make sure to tag
+                    Re-Tweet the <a href="https://twitter.com/SciFiction/status/1664838272894353408?s=20">message contest</a>, make sure to tag
                     **@scifiction** and at least **5** of your friends!
                   </li>
                 </ol>

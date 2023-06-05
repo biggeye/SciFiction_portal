@@ -48,7 +48,7 @@ export default function Voices() {
 
   const fetchYourData = async () => {
     const response = await axios.get(
-      "http://localhost:5000/api/xilabs/get_voices"
+      "https://flask-vercel-silk.vercel/api/xilabs/get_voices"
     );
     const voices = response.data.voices;
 

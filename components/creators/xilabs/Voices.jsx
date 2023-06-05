@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import {
   ButtonGroup,
   Flex,
@@ -10,20 +11,80 @@ import {
   Thead,
   Tr,
   useColorModeValue,
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
+  Textarea,
+  Spacer,
 } from "@chakra-ui/react";
 import { AiFillEdit } from "react-icons/ai";
 import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
+import axios from "axios";
 
-export default function ContentHistory(){
-  const header = ["name", "created", "actions"];
-  const data = [
-    { name: "Daggy", created: "7 days ago" },
-    { name: "Anubra", created: "23 hours ago" },
-    { name: "Josef", created: "A few seconds ago" },
-    { name: "Sage", created: "A few hours ago" },
-  ];
+export default function Voices() {
+  const [currentName, setCurrentName] = useState("");
+  const [currentVoiceId, setCurrentVoiceId] = useState("");
+  const [script, setScript] = useState("");
+  const header = ["Name", "Voice ID", "Preview", "Actions"];
+  const [data, setData] = useState([]);
   const color1 = useColorModeValue("gray.400", "gray.400");
   const color2 = useColorModeValue("gray.400", "gray.400");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
+
+  const sizes = ["xs", "sm", "md", "lg", "xl", "full"];
+
+  useEffect(() => {
+    fetchYourData().then((fetchedData) => {
+      setData(fetchedData);
+    });
+  }, []);
+
+  const fetchYourData = async () => {
+    const response = await axios.get(
+      "http://localhost:5000/api/xilabs/get_voices"
+    );
+    const voices = response.data.voices;
+
+    const tableData = voices.map((voice) => ({
+      name: voice.name,
+      voice_id: voice.voice_id,
+      preview_url: voice.preview_url,
+    }));
+
+    return tableData;
+  };
+
+  const handleFormInputChange = (e) => {
+    setScript(e.target.value);
+  };
+
+  const createTTS = async (event) => {
+    event.preventDefault();
+    const voice_id = currentVoiceId;
+    const data = {
+      voice_id: voice_id,
+      script: script,
+    };
+    
+    const response = await axios.post(
+      "http://localhost:5000/api/xilabs/tts",
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    );
+     
+    
+  };
 
   return (
     <Flex
@@ -149,17 +210,11 @@ export default function ContentHistory(){
                       colorScheme="blue"
                       icon={<BsBoxArrowUpRight />}
                       aria-label="Up"
-                    />
-                    <IconButton
-                      colorScheme="green"
-                      icon={<AiFillEdit />}
-                      aria-label="Edit"
-                    />
-                    <IconButton
-                      colorScheme="red"
-                      variant="outline"
-                      icon={<BsFillTrashFill />}
-                      aria-label="Delete"
+                      onClick={() => {
+                        setCurrentName(token["name"]);
+                        setCurrentVoiceId(token["voice_id"]);
+                        onOpen();
+                      }}
                     />
                   </ButtonGroup>
                 </Td>
@@ -168,6 +223,42 @@ export default function ContentHistory(){
           })}
         </Tbody>
       </Table>
+      <Drawer
+        size={sizes}
+        isOpen={isOpen}
+        placement="right"
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay />
+        <form id="TTS" onSubmit={createTTS}>
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>{currentName}</DrawerHeader>
+
+            <DrawerBody>
+              <Flex>
+                <Textarea
+                  h="100%"
+                  rows="auto"
+                  placeholder="Type or paste the script here"
+                  name="script"
+                  onChange={handleFormInputChange}
+                />
+              </Flex>
+            </DrawerBody>
+
+            <DrawerFooter>
+              <Button variant="outline" mr={3} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button type="submit" colorScheme="blue">
+                Generate Voiceover
+              </Button>
+            </DrawerFooter>
+          </DrawerContent>
+        </form>
+      </Drawer>
     </Flex>
   );
-};
+}

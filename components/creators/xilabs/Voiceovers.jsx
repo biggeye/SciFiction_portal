@@ -43,7 +43,7 @@ export default function Voiceovers() {
   }, []);
 
   const fetchYourData = async () => {
-    const response = await axios.get("http://localhost:5000/api/xilabs/get_history");
+    const response = await axios.get("https://flask-vercel-silk.vercel/api/xilabs/get_history");
     const voiceovers = response.data;
   
     const tableData = voiceovers.map((vo) => ({

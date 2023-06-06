@@ -16,7 +16,7 @@ import { RiCloseCircleLine, RiDownloadCloud2Line } from "react-icons/ri";
 import axios from "axios";
 import sliceWords from "../../../utils/sliceWords";
 import convertDate from "../../../utils/convertDate";
-import { downloadFile } from "../../../utils/downloadFile.js";
+import { downloadFile } from "../../../utils/downloadFile";
 
 export default function Voiceovers() {
   const [data, setData] = useState([]);
@@ -49,37 +49,34 @@ export default function Voiceovers() {
   };
 
   const downloadRow = async (voiceoverId) => {
-    const voData = { voiceover_id: voiceoverId };
+    const voData = { "voiceoverId": voiceoverId };
     const response = await axios.post(
       "https://flask-vercel-silk.vercel.app/api/xilabs/download_voiceover",
-      voData,
-      { responseType: "blob" } // Set the response type to "blob" to receive the audio file as a Blob
-    );
-  
+      voData);
+    console.log(response);
     const filename = "audio.mp3"; // Set the desired filename for the downloaded audio file
-  
-    downloadFile(response.data, filename);
-  };
-  
 
-  
+  downloadFile(response, filename);
+  };
   
   const deleteRow = async (voiceoverId) => {
-    try {
-      const response = await axios.delete(
-        `https://api.elevenlabs.io/v1/history/${voiceoverId}`,
-        {
-          headers: {
-            Accept: "audio/json",
-            "xi-api-key": apiKey,
-          },
-        }
-      );
-      console.log(response);
-    } catch (error) {
-      console.error(error);
+    const voData = { voiceoverId: voiceoverId };
+    const response = await axios.post(
+      "https://flask-vercel-silk.vercel.app/api/xilabs/delete_voiceover",
+      voData
+    );
+    console.log(response);
+    if (response.status === 200) {
+      window.alert("Voiceover Deleted.");
+      fetchYourData().then((fetchedData) => {
+        setData(fetchedData);
+      });
+    } else {
+      window.alert("Something went wrong.");
     }
   };
+  
+  
   
 
   return (

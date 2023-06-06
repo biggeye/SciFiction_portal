@@ -16,9 +16,9 @@ import { RiCloseCircleLine, RiDownloadCloud2Line } from "react-icons/ri";
 import axios from "axios";
 import sliceWords from "../../../utils/sliceWords";
 import convertDate from "../../../utils/convertDate";
+import { downloadFile } from "../../../utils/downloadFile.js";
 
 export default function Voiceovers() {
-  const [currentVoiceover, setCurrentVoiceover] = useState("");
   const [data, setData] = useState([]);
   const header = ["Voice", "Date", "Script", "Actions"];
   const color1 = useColorModeValue("gray.400", "gray.400");
@@ -49,19 +49,20 @@ export default function Voiceovers() {
   };
 
   const downloadRow = async (voiceoverId) => {
+    const voData = { voiceover_id: voiceoverId };
     const response = await axios.post(
-      "https://api.elevenlabs.io/v1/history/download",
-      {
-      headers: {
-        "xi-api-key": apiKey,
-      },
-        "history_item_ids": [
-         voiceoverId
-        ]
-      }
-      );
-    console.log(response);
+      "https://flask-vercel-silk.vercel.app/api/xilabs/download_voiceover",
+      voData,
+      { responseType: "blob" } // Set the response type to "blob" to receive the audio file as a Blob
+    );
+  
+    const filename = "audio.mp3"; // Set the desired filename for the downloaded audio file
+  
+    downloadFile(response.data, filename);
   };
+  
+
+  
   
   const deleteRow = async (voiceoverId) => {
     try {

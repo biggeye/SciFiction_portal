@@ -77,50 +77,6 @@ def create_new_voice():
     response = requests.post(url, headers=headers, data=data, files=files)
     return jsonify(response.json())
 
-
-@app.route('/api/xilabs/edit_settings', methods=['POST'])
-def edit_settings():
-    xi_api_key = api_key
-    url = "https://api.elevenlabs.io/v1/voices/<voice-id>/settings/edit"
-
-    headers = {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "xi-api-key": "<xi-api-key>"
-    }
-
-    data = {
-        "stability": 0.5,
-        "similarity_boost": 0.5
-    }
-
-    response = requests.post(url, json=data, headers=headers)
-
-@app.route('/api/xilabs/edit_voice', methods=['POST'])
-def edit_voice():
-    xi_api_key = api_key
-
-
-    url = "https://api.elevenlabs.io/v1/voices/<voice-id>/edit"
-
-    headers = {
-        "Accept": "application/json",
-        "xi-api-key": "<xi-api-key>"
-    }
-
-    data = {
-        'name': 'Voice New name',
-        'labels': '{"accent": "British"}',
-        'description': 'Voice description'
-    }
-
-    files = [
-        ('files', ('sample1.mp3', open('sample1.mp3', 'rb'), 'audio/mpeg')),
-        ('files', ('sample2.mp3', open('sample2.mp3', 'rb'), 'audio/mpeg'))
-    ]
-
-    response = requests.post(url, headers=headers, data=data, files=files)
-
 @app.route('/api/xilabs/get_voices', methods=['GET'])
 def get_voices():
     xi_api_key = api_key
@@ -174,26 +130,41 @@ def get_history():
 
     return jsonify(history)
 
-@app.route('/api/xilabs/download_voiceover/', methods=['GET'])
-def download_voiceover(voiceover_id):
+@app.route('/api/xilabs/download_voiceover/', methods=['POST'])
+def download_history_items(history_item_ids):
     url = "https://api.elevenlabs.io/v1/history/download"
+    
+    headers = {
+        "xi-api-key": api_key,
+        "Content-Type": "application/json"
+    }
+    
+    data = {
+        "history_item_ids": history_item_ids
+    }
+    
+    response = requests.post(url, json=data, headers=headers)
+    
+    if response.status_code == 200:
+        # Save the downloaded file or process the response as needed
+        content = response.content
+        # ... your code to save the content or handle the response
+    else:
+        print("Download failed with status code:", response.status_code)
+        print(response.text)
+
+
+@app.route('/api/xilabs/delete_voiceover/', methods=['DELETE'])
+def delete_voiceover(voiceover_id):
+    voiceover_id = request.json.get("voiceover_id")
+    url = f'https://api.elevenlabs.io/v1/history/{voiceover_id}'
 
     headers = {
-        "Accept": "*/*",
-        "Content-Type": "application/json",
+        "Accept": "audio/json",
         "xi-api-key": xi_api_key
     }
 
-    data = {
-        "history_item_ids": [
-           voiceover_id
-        ]
-    }
-
-    response = requests.post(url, json=data, headers=headers)
-    return response.content, response.status_code
-
-
+    response = requests.delete(url, headers=headers)
 
 
 if __name__ == '__main__':

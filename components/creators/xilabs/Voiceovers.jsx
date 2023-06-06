@@ -11,20 +11,8 @@ import {
   Thead,
   Tr,
   useColorModeValue,
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
-  Textarea,
-  Spacer,
 } from "@chakra-ui/react";
-import { AiFillEdit } from "react-icons/ai";
-import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
+import { RiCloseCircleLine, RiDownloadCloud2Line } from "react-icons/ri";
 import axios from "axios";
 import sliceWords from "../../../utils/sliceWords";
 import convertDate from "../../../utils/convertDate";
@@ -36,6 +24,8 @@ export default function Voiceovers() {
   const color1 = useColorModeValue("gray.400", "gray.400");
   const color2 = useColorModeValue("gray.400", "gray.400");
 
+  const apiKey = process.env.XI_API_KEY;
+
   useEffect(() => {
     fetchYourData().then((fetchedData) => {
       setData(fetchedData);
@@ -43,20 +33,54 @@ export default function Voiceovers() {
   }, []);
 
   const fetchYourData = async () => {
-    const response = await axios.get("https://flask-vercel-silk.vercel/api/xilabs/get_history");
+    const response = await axios.get(
+      "https://flask-vercel-silk.vercel.app/api/xilabs/get_history"
+    );
     const voiceovers = response.data;
-  
+
     const tableData = voiceovers.map((vo) => ({
       voice: vo.voice_name,
       date: convertDate(vo.date_unix),
       script: sliceWords(vo.text),
-      voiceover_id: null, // Set voiceover_id to null initially
+      voiceover_id: vo.history_item_id,
     }));
-  
+
     return tableData;
   };
+
+  const downloadRow = async (voiceoverId) => {
+    const response = await axios.post(
+      "https://api.elevenlabs.io/v1/history/download",
+      {
+      headers: {
+        "xi-api-key": apiKey,
+      },
+        "history_item_ids": [
+         voiceoverId
+        ]
+      }
+      );
+    console.log(response);
+  };
   
+  const deleteRow = async (voiceoverId) => {
+    try {
+      const response = await axios.delete(
+        `https://api.elevenlabs.io/v1/history/${voiceoverId}`,
+        {
+          headers: {
+            Accept: "audio/json",
+            "xi-api-key": apiKey,
+          },
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   
+
   return (
     <Flex
       w="full"
@@ -108,24 +132,22 @@ export default function Voiceovers() {
             },
           }}
         >
-       {data.map((token, tid) => {
-  return (
-    <Tr
-      key={tid}
-      display={{
-        base: "grid",
-        md: "table-row",
-      }}
-      sx={{
-        "@media print": {
-          display: "table-row",
-        },
-        gridTemplateColumns: "minmax(0px, 35%) minmax(0px, 65%)",
-        gridGap: "10px",
-      }}
-      onClick={() => handleRowSelect(token.voiceover_id)} // Pass voiceover_id as a prop when row is selected
-    >
-
+          {data.map((token, tid) => {
+            return (
+              <Tr
+                key={tid}
+                display={{
+                  base: "grid",
+                  md: "table-row",
+                }}
+                sx={{
+                  "@media print": {
+                    display: "table-row",
+                  },
+                  gridTemplateColumns: "minmax(0px, 35%) minmax(0px, 65%)",
+                  gridGap: "10px",
+                }}
+              >
                 {Object.keys(token).map((x) => {
                   return (
                     <React.Fragment key={`${tid}${x}`}>
@@ -181,13 +203,15 @@ export default function Voiceovers() {
                   <ButtonGroup variant="solid" size="sm" spacing={3}>
                     <IconButton
                       colorScheme="blue"
-                      icon={<BsBoxArrowUpRight />}
+                      icon={<RiDownloadCloud2Line />}
                       aria-label="Up"
-                      onClick={() => {
-                        setCurrentName(token["name"]);
-                        setCurrentVoiceId(token["voice_id"]);
-                        onOpen();
-                      }}
+                      onClick={() => downloadRow(token["voiceover_id"])}
+                    />
+                    <IconButton
+                      colorScheme="red"
+                      icon={<RiCloseCircleLine />}
+                      aria-label="Up"
+                      onClick={() => deleteRow(token["voiceover_id"])}
                     />
                   </ButtonGroup>
                 </Td>
@@ -196,7 +220,6 @@ export default function Voiceovers() {
           })}
         </Tbody>
       </Table>
-     
     </Flex>
   );
 }

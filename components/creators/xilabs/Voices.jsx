@@ -38,7 +38,7 @@ export default function Voices() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
 
-  const sizes = ["xs", "sm", "md", "lg", "xl", "full"];
+  const sizes = ["xs", "sm", "md", "lg", "xl"];
 
   useEffect(() => {
     fetchYourData().then((fetchedData) => {
@@ -48,7 +48,7 @@ export default function Voices() {
 
   const fetchYourData = async () => {
     const response = await axios.get(
-      "https://flask-vercel-silk.vercel/api/xilabs/get_voices"
+      "https://flask-vercel-silk.vercel.app/api/xilabs/get_voices"
     );
     const voices = response.data.voices;
 
@@ -74,7 +74,7 @@ export default function Voices() {
     };
     
     const response = await axios.post(
-      "http://localhost:5000/api/xilabs/tts",
+      "https://flask-vercel-silk.vercel.app/api/xilabs/tts",
       data,
       {
         headers: {

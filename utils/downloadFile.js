@@ -1,5 +1,14 @@
 function downloadFile(data, filename) {
-    const blob = new Blob([data], { type: "audio/mpeg" });
+
+      const decodedData = atob(data);
+
+      const uint8Array = new Uint8Array(decodedData.length);
+
+      for (let i = 0; i < decodedData.length; i++) {
+        uint8Array[i] = decodedData.charCodeAt(i);
+      }
+  
+      const blob = new Blob([uint8Array], { type: "audio/mpeg" });
   
     if (typeof window.navigator.msSaveBlob !== "undefined") {
       // For Internet Explorer and Edge

@@ -53,10 +53,10 @@ export default function Voiceovers() {
     const response = await axios.post(
       "https://flask-vercel-silk.vercel.app/api/xilabs/download_voiceover",
       voData);
-    console.log(response);
-    const filename = "audio.mp3"; // Set the desired filename for the downloaded audio file
+     console.log(response);
+     const filename = "voiceover.mp3"; // Set the desired filename for the downloaded audio file
 
-  downloadFile(response, filename);
+     downloadFile(response.data, filename);
   };
   
   const deleteRow = async (voiceoverId) => {

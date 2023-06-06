@@ -21,12 +21,12 @@ import {
         minH={'100vh'}
         align={'center'}
         justify={'center'}
-        bg={useColorModeValue('gray.50', 'gray.800')}>
+        bg={useColorModeValue('brand.50', 'brand.800')}>
         <Stack
           spacing={4}
           w={'full'}
           maxW={'md'}
-          bg={useColorModeValue('white', 'gray.700')}
+          bg={useColorModeValue('white', 'brand.700')}
           rounded={'xl'}
           boxShadow={'lg'}
           p={6}
@@ -59,7 +59,7 @@ import {
             <FormLabel>User name</FormLabel>
             <Input
               placeholder="UserName"
-              _placeholder={{ color: 'gray.500' }}
+              _placeholder={{ color: 'brand.500' }}
               type="text"
             />
           </FormControl>
@@ -67,7 +67,7 @@ import {
             <FormLabel>Email address</FormLabel>
             <Input
               placeholder="your-email@example.com"
-              _placeholder={{ color: 'gray.500' }}
+              _placeholder={{ color: 'brand.500' }}
               type="email"
             />
           </FormControl>
@@ -75,7 +75,7 @@ import {
             <FormLabel>Password</FormLabel>
             <Input
               placeholder="password"
-              _placeholder={{ color: 'gray.500' }}
+              _placeholder={{ color: 'brand.500' }}
               type="password"
             />
           </FormControl>

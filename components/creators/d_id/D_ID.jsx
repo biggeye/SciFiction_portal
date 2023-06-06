@@ -22,8 +22,8 @@ export default function D_ID(){
     { name: "Josef", created: "A few seconds ago" },
     { name: "Sage", created: "A few hours ago" },
   ];
-  const color1 = useColorModeValue("gray.400", "gray.400");
-  const color2 = useColorModeValue("gray.400", "gray.400");
+  const color1 = useColorModeValue("brand.400", "brand.400");
+  const color2 = useColorModeValue("brand.400", "brand.400");
 
   return (
     <Flex
@@ -37,7 +37,7 @@ export default function D_ID(){
       <Table
         w="full"
         bg="white"
-        _dark={{ bg: "gray.800" }}
+        _dark={{ bg: "brand.800" }}
         display={{
           base: "block",
           md: "table",
@@ -115,7 +115,7 @@ export default function D_ID(){
                         {x}
                       </Td>
                       <Td
-                        color={"gray.500"}
+                        color={"brand.500"}
                         fontSize="md"
                         fontWeight="hairline"
                       >

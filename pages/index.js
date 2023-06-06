@@ -2,7 +2,7 @@ import Layout from "../components/Layout";
 import { chakra, Box, Icon, Image, useColorModeValue } from "@chakra-ui/react";
 
 export default function Home() {
-  const bg = useColorModeValue("white", "gray.800");
+  const bg = useColorModeValue("white", "brand.800");
 
   const followTwitter = () => {
     window.open("https://twitter.com/scifiction");
@@ -60,7 +60,7 @@ export default function Home() {
                   letterSpacing="tight"
                   lineHeight="short"
                   fontWeight="bold"
-                  color="gray.900"
+                  color="brand.900"
                   _dark={{ color: "white" }}
                 >
                   <chakra.span display={{ base: "block", xl: "inline" }}>
@@ -79,7 +79,7 @@ export default function Home() {
                   fontSize={{ sm: "lg", md: "xl" }}
                   maxW={{ sm: "xl" }}
                   mx={{ sm: "auto", lg: 0 }}
-                  color="gray.500"
+                  color="brand.500"
                 >
                   Friday June 9th, the winner of a $25 STEAM Gift Card will be
                   announced!

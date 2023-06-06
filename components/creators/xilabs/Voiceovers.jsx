@@ -1,18 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import {
-  ButtonGroup,
+  Box,
   Flex,
   IconButton,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
+  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { RiCloseCircleLine, RiDownloadCloud2Line } from "react-icons/ri";
+import { RiCloseCircleLine, RiDownloadCloud2Line, RiPlayCircleLine } from "react-icons/ri";
 import axios from "axios";
 import sliceWords from "../../../utils/sliceWords";
 import convertDate from "../../../utils/convertDate";
@@ -20,12 +15,7 @@ import { downloadFile } from "../../../utils/downloadFile";
 
 export default function Voiceovers() {
   const [data, setData] = useState([]);
-  const header = ["Voice", "Date", "Script", "Actions"];
-  const color1 = useColorModeValue("gray.400", "gray.400");
-  const color2 = useColorModeValue("gray.400", "gray.400");
-
-  const apiKey = process.env.XI_API_KEY;
-
+  
   useEffect(() => {
     fetchYourData().then((fetchedData) => {
       setData(fetchedData);
@@ -47,6 +37,20 @@ export default function Voiceovers() {
 
     return tableData;
   };
+
+const playRow = async (voiceover_id) => {
+  const xiApiKey = process.env.XI_API_KEY;
+
+  const playAudio = await axios.get(`"https://api.elevenlabs.io/v1/history${voiceover_id}/audio"`,
+  {
+    headers: {
+      "xi-api-key": xiApiKey,
+    },
+  }
+  );
+  return playAudio;
+};
+
 
   const downloadRow = async (voiceoverId) => {
     const voData = { "voiceoverId": voiceoverId };
@@ -88,137 +92,54 @@ export default function Voiceovers() {
       p={50}
       alignItems="center"
       justifyContent="center"
+      flexWrap="wrap"
+    >  {data.map((token, tid) => (
+      <Box
+      key={tid}
+      bg="white"
+      _dark={{ bg: "brand.800" }}
+      m={4} // some margin for separation
+      borderRadius="md" // rounded corners
+      overflow="hidden" // keep child boundaries within card
+      boxShadow="sm" // small shadow for 3D effect
+      textAlign="center"
     >
-      <Table
-        w="full"
-        bg="white"
-        _dark={{ bg: "gray.800" }}
-        display={{
-          base: "block",
-          md: "table",
-        }}
-        sx={{
-          "@media print": {
-            display: "table",
-          },
-        }}
-      >
-        <Thead
-          display={{
-            base: "none",
-            md: "table-header-group",
-          }}
-          sx={{
-            "@media print": {
-              display: "table-header-group",
-            },
-          }}
-        >
-          <Tr>
-            {header.map((x) => (
-              <Th key={x}>{x}</Th>
-            ))}
-          </Tr>
-        </Thead>
-        <Tbody
-          display={{
-            base: "block",
-            lg: "table-row-group",
-          }}
-          sx={{
-            "@media print": {
-              display: "table-row-group",
-            },
-          }}
-        >
-          {data.map((token, tid) => {
+        <Box p={4}>
+          {Object.keys(token).map((x) => {
+            if (x === "voiceover_id" || x === "script") return null;
+  
             return (
-              <Tr
-                key={tid}
-                display={{
-                  base: "grid",
-                  md: "table-row",
-                }}
-                sx={{
-                  "@media print": {
-                    display: "table-row",
-                  },
-                  gridTemplateColumns: "minmax(0px, 35%) minmax(0px, 65%)",
-                  gridGap: "10px",
-                }}
-              >
-                {Object.keys(token).map((x) => {
-                  return (
-                    <React.Fragment key={`${tid}${x}`}>
-                      <Td
-                        display={{
-                          base: "table-cell",
-                          md: "none",
-                        }}
-                        sx={{
-                          "@media print": {
-                            display: "none",
-                          },
-                          textTransform: "uppercase",
-                          color: color1,
-                          fontSize: "xs",
-                          fontWeight: "bold",
-                          letterSpacing: "wider",
-                          fontFamily: "heading",
-                        }}
-                      >
-                        {x}
-                      </Td>
-                      <Td
-                        color={"gray.500"}
-                        fontSize="md"
-                        fontWeight="hairline"
-                      >
-                        {token[x]}
-                      </Td>
-                    </React.Fragment>
-                  );
-                })}
-                <Td
-                  display={{
-                    base: "table-cell",
-                    md: "none",
-                  }}
-                  sx={{
-                    "@media print": {
-                      display: "none",
-                    },
-                    textTransform: "uppercase",
-                    color: color2,
-                    fontSize: "xs",
-                    fontWeight: "bold",
-                    letterSpacing: "wider",
-                    fontFamily: "heading",
-                  }}
-                >
-                  Actions
-                </Td>
-                <Td>
-                  <ButtonGroup variant="solid" size="sm" spacing={3}>
-                    <IconButton
-                      colorScheme="blue"
-                      icon={<RiDownloadCloud2Line />}
-                      aria-label="Up"
-                      onClick={() => downloadRow(token["voiceover_id"])}
-                    />
-                    <IconButton
-                      colorScheme="red"
-                      icon={<RiCloseCircleLine />}
-                      aria-label="Up"
-                      onClick={() => deleteRow(token["voiceover_id"])}
-                    />
-                  </ButtonGroup>
-                </Td>
-              </Tr>
+              <Text size="xs" key={`${tid}${x}`}>
+                <b>{x}: </b>{token[x]}
+              </Text>
             );
           })}
-        </Tbody>
-      </Table>
+        </Box>
+  
+        <Flex justifyContent="flex-end" p={1}>
+          <IconButton
+          size="xs"
+          colorScheme="green"
+          icon={<RiPlayCircleLine />}
+          />
+          <IconButton
+            size="xs"
+            colorScheme="blue"
+            icon={<RiDownloadCloud2Line />}
+            aria-label="Up"
+            onClick={() => downloadRow(token["voiceover_id"])}
+          />
+          <IconButton
+            size="xs"
+            colorScheme="red"
+            icon={<RiCloseCircleLine />}
+            aria-label="Up"
+            onClick={() => deleteRow(token["voiceover_id"])}
+          />
+        </Flex>
+      </Box>
+    ))}
+  
     </Flex>
   );
 }

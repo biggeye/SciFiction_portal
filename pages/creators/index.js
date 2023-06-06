@@ -1,3 +1,11 @@
+import React from "react";
+import {
+  RiBriefcase2Line,
+  RiChatVoiceLine,
+  RiBallPenLine,
+  RiVipCrown2Line,
+  RiSlideshowLine,
+} from "react-icons/ri";
 import {
   Avatar,
   Box,
@@ -6,6 +14,7 @@ import {
   DrawerContent,
   DrawerOverlay,
   Flex,
+  Image,
   Icon,
   IconButton,
   Input,
@@ -15,35 +24,24 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-
-import {
-  RiBriefcase2Line,
-  RiChatVoiceLine,
-  RiBallPenLine,
-  RiVipCrown2Line,
-  RiSlideshowLine,
-} from "react-icons/ri";
 import { FaBell, FaClipboardCheck, FaRss } from "react-icons/fa";
-import { AiFillGift } from "react-icons/ai";
 import { BsGearFill } from "react-icons/bs";
 import { FiMenu, FiSearch } from "react-icons/fi";
-import { HiCode, HiCollection } from "react-icons/hi";
 import { MdHome, MdKeyboardArrowRight } from "react-icons/md";
 
-import D_ID from "../../components/creators/D_ID";
+import D_ID from "../../components/creators/d_id/D_ID";
 import Voices from "../../components/creators/xilabs/Voices";
 import Voiceovers from "../../components/creators/xilabs/Voiceovers";
-import React from "react";
+
 import { useState } from "react";
 import Layout from "../../components/Layout";
 
 export default function creators() {
   const sidebar = useDisclosure();
   const integrations = useDisclosure();
-  const color = useColorModeValue("gray.600", "gray.300");
+  const color = useColorModeValue("brand.600", "brand.300");
 
   const [currentPage, setCurrentPage] = useState("");
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -58,11 +56,11 @@ export default function creators() {
         py="3"
         cursor="pointer"
         color="inherit"
-        _dark={{ color: "gray.400" }}
+        _dark={{ color: "brand.400" }}
         _hover={{
-          bg: "gray.100",
-          _dark: { bg: "gray.900" },
-          color: "gray.900",
+          bg: "brand.50",
+          _dark: { bg: "brand.900" },
+          color: "brand.900",
         }}
         role="group"
         fontWeight="semibold"
@@ -73,7 +71,7 @@ export default function creators() {
         {icon && (
           <Icon
             mx="2"
-            boxSize="4"
+            boxSize="5"
             _groupHover={{
               color: color,
             }}
@@ -97,7 +95,7 @@ export default function creators() {
       overflowX="hidden"
       overflowY="auto"
       bg="white"
-      _dark={{ bg: "gray.800" }}
+      _dark={{ bg: "brand.800" }}
       border
       color="inherit"
       borderRightWidth="1px"
@@ -106,20 +104,23 @@ export default function creators() {
     >
       <Flex px="2" py="3" align="center">
         <Text
+          bgGradient="linear(to-l, #7928CA, #FF0080)"
+          bgClip="text"
+          fontWeight="extrabold"
           fontSize="2xl"
           ml="2"
           color="brand.500"
           _dark={{ color: "white" }}
-          fontWeight="semibold"
+
         >
-          SciFiction
+         <Image src="./logoHorizontal.png" alt="logo" w={175} />
         </Text>
       </Flex>
       <Flex
         direction="column"
         as="nav"
         fontSize="sm"
-        color="gray.600"
+        color="brand.600"
         aria-label="Main Navigation"
       >
         <NavItem
@@ -149,24 +150,36 @@ export default function creators() {
           />
         </NavItem>
         <Collapse in={integrations.isOpen}>
-          <NavItem pl="6" py="1" onMenuClick={() => handlePageChange("D_ID")}>
+          <NavItem ml="3" pl="6" py="1" onMenuClick={() => handlePageChange("D_ID")}>
             D-ID
           </NavItem>
-          <NavItem pl="6" py="1" onMenuClick={() => handlePageChange("Voiceovers")}>
+          <NavItem ml="3" pl="6" py="1" onMenuClick={() => handlePageChange("Voiceovers")}>
             ElevenLabs
           </NavItem>
         </Collapse>
 
-        <NavItem icon={RiSlideshowLine}>Social Media</NavItem>
-        <NavItem icon={BsGearFill}>Settings</NavItem>
+        <NavItem 
+          icon={RiSlideshowLine} 
+          onMenuClick={() => handlePageChange("Social")}
+        >
+          Social Media
+          </NavItem>
+        <NavItem 
+          icon={BsGearFill}
+          onMenuClick={() => handlePageChange("Social")}
+        >
+          Settings
+          </NavItem>
       </Flex>
     </Box>
   );
+  
   return (
     <Layout>
-      <Box as="section" bg="gray.50" _dark={{ bg: "gray.700" }} minH="100vh">
+      <Box as="section" bg="brand.200" _dark={{ bg: "brand.800" }} minH="100vh">
         <SidebarContent display={{ base: "none", md: "unset" }} />
         <Drawer
+          size="xs"
           isOpen={sidebar.isOpen}
           onClose={sidebar.onClose}
           placement="left"
@@ -184,7 +197,7 @@ export default function creators() {
             w="full"
             px="4"
             bg="white"
-            _dark={{ bg: "gray.800" }}
+            _dark={{ bg: "brand.800" }}
             borderBottomWidth="1px"
             color="inherit"
             h="14"
@@ -197,14 +210,18 @@ export default function creators() {
               size="sm"
             />
             <InputGroup w="96" display={{ base: "none", md: "flex" }}>
-              <InputLeftElement color="gray.500">
+              <InputLeftElement color="brand.500">
                 <FiSearch />
               </InputLeftElement>
               <Input placeholder="Search for assets..." />
             </InputGroup>
 
             <Flex align="center">
-              <Icon color="gray.500" as={FaBell} cursor="pointer" />
+              <Text
+              mr="3"
+              size="xs"
+              >{currentPage}</Text>
+              <Icon color="brand.500" as={FaBell} cursor="pointer" />
               <Avatar
                 ml="4"
                 size="sm"
@@ -224,4 +241,5 @@ export default function creators() {
       </Box>
     </Layout>
   );
+
 }

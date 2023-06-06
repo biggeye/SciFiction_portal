@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import {
   ButtonGroup,
+  Box,
   Flex,
   IconButton,
   Table,
@@ -22,24 +23,26 @@ import {
   useDisclosure,
   Textarea,
   Spacer,
+  Text,
 } from "@chakra-ui/react";
 import { AiFillEdit } from "react-icons/ai";
 import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
 import axios from "axios";
+import AudioPlayer from "../shared/AudioPlayer";
 
 export default function Voices() {
+  const header = ["Name", "Voice ID", "Preview", "Actions"];
+  const color1 = useColorModeValue("brand.400", "brand.400");
+  const color2 = useColorModeValue("brand.400", "brand.400");
+
+  const [isLoading, setIsLoading] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
+  const sizes = ["xs", "sm", "md", "lg", "xl"];
   const [currentName, setCurrentName] = useState("");
   const [currentVoiceId, setCurrentVoiceId] = useState("");
   const [script, setScript] = useState("");
-  const header = ["Name", "Voice ID", "Preview", "Actions"];
   const [data, setData] = useState([]);
-  const color1 = useColorModeValue("gray.400", "gray.400");
-  const color2 = useColorModeValue("gray.400", "gray.400");
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef();
-
-  const sizes = ["xs", "sm", "md", "lg", "xl"];
-
   useEffect(() => {
     fetchYourData().then((fetchedData) => {
       setData(fetchedData);
@@ -55,7 +58,7 @@ export default function Voices() {
     const tableData = voices.map((voice) => ({
       name: voice.name,
       voice_id: voice.voice_id,
-      preview_url: voice.preview_url,
+      sample: voice.preview_url,
     }));
 
     return tableData;
@@ -67,23 +70,24 @@ export default function Voices() {
 
   const createTTS = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     const voice_id = currentVoiceId;
     const data = {
       voice_id: voice_id,
       script: script,
     };
-    
+
     const response = await axios.post(
       "https://flask-vercel-silk.vercel.app/api/xilabs/tts",
       data,
       {
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
-     
-    
+    setIsLoading(false); // set loading state to false when the function ends
+    onClose();
   };
 
   return (
@@ -94,135 +98,55 @@ export default function Voices() {
       p={50}
       alignItems="center"
       justifyContent="center"
+      flexWrap="wrap" // allow cards to wrap to new lines
     >
-      <Table
-        w="full"
-        bg="white"
-        _dark={{ bg: "gray.800" }}
-        display={{
-          base: "block",
-          md: "table",
-        }}
-        sx={{
-          "@media print": {
-            display: "table",
-          },
-        }}
-      >
-        <Thead
-          display={{
-            base: "none",
-            md: "table-header-group",
-          }}
-          sx={{
-            "@media print": {
-              display: "table-header-group",
-            },
-          }}
+      {data.map((token, tid) => (
+        <Box
+          key={tid}
+          bg="white"
+          _dark={{ bg: "brand.800" }}
+          m={4} // some margin for separation
+          borderRadius="md" // rounded corners
+          overflow="hidden" // keep child boundaries within card
+          boxShadow="sm" // small shadow for 3D effect
+          textAlign="center"
         >
-          <Tr>
-            {header.map((x) => (
-              <Th key={x}>{x}</Th>
-            ))}
-          </Tr>
-        </Thead>
-        <Tbody
-          display={{
-            base: "block",
-            lg: "table-row-group",
-          }}
-          sx={{
-            "@media print": {
-              display: "table-row-group",
-            },
-          }}
-        >
-          {data.map((token, tid) => {
-            return (
-              <Tr
-                key={tid}
-                display={{
-                  base: "grid",
-                  md: "table-row",
-                }}
-                sx={{
-                  "@media print": {
-                    display: "table-row",
-                  },
-                  gridTemplateColumns: "minmax(0px, 35%) minmax(0px, 65%)",
-                  gridGap: "10px",
-                }}
-              >
-                {Object.keys(token).map((x) => {
-                  return (
-                    <React.Fragment key={`${tid}${x}`}>
-                      <Td
-                        display={{
-                          base: "table-cell",
-                          md: "none",
-                        }}
-                        sx={{
-                          "@media print": {
-                            display: "none",
-                          },
-                          textTransform: "uppercase",
-                          color: color1,
-                          fontSize: "xs",
-                          fontWeight: "bold",
-                          letterSpacing: "wider",
-                          fontFamily: "heading",
-                        }}
-                      >
-                        {x}
-                      </Td>
-                      <Td
-                        color={"gray.500"}
-                        fontSize="md"
-                        fontWeight="hairline"
-                      >
+          <Box p={4}>
+            {Object.keys(token).map((x) => {
+              if (x === "voice_id") return null;
+
+              return (
+                <Text key={`${tid}${x}`}>
+                  {x === "sample" ? (
+                    <AudioPlayer src={token[x]} />
+                  ) : (
+                    <>
+                      <Text size="md" as="b">
                         {token[x]}
-                      </Td>
-                    </React.Fragment>
-                  );
-                })}
-                <Td
-                  display={{
-                    base: "table-cell",
-                    md: "none",
-                  }}
-                  sx={{
-                    "@media print": {
-                      display: "none",
-                    },
-                    textTransform: "uppercase",
-                    color: color2,
-                    fontSize: "xs",
-                    fontWeight: "bold",
-                    letterSpacing: "wider",
-                    fontFamily: "heading",
-                  }}
-                >
-                  Actions
-                </Td>
-                <Td>
-                  <ButtonGroup variant="solid" size="sm" spacing={3}>
-                    <IconButton
-                      colorScheme="blue"
-                      icon={<BsBoxArrowUpRight />}
-                      aria-label="Up"
-                      onClick={() => {
-                        setCurrentName(token["name"]);
-                        setCurrentVoiceId(token["voice_id"]);
-                        onOpen();
-                      }}
-                    />
-                  </ButtonGroup>
-                </Td>
-              </Tr>
-            );
-          })}
-        </Tbody>
-      </Table>
+                      </Text>
+                    </>
+                  )}
+                </Text>
+              );
+            })}
+          </Box>
+
+          <Flex justifyContent="flex-end" p={2}>
+            <IconButton
+              size="xs"
+              colorScheme="blue"
+              icon={<BsBoxArrowUpRight />}
+              aria-label="Up"
+              onClick={() => {
+                setCurrentName(token["name"]);
+                setCurrentVoiceId(token["voice_id"]);
+                onOpen();
+              }}
+            />
+          </Flex>
+        </Box>
+      ))}
+
       <Drawer
         size={sizes}
         isOpen={isOpen}
@@ -252,7 +176,11 @@ export default function Voices() {
               <Button variant="outline" mr={3} onClick={onClose}>
                 Cancel
               </Button>
-              <Button type="submit" colorScheme="blue">
+              <Button
+                type="submit"
+                colorScheme="blue"
+                isLoading={isLoading} // Add this line to use the isLoading state
+              >
                 Generate Voiceover
               </Button>
             </DrawerFooter>

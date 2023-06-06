@@ -56,7 +56,7 @@ export default function Voiceovers() {
     console.log(response);
     const filename = "audio.mp3"; // Set the desired filename for the downloaded audio file
 
-  downloadFile(response, filename);
+  downloadFile(response.data, filename);
   };
   
   const deleteRow = async (voiceoverId) => {

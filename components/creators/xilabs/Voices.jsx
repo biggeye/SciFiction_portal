@@ -43,6 +43,7 @@ export default function Voices() {
   const [currentVoiceId, setCurrentVoiceId] = useState("");
   const [script, setScript] = useState("");
   const [data, setData] = useState([]);
+  
   useEffect(() => {
     fetchYourData().then((fetchedData) => {
       setData(fetchedData);
@@ -93,7 +94,7 @@ export default function Voices() {
   return (
     <Flex
       w="full"
-      bg="#edf3f8"
+      bg="brand.200"
       _dark={{ bg: "#3e3e3e" }}
       p={50}
       alignItems="center"

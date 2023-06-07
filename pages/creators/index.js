@@ -29,7 +29,7 @@ import { BsGearFill } from "react-icons/bs";
 import { FiMenu, FiSearch } from "react-icons/fi";
 import { MdHome, MdKeyboardArrowRight } from "react-icons/md";
 
-import D_ID from "../../components/creators/d_id/D_ID";
+import Avatars from "../../components/creators/d_id/Avatars";
 import Voices from "../../components/creators/xilabs/Voices";
 import Voiceovers from "../../components/creators/xilabs/Voiceovers";
 
@@ -236,6 +236,7 @@ export default function creators() {
             {/* Add content here, remove div below  */}
             {currentPage === "Voices" && <Voices />}
             {currentPage === "Voiceovers" && <Voiceovers />}
+            {currentPage === "Avatars" && <Avatars />}
           </Box>
         </Box>
       </Box>

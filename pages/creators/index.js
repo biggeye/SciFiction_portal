@@ -29,12 +29,12 @@ import { BsGearFill } from "react-icons/bs";
 import { FiMenu, FiSearch } from "react-icons/fi";
 import { MdHome, MdKeyboardArrowRight } from "react-icons/md";
 
-import D_ID from "../../components/creators/d_id/D_ID";
+import Layout from "../../components/Layout";
+import CreateTalk  from "../../components/creators/d_id/CreateTalk";
 import Voices from "../../components/creators/xilabs/Voices";
 import Voiceovers from "../../components/creators/xilabs/Voiceovers";
 
 import { useState } from "react";
-import Layout from "../../components/Layout";
 
 export default function creators() {
   const sidebar = useDisclosure();
@@ -137,9 +137,9 @@ export default function creators() {
         </NavItem>
         <NavItem
           icon={RiBallPenLine}
-          onMenuClick={() => handlePageChange("Scripts")}
+          onMenuClick={() => handlePageChange("CreateTalk")}
         >
-          Scripts
+          Create
         </NavItem>
         <NavItem icon={RiBriefcase2Line} onClick={integrations.onToggle}>
           Renderings
@@ -232,10 +232,11 @@ export default function creators() {
             </Flex>
           </Flex>
 
-          <Box as="main" p="4">
+          <Box as="main" p="2">
             {/* Add content here, remove div below  */}
             {currentPage === "Voices" && <Voices />}
             {currentPage === "Voiceovers" && <Voiceovers />}
+            {currentPage === "CreateTalk" && <CreateTalk />}
           </Box>
         </Box>
       </Box>

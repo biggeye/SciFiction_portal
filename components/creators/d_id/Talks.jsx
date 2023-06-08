@@ -19,7 +19,7 @@ import axios from "axios";
 import VideoPlayer from "../shared/VideoPlayer";
 import { downloadS3Mp4 } from "../../../utils/downloadS3Mp4";
 
-export default function Avatars() {
+export default function Talks() {
   const [tableData, setTableData] = useState([]);
   const [playingVideo, setPlayingVideo] = useState(null);
 
@@ -92,41 +92,28 @@ export default function Avatars() {
               ),
             }}
           >
-            {/* Replace the existing content with the corresponding properties from tableData */}
-            <HStack justifyContent="space-between" alignItems="baseline">
+
     <Tooltip
       label={talk.name}
       aria-label={talk.name}
       placement="right-end"
       size="sm"
     >
-      <Box pos="relative">
-        {playingVideo ? (
-          <VideoPlayer s3Url={playingVideo} />
-        ) : (
+  
           <Image
             src={talk.thumbnail}
             size="xl"
             borderRadius="md"
             onClick={() => playVideo(talk.id)}
           />
-        )}
-      </Box>
-    </Tooltip>
-    <Link isExternal href={talk.video}>
-      <Icon as={AiFillGithub} w={6} h={6} />
-    </Link>
-  </HStack>
+        
+         </Tooltip>
   <chakra.h1 fontSize="xl" fontWeight="bold">
     {talk.name}
   </chakra.h1>
 
             <Divider />
-            {/* Replace the existing content with the appropriate data */}
-            <Text fontSize="md" color="brand.500">
-              Sports lover ⚽️, exercise addict 🏋 and lifelong learner 👨🏻‍💻
-            </Text>
-          </Stack>
+                      </Stack>
         ))}
       </Container>
     </Flex>

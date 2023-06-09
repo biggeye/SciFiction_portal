@@ -79,7 +79,7 @@ import {
     return (
       <Box px={4} bg={"brand.600"}>
         <Flex h={12} alignItems="center" justifyContent="space-between" mx="auto">
-        <Image src="/logoHorizontal.png" alt="Logo" h={10}/>
+        <Image src="/IMG_1870.png" alt="Logo" h={10}/>
         <Spacer />
           <HStack spacing={8} alignItems="center">
             <HStack as="nav" spacing={6} display={{ base: 'none', md: 'flex' }} alignItems="center">

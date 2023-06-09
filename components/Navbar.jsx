@@ -77,7 +77,7 @@ import {
 
   
     return (
-      <Box px={4} bg={"brand.600"}>
+      <Box px={4} bg={"gray.400"}>
         <Flex h={12} alignItems="center" justifyContent="space-between" mx="auto">
         <Image src="/IMG_1870.png" alt="Logo" h={10}/>
         <Spacer />

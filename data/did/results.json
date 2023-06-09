@@ -1,0 +1,206 @@
+{
+    "DID_WORKFLOW_RESPONSES": [
+      {
+        "upload_image": {
+          "url": "s3://d-id-images-prod/auth0|6428b6821e6006b657eae3f9/img_1k1FmO8Bxy5kLvPDB5dMu/neuro3.png",
+          "id": "img_1k1FmO8Bxy5kLvPDB5dMu"
+        }
+      },
+      {
+        "upload_audio": {
+          "url": "s3://d-id-audios-prod/auth0|6428b6821e6006b657eae3f9/STXChVRK3J17AsW03dRi0/VO.wav",
+          "id": "STXChVRK3J17AsW03dRi0",
+          "duration": 12.251375,
+          "moderation_metadata": {}
+        }
+      },
+      {
+        "create_talk": {
+          "id": "tlk_-hwfU63HK8AUGaao3SY5H",
+          "created_at": "2023-06-09T00:45:43.427Z",
+          "created_by": "auth0|6428b6821e6006b657eae3f9",
+          "status": "created",
+          "object": "talk"
+        }
+      },
+      {
+        "get_talk": {
+          "user": {
+            "features": [
+              "stitch",
+              "no-watermark",
+              "clips:write",
+              "api-keys:write",
+              "talks"
+            ],
+            "stripe_customer_id": "cus_NdULqomb9fvcCM",
+            "authorizer": "bearer",
+            "org_id": null,
+            "owner_id": "auth0|6428b6821e6006b657eae3f9",
+            "id": "auth0|6428b6821e6006b657eae3f9",
+            "plan": "deid-pro",
+            "email": "owen@scifiction.com"
+          },
+          "script": {
+            "subtitles": false,
+            "audio_url": "s3://d-id-audios-prod/auth0|6428b6821e6006b657eae3f9/STXChVRK3J17AsW03dRi0/VO.wav",
+            "type": "audio",
+            "reduce_noise": false
+          },
+          "metadata": {
+            "driver_url": "bank://lively/driver-02/original",
+            "mouth_open": false,
+            "num_faces": 1,
+            "num_frames": 306,
+            "processing_fps": 74.39998599529675,
+            "resolution": [
+              512,
+              512
+            ],
+            "size_kib": 3352.9755859375
+          },
+          "audio_url": "s3://d-id-audios-prod/auth0|6428b6821e6006b657eae3f9/STXChVRK3J17AsW03dRi0/VO.wav",
+          "created_at": "2023-06-09T00:45:43.427Z",
+          "face": {
+            "mask_confidence": -1,
+            "detection": [
+              83,
+              300,
+              575,
+              921
+            ],
+            "overlap": "no",
+            "size": 917,
+            "top_left": [
+              -129,
+              152
+            ],
+            "face_id": 0,
+            "detect_confidence": 0.9999792575836182
+          },
+          "config": {
+            "stitch": false,
+            "pad_audio": 0,
+            "align_driver": true,
+            "sharpen": true,
+            "reduce_noise": false,
+            "auto_match": true,
+            "normalization_factor": 1,
+            "logo": {
+              "url": "ai",
+              "position": [
+                0,
+                0
+              ]
+            },
+            "motion_factor": 1,
+            "result_format": ".mp4",
+            "fluent": false,
+            "align_expand_factor": 0.3
+          },
+          "source_url": "s3://d-id-images-prod/auth0|6428b6821e6006b657eae3f9/img_VctxQXCfrMGKGLJ3PXjUp/IMG_1818.PNG",
+          "created_by": "auth0|6428b6821e6006b657eae3f9",
+          "status": "done",
+          "driver_url": "bank://lively/",
+          "name": "TestJune8",
+          "modified_at": "2023-06-09T00:45:47.732Z",
+          "user_id": "auth0|6428b6821e6006b657eae3f9",
+          "subtitles": false,
+          "id": "tlk_-hwfU63HK8AUGaao3SY5H",
+          "duration": 12.251438,
+          "started_at": "2023-06-09T00:45:43.478",
+          "result_url": "https://d-id-talks-prod.s3.us-west-2.amazonaws.com/auth0%7C6428b6821e6006b657eae3f9/tlk_-hwfU63HK8AUGaao3SY5H/1686271543427.mp4?AWSAccessKeyId=AKIA5CUMPJBIK65W6FGA&Expires=1686357947&Signature=JQLa1wkd%2FMXqi0W36n%2FR%2FoBAn9E%3D&X-Amzn-Trace-Id=Root%3D1-6482763b-45653f86188c19887515cf51%3BParent%3D322cbb091bd16e32%3BSampled%3D0%3BLineage%3D6b931dd4%3A0"
+        }
+      },
+      {
+        "get_talks": [
+          {
+            "user": {
+              "features": [
+                "stitch",
+                "no-watermark",
+                "clips:write",
+                "api-keys:write",
+                "talks"
+              ],
+              "stripe_customer_id": "cus_NdULqomb9fvcCM",
+              "authorizer": "bearer",
+              "org_id": null,
+              "owner_id": "auth0|6428b6821e6006b657eae3f9",
+              "id": "auth0|6428b6821e6006b657eae3f9",
+              "plan": "deid-pro",
+              "email": "owen@scifiction.com"
+            },
+            "script": {
+              "subtitles": false,
+              "audio_url": "s3://d-id-audios-prod/auth0|6428b6821e6006b657eae3f9/STXChVRK3J17AsW03dRi0/VO.wav",
+              "type": "audio",
+              "reduce_noise": false
+            },
+            "metadata": {
+              "driver_url": "bank://lively/driver-02/original",
+              "mouth_open": false,
+              "num_faces": 1,
+              "num_frames": 306,
+              "processing_fps": 73.51748743175307,
+              "resolution": [
+                512,
+                512
+              ],
+              "size_kib": 3352.9755859375
+            },
+            "audio_url": "s3://d-id-audios-prod/auth0|6428b6821e6006b657eae3f9/STXChVRK3J17AsW03dRi0/VO.wav",
+            "created_at": "2023-06-09T01:01:42.472Z",
+            "face": {
+              "mask_confidence": -1,
+              "detection": [
+                83,
+                300,
+                575,
+                921
+              ],
+              "overlap": "no",
+              "size": 917,
+              "top_left": [
+                -129,
+                152
+              ],
+              "face_id": 0,
+              "detect_confidence": 0.9999792575836182
+            },
+            "config": {
+              "stitch": false,
+              "pad_audio": 0,
+              "align_driver": true,
+              "sharpen": true,
+              "reduce_noise": false,
+              "auto_match": true,
+              "normalization_factor": 1,
+              "logo": {
+                "url": "ai",
+                "position": [
+                  0,
+                  0
+                ]
+              },
+              "motion_factor": 1,
+              "result_format": ".mp4",
+              "fluent": false,
+              "align_expand_factor": 0.3
+            },
+            "source_url": "s3://d-id-images-prod/auth0|6428b6821e6006b657eae3f9/img_VctxQXCfrMGKGLJ3PXjUp/IMG_1818.PNG",
+            "created_by": "auth0|6428b6821e6006b657eae3f9",
+            "status": "done",
+            "driver_url": "bank://lively/",
+            "name": "TestJune8b",
+            "modified_at": "2023-06-09T01:01:46.749Z",
+            "user_id": "auth0|6428b6821e6006b657eae3f9",
+            "subtitles": false,
+            "id": "tlk_mEiL-0Xtl5tYZkuDEf-Ba",
+            "duration": 12.251438,
+            "started_at": "2023-06-09T01:01:42.520",
+            "result_url": "https://d-id-talks-prod.s3.us-west-2.amazonaws.com/auth0%7C6428b6821e6006b657eae3f9/tlk_mEiL-0Xtl5tYZkuDEf-Ba/1686272502472.mp4?AWSAccessKeyId=AKIA5CUMPJBIK65W6FGA&Expires=1686358906&Signature=FWClHE6dLoEMxbJouNG188P0e50%3D&X-Amzn-Trace-Id=Root%3D1-648279fa-05a2c8ec5c2e657134edf763%3BParent%3De9a223971d2588f5%3BSampled%3D1%3BLineage%3D6b931dd4%3A0"
+          }
+    ]
+  }
+]}

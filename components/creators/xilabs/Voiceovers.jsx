@@ -15,12 +15,27 @@ import { downloadFile } from "../../../utils/downloadFile";
 
 export default function Voiceovers() {
   const [data, setData] = useState([]);
+  const [charactersUsed, setCharactersUsed] = useState("");
   
   useEffect(() => {
     fetchYourData().then((fetchedData) => {
       setData(fetchedData);
     });
   }, []);
+  
+  useEffect(() => {
+    if (data.length > 0) {
+      const mostRecentEntry = data.reduce((prev, curr) => {
+        return curr.date_unix > prev.date_unix ? curr : prev;
+      });
+  
+      // Extract the "character_count_change_to" from the most recent entry
+      const characterCountChangeTo = mostRecentEntry.character_count_change_to;
+      setCharactersUsed(characterCountChangeTo);
+      console.log(charactersUsed);
+    }
+  }, [data]);
+  
 
   const fetchYourData = async () => {
     const response = await axios.get(
@@ -61,7 +76,7 @@ const playRow = async (voiceover_id) => {
      const filename = "voiceover.mp3"; // Set the desired filename for the downloaded audio file
 
 
-  downloadFile(response.data, filename);
+  downloadFile(response.data, filename, 'audio/mpeg');
   };
   
   const deleteRow = async (voiceoverId) => {
@@ -87,13 +102,14 @@ const playRow = async (voiceover_id) => {
   return (
     <Flex
       w="full"
-      bg="#edf3f8"
+      bg="gray.700"
       _dark={{ bg: "#3e3e3e" }}
       p={50}
       alignItems="center"
       justifyContent="center"
       flexWrap="wrap"
-    >  {data.map((token, tid) => (
+    >      {charactersUsed} / 40,000 used 
+     {data.map((token, tid) => (
       <Box
       key={tid}
       bg="white"
@@ -104,6 +120,7 @@ const playRow = async (voiceover_id) => {
       boxShadow="sm" // small shadow for 3D effect
       textAlign="center"
     >
+
         <Box p={4}>
           {Object.keys(token).map((x) => {
             if (x === "voiceover_id" || x === "script") return null;

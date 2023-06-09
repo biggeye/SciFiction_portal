@@ -1,7 +1,11 @@
 import React from "react";
+import { useState } from "react";
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
 function App({ Component, pageProps }) {
+  const [supabaseClient] = useState(() => createPagesBrowserClient());
   const colors = {
     brand: {
       50: "#f1e7cc",
@@ -13,22 +17,24 @@ function App({ Component, pageProps }) {
       600: "#78afda",
       700: "#e4b18f",
       800: "#cd5123",
-      900: "#a4411c"
-    }
+      900: "#a4411c",
+    },
   };
-  
-  
   const config = {
     initialColorMode: "dark",
-    useSystemColorMode: false
+    useSystemColorMode: false,
   };
-  
   const theme = extendTheme({ colors, config });
-  
+
   return (
-    <ChakraProvider theme={theme}>
+    <SessionContextProvider
+      supabaseClient={supabaseClient}
+      initialSession={pageProps.initialSession}
+    >
+      <ChakraProvider theme={theme}>
         <Component {...pageProps} />
-    </ChakraProvider>
+      </ChakraProvider>
+    </SessionContextProvider>
   );
 }
 

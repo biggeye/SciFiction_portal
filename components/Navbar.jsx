@@ -14,7 +14,8 @@ import {
     MenuItem,
     MenuList,
     Text,
-    Spacer
+    Spacer,
+    Stack
   } from '@chakra-ui/react';
   import {
     RiChatVoiceLine,

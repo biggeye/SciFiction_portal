@@ -13,6 +13,7 @@ import {
   Tr,
   useColorModeValue,
   Button,
+  Image,
   Drawer,
   DrawerBody,
   DrawerFooter,
@@ -24,81 +25,56 @@ import {
   Textarea,
   Spacer,
   Text,
-  Slider,
-  SliderMark,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
-  VStack,
 } from "@chakra-ui/react";
 import { AiFillEdit } from "react-icons/ai";
 import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
 import axios from "axios";
 import AudioPlayer from "../shared/AudioPlayer";
 
-export default function Voices() {
-  const [stabilityValue, setStabilityValue] = useState(50);
-  const [similarityValue, setSimilarityValue] = useState(50);
+export default function Avatars() {
   const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
   const sizes = ["xs", "sm", "md", "lg", "xl"];
   const [currentName, setCurrentName] = useState("");
-  const [currentVoiceId, setCurrentVoiceId] = useState("");
+  const [currentId, setCurrentId] = useState("");
   const [script, setScript] = useState("");
   const [data, setData] = useState([]);
-
-  const labelStyles = {
-    mt: "2",
-    ml: "-2.5",
-    fontSize: "sm",
-  };
-
+  
   useEffect(() => {
-    fetchYourData().then((fetchedData) => {
-      setData(fetchedData);
+    fetchYourData().then((cards) => {
+      setData(cards);
     });
   }, []);
 
   const fetchYourData = async () => {
     const response = await axios.get(
-      "https://flask-vercel-silk.vercel.app/api/xilabs/get_voices"
+      "https://flask-vercel-silk.vercel.app/api/elai/get_avatars"
     );
-    const voices = response.data.voices;
-
-    const tableData = voices.map((voice) => ({
-      name: voice.name,
-      voice_id: voice.voice_id,
-      sample: voice.preview_url,
-    }));
-
-    return tableData;
+    const avatars = response.data;
+    console.log(avatars);
+  
+    const cards = [];
+  
+    avatars.forEach((avatar) => {
+      avatar.variants.forEach((variant) => {
+        const card = {
+          avatar_name: avatar.name,
+          avatar_id: avatar._id,
+          thumbnail: variant.thumbnail,
+          variant_id: variant.id,
+        };
+  
+        cards.push(card);
+      });
+    });
+  
+    return cards;
   };
+  
 
   const handleFormInputChange = (e) => {
     setScript(e.target.value);
-  };
-
-  const createTTS = async (event) => {
-    event.preventDefault();
-    setIsLoading(true);
-    const voice_id = currentVoiceId;
-    const data = {
-      voice_id: voice_id,
-      script: script,
-    };
-
-    const response = await axios.post(
-      "https://flask-vercel-silk.vercel.app/api/xilabs/tts",
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    setIsLoading(false); // set loading state to false when the function ends
-    onClose();
   };
 
   return (
@@ -124,12 +100,11 @@ export default function Voices() {
         >
           <Box p={4}>
             {Object.keys(token).map((x) => {
-              if (x === "voice_id") return null;
-
+              if (x === "avatar_id") return null;
               return (
                 <Text key={`${tid}${x}`}>
-                  {x === "sample" ? (
-                    <AudioPlayer src={token[x]} />
+                  {x === "thumbnail" ? (
+                    <Image alt="thumbnail" src={token[x]} />
                   ) : (
                     <>
                       <Text size="md" as="b">
@@ -149,8 +124,8 @@ export default function Voices() {
               icon={<BsBoxArrowUpRight />}
               aria-label="Up"
               onClick={() => {
-                setCurrentName(token["name"]);
-                setCurrentVoiceId(token["voice_id"]);
+                setCurrentName(token["avatar_name"]);
+                setCurrentId(token["avatar_id"]);
                 onOpen();
               }}
             />
@@ -161,18 +136,18 @@ export default function Voices() {
       <Drawer
         size={sizes}
         isOpen={isOpen}
-        placement="right"
+        placement="left"
         onClose={onClose}
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
-        <form id="TTS" onSubmit={createTTS}>
+        <form id="TTS">
           <DrawerContent>
             <DrawerCloseButton />
             <DrawerHeader>{currentName}</DrawerHeader>
 
             <DrawerBody>
-              <Flex direction="column">
+              <Flex>
                 <Textarea
                   h="100%"
                   rows="auto"
@@ -180,44 +155,6 @@ export default function Voices() {
                   name="script"
                   onChange={handleFormInputChange}
                 />
-                <Spacer />
-                <VStack>
-                  <Text>Stability Value</Text>
-                  <Slider
-                    w="75%"
-                    aria-label="slider-stability"
-                    onChange={(val) => setStabilityValue(val)}
-                  >
-                    <SliderMark
-                      value={stabilityValue}
-                      textAlign="center"
-                      bg="blue.500"
-                      color="white"
-                    ></SliderMark>
-                    <SliderTrack>
-                      <SliderFilledTrack />
-                    </SliderTrack>
-                    <SliderThumb />
-                  </Slider>
-
-                  <Text>Similarity Value</Text>
-                  <Slider
-                    w="75%"
-                    aria-label="slider-similarity"
-                    onChange={(val) => setSimilarityValue(val)}
-                  >
-                    <SliderMark
-                      value={similarityValue}
-                      textAlign="center"
-                      bg="gray.500"
-                      color="white"
-                    ></SliderMark>
-                    <SliderTrack>
-                      <SliderFilledTrack />
-                    </SliderTrack>
-                    <SliderThumb />
-                  </Slider>
-                </VStack>
               </Flex>
             </DrawerBody>
 

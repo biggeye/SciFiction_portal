@@ -21,6 +21,7 @@ export default function Home() {
     setCurrentPage(page);
   };
 
+  
   if (!user)
     return (
       <Auth

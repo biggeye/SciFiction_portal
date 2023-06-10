@@ -63,16 +63,16 @@ import {
             },
           ],
         },
- /*      {
+       {
           name: 'Social Media',
           icon: RiSlideshowLine,
-          action: () => handlePageChange('Social'),
+          action: () => handlePageChange('DashBoard'),
         },
         {
           name: 'Settings',
           icon: BsGearFill,
           action: () => handlePageChange('Settings'),
-        },*/
+        },
       ];
 
   

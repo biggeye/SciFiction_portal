@@ -5,6 +5,7 @@ import Avatars from "../components/creators/elai/Avatars";
 import Voices from "../components/creators/xilabs/Voices";
 import Talks from "../components/creators/did/Talks";
 import Voiceovers from "../components/creators/xilabs/Voiceovers";
+import DashBoard from "../components/creators/social/DashBoard";
 import { Box } from "@chakra-ui/react";
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
@@ -43,6 +44,7 @@ export default function Home() {
             {currentPage === "Voices" && <Voices />}
             {currentPage === "Voiceovers" && <Voiceovers />}
             {currentPage === "Settings" && <Settings />}
+            {currentPage === "DashBoard" && <DashBoard />}
         </Box>
       </Box>
     </Layout>

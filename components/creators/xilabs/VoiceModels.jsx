@@ -36,7 +36,6 @@ import { AiFillEdit } from "react-icons/ai";
 import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
 import axios from "axios";
 import AudioPlayer from "../../shared/AudioPlayer";
-import { createNewVoice } from "../../../utils/production/createNewVoice";
 
 export default function VoiceModels() {
   const [isLoading, setIsLoading] = useState(false);

@@ -1,51 +1,54 @@
 import React from "react";
+import { useEffect, useState } from 'react'
+//VENDORS
+import Talks from "../components/creators/did/Talks";
+import ElaiAvatars from "../components/creators/elai/ElaiAvatars";
+import VoiceModels from "../components/creators/xilabs/VoiceModels";
+
+//PROPRIETARY
 import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
-import Avatars from "../components/creators/elai/Avatars";
-import Voices from "../components/creators/xilabs/Voices";
-import Talks from "../components/creators/did/Talks";
-import Voiceovers from "../components/creators/xilabs/Voiceovers";
-import DashBoard from "../components/creators/social/DashBoard";
+import DashBoard from "../components/social/DashBoard";
+import Avatars from "../components/assets/Avatars";
+import Scripts from "../components/assets/Scripts";
+import Voiceovers from "../components/assets/Voiceovers";
 import { Box } from "@chakra-ui/react";
+//AUTH & DB
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
-import { useEffect, useState } from 'react'
-
 
 export default function Home() {
   const supabaseClient = useSupabaseClient()
   const user = useUser()
-  const [currentPage, setCurrentPage] = useState("");
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  
   if (!user)
     return (
       <Auth
         redirectTo="/"
         appearance={{ theme: ThemeSupa }}
         supabaseClient={supabaseClient}
-        providers={['google', 'github']}
+        providers={['google', 'twitter']}
         socialLayout="horizontal"
       />
     )
 
- 
+    const [currentPage, setCurrentPage] = useState("");
+    const handlePageChange = (page) => {
+      setCurrentPage(page);
+    };
+  
   return (
     <Layout>
-      <Box as="section" bg="black" _dark={{ bg: "brand.800" }} minH="100vh">
+      <Box as="section" bg="black" _dark={{ bg: "brand.800" }} minH="100vh" overflowX="none" overflowY="auto">
         <Navbar handlePageChange={handlePageChange}/> 
-        <Box as="main" p="2">
-            {/* Add content here, remove div below  */}
-            {currentPage === "Talks" && <Talks />}
+        <Box bg="gray.900" as="main" p="2">
+            {currentPage === "Dashboard" && <Dashboard />}
             {currentPage === "Avatars" && <Avatars />}
-            {currentPage === "Voices" && <Voices />}
+            {currentPage === "VoiceModels" && <VoiceModels />}
             {currentPage === "Voiceovers" && <Voiceovers />}
-            {currentPage === "Settings" && <Settings />}
-            {currentPage === "DashBoard" && <DashBoard />}
+            {currentPage === "Scripts" && <Scripts />}
+            {currentPage === "Videos" && <Videos />}
+            {currentPage === "Campaigns" && <Campaigns />}
         </Box>
       </Box>
     </Layout>

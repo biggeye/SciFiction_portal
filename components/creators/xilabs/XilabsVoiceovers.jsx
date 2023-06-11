@@ -17,7 +17,7 @@ import sliceWords from "../../../utils/sliceWords";
 import convertDate from "../../../utils/convertDate";
 import { downloadFile } from "../../../utils/downloadFile";
 
-export default function Voiceovers() {
+export default function XilabsVoiceovers() {
   const [data, setData] = useState([]);
   const [charactersUsed, setCharactersUsed] = useState("");
 

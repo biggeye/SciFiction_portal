@@ -29,9 +29,9 @@ import {
 import { AiFillEdit } from "react-icons/ai";
 import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
 import axios from "axios";
-import AudioPlayer from "../shared/AudioPlayer";
+import AudioPlayer from "../../shared/AudioPlayer";
 
-export default function Avatars() {
+export default function ElaiAvatars() {
   const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();

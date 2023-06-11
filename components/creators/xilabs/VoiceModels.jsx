@@ -3,6 +3,8 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Card,
+  Container,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -31,11 +33,20 @@ import {
   useColorModeValue,
   useDisclosure,
   VStack,
+  Radio,
+  RadioGroup,
+  Stack,
 } from "@chakra-ui/react";
-import { AiFillEdit } from "react-icons/ai";
+import {
+  RiRecordCircleFill,
+  RiRecordCircleLine,
+  RiStopCircleLine,
+} from "react-icons/ai";
 import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
 import axios from "axios";
 import AudioPlayer from "../../shared/AudioPlayer";
+import AudioRecorder from "../../shared/AudioRecorder";
+import Waveform from "../../shared/Waveform";
 
 export default function VoiceModels() {
   const [isLoading, setIsLoading] = useState(false);
@@ -59,8 +70,8 @@ export default function VoiceModels() {
   const [newVoiceName, setNewVoiceName] = useState("");
   const [newVoiceLabels, setNewVoiceLabels] = useState("");
   const [newVoiceDescription, setNewVoiceDescription] = useState("");
-  const [newVoiceFile1, setNewVoiceFile1] = useState(null);
-  const [newVoiceFile2, setNewVoiceFile2] = useState(null);
+  const [newVoiceFile, setNewVoiceFile] = useState(null);
+  const [voiceInputOption, setVoiceInputOption] = useState("upload");
   //editVoice
   const [editVoiceName, setEditVoiceName] = useState("");
   const [editVoiceLabels, setEditVoiceLabels] = useState("");
@@ -127,8 +138,7 @@ export default function VoiceModels() {
     formData.append("name", newVoiceName);
     formData.append("labels", newVoiceLabels);
     formData.append("description", newVoiceDescription);
-    formData.append("file1", newVoiceFile1);
-    formData.append("file2", newVoiceFile2);
+    formData.append("file1", newVoiceFile);
 
     try {
       const response = await axios.post(
@@ -183,9 +193,9 @@ export default function VoiceModels() {
 
   return (
     <>
-    <Box position="absolute" mt={2} ml={2}>
+      <Box position="absolute" mt={2} ml={2}>
         <Button
-        size="xs"
+          size="xs"
           colorScheme="blue"
           onClick={() => {
             onNewVoiceOpen();
@@ -193,7 +203,7 @@ export default function VoiceModels() {
         >
           New
         </Button>
-        </Box>
+      </Box>
       <Flex
         w="full"
         bg="gray.700"
@@ -203,8 +213,6 @@ export default function VoiceModels() {
         justifyContent="center"
         flexWrap="wrap" // allow cards to wrap to new lines
       >
-    
-
         {data.map((token, tid) => (
           <Box
             key={tid}
@@ -267,7 +275,11 @@ export default function VoiceModels() {
           <DrawerHeader>{currentName}</DrawerHeader>
 
           <DrawerBody>
-          <Tabs index={tabIndex} onChange={(index) => setTabIndex(index)} variant="enclosed">
+            <Tabs
+              index={tabIndex}
+              onChange={(index) => setTabIndex(index)}
+              variant="enclosed"
+            >
               <TabList>
                 <Tab>Create Voiceover</Tab>
                 <Tab>Edit Voice Model</Tab>
@@ -379,26 +391,26 @@ export default function VoiceModels() {
 
           <DrawerFooter>
             <Flex>
-            {tabIndex === 0 && (
-        <Button
-          type="submit"
-          form="TTS"
-          colorScheme="blue"
-          isLoading={isLoading}
-        >
-          Generate Voiceover
-        </Button>
-      )}
-      {tabIndex === 1 && (
-        <Button
-          type="submit"
-          form="editVoice"
-          colorScheme="blue"
-          isLoading={isLoading}
-        >
-          Edit Voice
-        </Button>
-      )}
+              {tabIndex === 0 && (
+                <Button
+                  type="submit"
+                  form="TTS"
+                  colorScheme="blue"
+                  isLoading={isLoading}
+                >
+                  Generate Voiceover
+                </Button>
+              )}
+              {tabIndex === 1 && (
+                <Button
+                  type="submit"
+                  form="editVoice"
+                  colorScheme="blue"
+                  isLoading={isLoading}
+                >
+                  Edit Voice
+                </Button>
+              )}
               <Spacer />
               <Button variant="outline" onClick={onClose}>
                 Cancel
@@ -415,54 +427,75 @@ export default function VoiceModels() {
       >
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader borderBottomWidth="1px">Basic Drawer</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">Create New Voice Model</DrawerHeader>
           <DrawerBody>
-            <VStack>
+   
+          <FormControl>
               <form id="newVoice" onSubmit={createNewVoice}>
-                <FormControl>
-                  <FormLabel>Name</FormLabel>
+              <Flex direction={{ base: "column", md: "row" }}>
+                
+              <Text>Name</Text>
                   <Input
                     type="text"
                     value={newVoiceName}
                     onChange={(e) => setNewVoiceName(e.target.value)}
                   />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Labels</FormLabel>
+   
+                <Text>Labels</Text>
                   <Input
                     type="text"
                     value={newVoiceLabels}
                     onChange={(e) => setNewVoiceLabels(e.target.value)}
                   />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Description</FormLabel>
+       <Text>Description</Text>
                   <Textarea
                     value={newVoiceDescription}
                     onChange={(e) => setNewVoiceDescription(e.target.value)}
                   />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Voice Sample 1</FormLabel>
-                  <Input
-                    type="file"
-                    accept="audio/mpeg"
-                    onChange={(e) => setNewVoiceFile1(e.target.files[0])}
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Voice Sample 2</FormLabel>
-                  <Input
-                    type="file"
-                    accept="audio/mpeg"
-                    onChange={(e) => setNewVoiceFile2(e.target.files[0])}
-                  />
-                </FormControl>
+                  </Flex>
+                  <Card>
+    <Text>Voice Sample</Text>
+                  <RadioGroup
+                    defaultValue="upload"
+                    onChange={setVoiceInputOption}
+                  >
+                    <Stack direction="row" alignItems="center">
+                      <Radio value="upload">Upload a file</Radio>
+                      <Radio value="record">Record a voice sample</Radio>
+                    </Stack>
+                  </RadioGroup>
+                  {voiceInputOption === "upload" ? (
+                    <Container m={5}>
+                      <Input
+                     
+                        type="file"
+                        accept="audio/mpeg"
+                        onChange={(e) => setNewVoiceFile(e.target.files[0])}
+                      />
+                      {newVoiceFile && <Waveform audioBlob={newVoiceFile} />}
+                      {newVoiceFile && (
+                        <AudioPlayer p={5} src={URL.createObjectURL(newVoiceFile)} />
+                      )}
+                    </Container>
+                  ) : (
+                    <Container m={5}>
+                      <AudioRecorder 
+                        onRecordingComplete={(blob) => setNewVoiceFile(blob)}
+                      />
+                      {newVoiceFile && <Waveform audioBlob={newVoiceFile} />}
+                      {newVoiceFile && (
+                        <AudioPlayer p={5} src={URL.createObjectURL(newVoiceFile)} />
+                      )}
+                    </Container>
+                  )}
+          
                 <Button type="submit" colorScheme="blue" isLoading={isLoading}>
                   Create
                 </Button>
+                </Card>
               </form>
-            </VStack>
+              </FormControl>
+       
           </DrawerBody>
         </DrawerContent>
       </Drawer>

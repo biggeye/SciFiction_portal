@@ -179,7 +179,7 @@ export default function VoiceModels() {
     onClose();
   };
   const deleteVoice = async (voice_id) => {
-    const confirmation = window.confirm("Are you sure you want to delete this voice?");
+    const confirmation = window.confirm("Are you sure you want to delete?");
 
     if (confirmation) {
       setIsLoading(true);
@@ -188,7 +188,14 @@ export default function VoiceModels() {
         "https://flask-vercel-silk.vercel.app/api/xilabs/delete_voice",
         { "voice_id": voice_id }
     );
-
+    if (response.status === 200) {
+      window.alert("Voice Model Deleted.");
+      fetchYourData().then((fetchedData) => {
+        setData(fetchedData);
+      });
+    } else {
+      window.alert("Something went wrong.");
+    }
     setIsLoading(false);
     fetchYourData();
     onClose();
@@ -196,7 +203,7 @@ export default function VoiceModels() {
   };
 
   return (
-    <>
+    <Box width="fill" height="fill">
       <Box position="absolute" mt={2} ml={2}>
         <Button
           size="xs"
@@ -248,8 +255,9 @@ export default function VoiceModels() {
               })}
             </Box>
 
-            <Flex justifyContent="flex-end" p={2}>
+            <Flex justifyContent="flex-end" p={1}>
               <IconButton
+              tooltip="Create Voiceover"
                 size="xs"
                 colorScheme="blue"
                 icon={<BsBoxArrowUpRight />}
@@ -261,6 +269,7 @@ export default function VoiceModels() {
                 }}
               />
                <IconButton
+               tooltip="Delete"
                 size="xs"
                 colorScheme="red"
                 icon={<RiDeleteBin2Line />}
@@ -520,6 +529,6 @@ export default function VoiceModels() {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-    </>
+      </Box>
   );
 }

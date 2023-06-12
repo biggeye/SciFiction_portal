@@ -87,51 +87,25 @@ export default function ElaiAvatars() {
       justifyContent="center"
       flexWrap="wrap" // allow cards to wrap to new lines
     >
-      {data.map((token, tid) => (
-        <Box
-          key={tid}
-          bg="white"
-          _dark={{ bg: "brand.800" }}
-          m={4} // some margin for separation
-          borderRadius="md" // rounded corners
-          overflow="hidden" // keep child boundaries within card
-          boxShadow="sm" // small shadow for 3D effect
-          textAlign="center"
-        >
-          <Box p={4}>
-            {Object.keys(token).map((x) => {
-              if (x === "avatar_id") return null;
-              return (
-                <Text key={`${tid}${x}`}>
-                  {x === "thumbnail" ? (
-                    <Image alt="thumbnail" src={token[x]} />
-                  ) : (
-                    <>
-                      <Text size="md" as="b">
-                        {token[x]}
-                      </Text>
-                    </>
-                  )}
-                </Text>
-              );
-            })}
-          </Box>
+{data.map((card) => (
+  <Box
+    key={card.variant_id}
+    bg="white"
+    _dark={{ bg: "brand.800" }}
+    m={4} // some margin for separation
+    borderRadius="md" // rounded corners
+    overflow="hidden" // keep child boundaries within card
+    boxShadow="sm" // small shadow for 3D effect
+    textAlign="center"
+  >
+    <Box alignItems="center">
+      <Image p={2} h={70} alt="thumbnail" src={card.thumbnail} />
+      <Text size="sm" as="b">{card.avatar_name}</Text>
+      <Text size="xs">{card.variant_id}</Text>
+    </Box>
+  </Box>
+))}
 
-          <Flex justifyContent="flex-end" p={2}>
-            <IconButton
-              size="xs"
-              colorScheme="blue"
-              icon={<BsBoxArrowUpRight />}
-              aria-label="Up"
-              onClick={() => {
-                setCurrentName(token["avatar_name"]);
-                setCurrentId(token["avatar_id"]);
-                onOpen();
-              }}
-            />
-          </Flex>
-        </Box>
-      ))}
 
       <Drawer
         size={sizes}

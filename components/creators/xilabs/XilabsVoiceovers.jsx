@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import {
+  Button,
   Box,
   Flex,
   IconButton,
@@ -8,7 +9,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import {
-  RiCloseCircleLine,
+  RiDeleteBin2Line,
   RiDownloadCloud2Line,
   RiPlayCircleLine,
 } from "react-icons/ri";
@@ -32,8 +33,6 @@ export default function XilabsVoiceovers() {
       const mostRecentEntry = data.reduce((prev, curr) => {
         return curr.date_unix > prev.date_unix ? curr : prev;
       });
-
-      // Extract the "character_count_change_to" from the most recent entry
       const characterCountChangeTo = mostRecentEntry.character_count_change_to;
       setCharactersUsed(characterCountChangeTo);
       console.log(charactersUsed);
@@ -55,7 +54,6 @@ export default function XilabsVoiceovers() {
 
     return tableData;
   };
-
   const playRow = async (voiceover_id) => {
     const xiApiKey = process.env.XI_API_KEY;
 
@@ -69,7 +67,6 @@ export default function XilabsVoiceovers() {
     );
     return playAudio;
   };
-
   const downloadRow = async (voiceoverId) => {
     const voData = { voiceoverId: voiceoverId };
     const response = await axios.post(
@@ -81,14 +78,17 @@ export default function XilabsVoiceovers() {
 
     downloadFile(response.data, filename, "audio/mpeg");
   };
-
   const deleteRow = async (voiceoverId) => {
+    const confirmation = window.confirm("Are you sure you want to delete?");
+
+    if (confirmation) {
+      setIsLoading(true);
+
     const voData = { voiceoverId: voiceoverId };
     const response = await axios.post(
       "https://flask-vercel-silk.vercel.app/api/xilabs/delete_voiceover",
       voData
     );
-    console.log(response);
     if (response.status === 200) {
       window.alert("Voiceover Deleted.");
       fetchYourData().then((fetchedData) => {
@@ -97,19 +97,33 @@ export default function XilabsVoiceovers() {
     } else {
       window.alert("Something went wrong.");
     }
+    setIsLoading(false);
+    fetchYourData();
   };
+};
 
   return (
+    <Box width="fill" height="fill">
+    <Box position="absolute" mt={2} ml={2}>
+        <Button
+          size="xs"
+          colorScheme="blue"
+          onClick={() => {
+            onNewAvatarOpen();
+          }}
+        >
+          New
+        </Button>
+      </Box>
     <Flex
-      w="full"
-      bg="gray.700"
-      _dark={{ bg: "#3e3e3e" }}
-      p={50}
-      alignItems="center"
-      justifyContent="center"
-      flexWrap="wrap"
-    >
-      {" "}
+    w="full"
+    bg="gray.700"
+    _dark={{ bg: "#3e3e3e" }}
+    p={50}
+    alignItems="center"
+    justifyContent="center"
+    flexWrap="wrap" // allow cards to wrap to new lines
+>
       {data.map((token, tid) => (
         <Box
           key={tid}
@@ -121,26 +135,15 @@ export default function XilabsVoiceovers() {
           boxShadow="sm" // small shadow for 3D effect
           textAlign="center"
         >
-          <Box p={4}>
-            {Object.keys(token).map((x) => {
-              if (x === "voiceover_id" || x === "script") return null;
-
-              return (
-                <Text size="xs" key={`${tid}${x}`}>
-                  <b>{x}: </b>
-                  {token[x]}
-                </Text>
-              );
-            })}
-          </Box>
+          <Flex direction="column">
+            <Text>{token.voice}</Text>
+            <Text>{token.date}</Text>
+            <Text>{token.script}</Text>
+            </Flex>
 
           <Flex justifyContent="flex-end" p={1}>
             <IconButton
-              size="xs"
-              colorScheme="green"
-              icon={<RiPlayCircleLine />}
-            />
-            <IconButton
+            tooltip="Download"
               size="xs"
               colorScheme="blue"
               icon={<RiDownloadCloud2Line />}
@@ -148,9 +151,10 @@ export default function XilabsVoiceovers() {
               onClick={() => downloadRow(token["voiceover_id"])}
             />
             <IconButton
+            tooltip="Delete"
               size="xs"
               colorScheme="red"
-              icon={<RiCloseCircleLine />}
+              icon={<RiDeleteBin2Line />}
               aria-label="Up"
               onClick={() => deleteRow(token["voiceover_id"])}
             />
@@ -158,5 +162,6 @@ export default function XilabsVoiceovers() {
         </Box>
       ))}
     </Flex>
+    </Box>
   );
 }

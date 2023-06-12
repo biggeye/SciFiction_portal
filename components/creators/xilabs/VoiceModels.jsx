@@ -37,16 +37,12 @@ import {
   RadioGroup,
   Stack,
 } from "@chakra-ui/react";
-import {
-  RiRecordCircleFill,
-  RiRecordCircleLine,
-  RiStopCircleLine,
-} from "react-icons/ai";
+import { RiDeleteBin2Line
+} from "react-icons/ri";
 import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
 import axios from "axios";
 import AudioPlayer from "../../shared/AudioPlayer";
 import AudioRecorder from "../../shared/AudioRecorder";
-import Waveform from "../../shared/Waveform";
 
 export default function VoiceModels() {
   const [isLoading, setIsLoading] = useState(false);
@@ -133,14 +129,11 @@ export default function VoiceModels() {
   const createNewVoice = async (event) => {
     event.preventDefault();
     setIsLoading(true);
-
     const formData = new FormData();
     formData.append("name", newVoiceName);
     formData.append("labels", newVoiceLabels);
     formData.append("description", newVoiceDescription);
     formData.append("file1", newVoiceFile);
-
-    try {
       const response = await axios.post(
         "https://flask-vercel-silk.vercel.app/api/xilabs/create_new_voice",
         formData,
@@ -150,12 +143,6 @@ export default function VoiceModels() {
           },
         }
       );
-
-      // Handle the response as needed
-    } catch (error) {
-      // Handle any error that occurred during the API call
-    }
-
     setIsLoading(false);
     onNewVoiceClose();
   };
@@ -182,13 +169,30 @@ export default function VoiceModels() {
         }
       );
 
-      // Handle the response as needed
     } catch (error) {
-      // Handle any error that occurred during the API call
+      if (response.status === 413) {
+        console.log("File Size Too Large")
+      }
     }
 
     setIsLoading(false);
     onClose();
+  };
+  const deleteVoice = async (voice_id) => {
+    const confirmation = window.confirm("Are you sure you want to delete this voice?");
+
+    if (confirmation) {
+      setIsLoading(true);
+    
+    const response = await axios.post(
+        "https://flask-vercel-silk.vercel.app/api/xilabs/delete_voice",
+        { "voice_id": voice_id }
+    );
+
+    setIsLoading(false);
+    fetchYourData();
+    onClose();
+};
   };
 
   return (
@@ -233,11 +237,11 @@ export default function VoiceModels() {
                     {x === "sample" ? (
                       <AudioPlayer src={token[x]} />
                     ) : (
-                      <>
+           
                         <Text size="md" as="b">
                           {token[x]}
-                        </Text>
-                      </>
+                          </Text>
+   
                     )}
                   </Text>
                 );
@@ -254,6 +258,17 @@ export default function VoiceModels() {
                   setCurrentName(token["name"]);
                   setCurrentVoiceId(token["voice_id"]);
                   onOpen();
+                }}
+              />
+               <IconButton
+                size="xs"
+                colorScheme="red"
+                icon={<RiDeleteBin2Line />}
+                aria-label="Up"
+                onClick={() => {
+                  setCurrentName(token["name"]);
+                  setCurrentVoiceId(token["voice_id"]);
+                  deleteVoice(token["voice_id"]);
                 }}
               />
             </Flex>
@@ -427,34 +442,34 @@ export default function VoiceModels() {
       >
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader borderBottomWidth="1px">Create New Voice Model</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">
+            Create New Voice Model
+          </DrawerHeader>
           <DrawerBody>
-   
-          <FormControl>
+            <FormControl>
               <form id="newVoice" onSubmit={createNewVoice}>
-              <Flex direction={{ base: "column", md: "row" }}>
-                
-              <Text>Name</Text>
+                <Flex direction={{ base: "column", md: "row" }}>
+                  <Text>Name</Text>
                   <Input
                     type="text"
                     value={newVoiceName}
                     onChange={(e) => setNewVoiceName(e.target.value)}
                   />
-   
-                <Text>Labels</Text>
+
+                  <Text>Labels</Text>
                   <Input
                     type="text"
                     value={newVoiceLabels}
                     onChange={(e) => setNewVoiceLabels(e.target.value)}
                   />
-       <Text>Description</Text>
+                  <Text>Description</Text>
                   <Textarea
                     value={newVoiceDescription}
                     onChange={(e) => setNewVoiceDescription(e.target.value)}
                   />
-                  </Flex>
-                  <Card>
-    <Text>Voice Sample</Text>
+                </Flex>
+                <Card>
+                  <Text>Voice Sample</Text>
                   <RadioGroup
                     defaultValue="upload"
                     onChange={setVoiceInputOption}
@@ -467,35 +482,41 @@ export default function VoiceModels() {
                   {voiceInputOption === "upload" ? (
                     <Container m={5}>
                       <Input
-                     
                         type="file"
                         accept="audio/mpeg"
                         onChange={(e) => setNewVoiceFile(e.target.files[0])}
                       />
-                      {newVoiceFile && <Waveform audioBlob={newVoiceFile} />}
+
                       {newVoiceFile && (
-                        <AudioPlayer p={5} src={URL.createObjectURL(newVoiceFile)} />
+                        <AudioPlayer
+                          p={5}
+                          src={URL.createObjectURL(newVoiceFile)}
+                        />
                       )}
                     </Container>
                   ) : (
                     <Container m={5}>
-                      <AudioRecorder 
+                      <AudioRecorder
                         onRecordingComplete={(blob) => setNewVoiceFile(blob)}
                       />
-                      {newVoiceFile && <Waveform audioBlob={newVoiceFile} />}
                       {newVoiceFile && (
-                        <AudioPlayer p={5} src={URL.createObjectURL(newVoiceFile)} />
+                        <AudioPlayer
+                          p={5}
+                          src={URL.createObjectURL(newVoiceFile)}
+                        />
                       )}
                     </Container>
                   )}
-          
-                <Button type="submit" colorScheme="blue" isLoading={isLoading}>
-                  Create
-                </Button>
+                  <Button
+                    type="submit"
+                    colorScheme="blue"
+                    isLoading={isLoading}
+                  >
+                    Create
+                  </Button>
                 </Card>
               </form>
-              </FormControl>
-       
+            </FormControl>
           </DrawerBody>
         </DrawerContent>
       </Drawer>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-export default function Scripts() {
+export default function Scripts({ supabaseClient }) {
   const [scripts, setScripts] = useState([]);
 
   useEffect(() => {

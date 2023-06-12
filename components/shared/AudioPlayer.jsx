@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from "@chakra-ui/react";
 import { FaPlay, FaPause } from 'react-icons/fa';
 
+
 function AudioPlayer({ src }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
@@ -20,12 +21,12 @@ function AudioPlayer({ src }) {
   };
 
   return (
-    <div>
+     <Button onClick={handlePlayPause}>
       <audio ref={audioRef} src={src} />
-      <Button onClick={handlePlayPause}>
+     
         {isPlaying ? <FaPause /> : <FaPlay />}
       </Button>
-    </div>
+
   );
 }
 

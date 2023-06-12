@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ElaiAvatars from "../creators/elai/ElaiAvatars";
 
-export default function Avatars() {
+export default function Avatars({ supabaseClient }) {
   const [avatars, setAvatars] = useState([]);
 
   useEffect(() => {

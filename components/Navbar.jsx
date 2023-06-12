@@ -21,7 +21,7 @@ import {
   Tabs,
   Tab,
   TabList,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import {
   RiChatVoiceLine,
@@ -42,22 +42,52 @@ export default function Navbar({ handlePageChange }) {
   const [currentTab, setTabList] = useState(""); // Added state hook here
   const headerItems = [
     {
-      name: "Dashboard",
+      name: "Social Media",
       icon: RiVipCrown2Line,
-      action: () => handlePageChange("Dashboard"),
+      action: () => {
+        setTabList("Social");
+        handlePageChange("DashBoard");
+      },
     },
     {
       name: "Assets",
       icon: RiBriefcase2Line,
-      action: () => setTabList("Assets"),  // Capitalized here
+      action: () => {
+        setTabList("Assets");
+        handlePageChange("Avatars");
+      }, // Capitalized here
     },
     {
       name: "Content",
       icon: RiBallPenLine,
-      action: () => setTabList("Content"),  // Capitalized here
+      action: () => {
+        setTabList("Content"), // Capitalized here
+          handlePageChange("Videos");
+      },
     },
   ];
   const tabs = [
+    {
+      name: "Social",
+      tabList: [
+        {
+          name: "Dashboard",
+          action: () => handlePageChange("DashBoard"),
+        },
+        {
+          name: "Twitter",
+          action: () => handlePageChange("Twitter"),
+        },
+        {
+          name: "YouTube",
+          action: () => handlePageChange("YouTube"),
+        },
+        {
+          name: "Facebook",
+          action: () => handlePageChange("Facebook"),
+        },
+      ],
+    },
     {
       name: "Assets",
       tabList: [
@@ -108,7 +138,7 @@ export default function Navbar({ handlePageChange }) {
       >
         <Flex alignItems="center" justifyContent="space-between" mx="auto">
           <HStack spacing={4} display="flex" alignItems="center">
-          <Box display={{ base: "inline-flex", md: "none" }}>
+            <Box display={{ base: "inline-flex", md: "none" }}>
               <IconButton
                 display={{ base: "flex", md: "none" }}
                 aria-label="Open menu"
@@ -118,7 +148,6 @@ export default function Navbar({ handlePageChange }) {
                 variant="ghost"
                 icon={<AiOutlineMenu />}
                 onClick={mobileNav.onOpen}
-                
               />
               <VStack
                 pos="absolute"
@@ -129,7 +158,6 @@ export default function Navbar({ handlePageChange }) {
                 flexDirection="column"
                 p={2}
                 pb={4}
-                
                 mt={15}
                 bg="gray.300"
                 spacing={3}
@@ -142,15 +170,20 @@ export default function Navbar({ handlePageChange }) {
                   justifySelf="self-start"
                   onClick={mobileNav.onClose}
                 />
-                  {headerItems.map((item, index) => (
-                <Button key={index} size="sm" w="full" variant="ghost"
-                onClick={() => {
-                  item.action();
-                  mobileNav.onClose();
-                }}>
-                {item.name}
-                </Button>
-                       ))}
+                {headerItems.map((item, index) => (
+                  <Button
+                    key={index}
+                    size="sm"
+                    w="full"
+                    variant="ghost"
+                    onClick={() => {
+                      item.action();
+                      mobileNav.onClose();
+                    }}
+                  >
+                    {item.name}
+                  </Button>
+                ))}
               </VStack>
             </Box>
             <chakra.a
@@ -180,12 +213,7 @@ export default function Navbar({ handlePageChange }) {
               ))}
             </HStack>
 
-            <Avatar
-            zIndex="1"
-              size="sm"
-              name="Dan Abrahmov"
-              src="https://bit.ly/dan-abramov"
-            />
+            <Avatar zIndex="1" size="sm" name="Dan Abrahmov" />
           </HStack>
         </Flex>
       </chakra.header>
@@ -198,7 +226,11 @@ export default function Navbar({ handlePageChange }) {
         borderWidth={0}
         overflowX="auto"
       >
-        <Tabs defaultIndex={0} borderBottomColor="transparent" colorScheme="gray.200">
+        <Tabs
+          defaultIndex={0}
+          borderBottomColor="transparent"
+          colorScheme="gray.200"
+        >
           {selectedTab && (
             <TabList>
               {selectedTab.tabList.map(
@@ -207,7 +239,7 @@ export default function Navbar({ handlePageChange }) {
                   index // We use selectedTab here
                 ) => (
                   <Tab
-                  size="xs"
+                    size="xs"
                     key={index}
                     py={1}
                     m={0}

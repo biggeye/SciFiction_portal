@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import XilabsVoiceovers from "../creators/xilabs/XilabsVoiceovers";
 
-export default function Voiceovers() {
+export default function Voiceovers({ supabaseClient }) {
   const [voiceovers, setVoiceovers] = useState([]);
 
   useEffect(() => {

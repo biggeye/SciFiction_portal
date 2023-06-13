@@ -22,6 +22,7 @@ import convertDate from "../../../utils/convertDate";
 import { downloadFile } from "../../../utils/downloadFile";
 
 export default function XilabsVoiceovers() {
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [charactersUsed, setCharactersUsed] = useState("");
 
@@ -133,13 +134,14 @@ export default function XilabsVoiceovers() {
   
         color="gray.700"
           key={tid}
-          bg= "gray.300"
-          p={1.5}
-          _dark={{ bg: "brand.800" }}
-          m={4} // some margin for separation
-          borderRadius="sm" // rounded corners
+          bg="brand.200"
+          _dark={{ bg: "gray.900" }}
+          m={4}
+          borderWidth="3px"
+          borderColor="brand.400"
+          borderRadius="md" // rounded corners
           overflow="hidden" // keep child boundaries within card
-          boxShadow="sm" // small shadow for 3D effect
+          boxShadow="xl" // small shadow for 3D effect
           textAlign="center"
         >
           <Flex direction="column">

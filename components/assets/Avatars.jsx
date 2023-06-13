@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ElaiAvatars from "../creators/elai/ElaiAvatars";
 import { Box, Button, Flex, Image, Input, Text, Divider, Card, Drawer, DrawerHeader, DrawerBody, DrawerFooter, DrawerContent, DrawerOverlay, FormControl, useDisclosure } from "@chakra-ui/react";
 import { upload_avatar } from "../../utils/production/upload";
 
@@ -11,15 +10,17 @@ const convertToDataURI = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-
-export default function Avatars({ supabaseClient }) {
+export default function Avatars({ supabaseClient, user }) {
   const [isLoading, setIsLoading] = useState(false);
   const [avatars, setAvatars] = useState([]);
   const [newAvatarName, setNewAvatarName] = useState("");
-  const [newAvatarImage, setNewAvatarImage] = useState([]);
-  const [newAvatarDescription, setNewAvatarDescription] = useState([]);
+  const [newAvatarImage, setNewAvatarImage] = useState("");
+  const [newAvatarDescription, setNewAvatarDescription] = useState("");
+  
   const [userInFile, setUserInFile] = useState([]);
   const { isOpen: isNewAvatarOpen, onOpen: onNewAvatarOpen, onClose: onNewAvatarClose } = useDisclosure();
+
+const userId = user
 
   useEffect(() => {
     fetchAvatars();
@@ -44,9 +45,13 @@ export default function Avatars({ supabaseClient }) {
       setUserInFile(URI);
     }
   };
-
-const createNewAvatar = async (event) => {
-  const newAvatarUuid = await upload_avatar(userInFile, newAvatarName, newAvatarDescription, user)
+  const createNewAvatar = async (event) => {
+    event.preventDefault();
+  const newAvatarUuid = await upload_avatar(userInFile, newAvatarName, newAvatarDescription, user, supabaseClient);
+  if (!newAvatarUuid) {
+    console.log("Avatar upload failed.");
+}
+else return newAvatarUuid;
 };
 
   return (
@@ -74,13 +79,15 @@ const createNewAvatar = async (event) => {
         {avatars.map((avatar) => (
           <Box
             key={avatar.uuid}
-            bgImage="radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(215,215,215,1) 17%, rgba(181,181,181,0.7343312324929971) 67%, rgba(144,190,226,0.42620798319327735) 100%)"
-  
+            w="200px"
+            bg="brand.200"
             _dark={{ bg: "gray.900" }}
             m={4}
+            borderWidth="3px"
+            borderColor="brand.400"
             borderRadius="md" // rounded corners
             overflow="hidden" // keep child boundaries within card
-            boxShadow="sm" // small shadow for 3D effect
+            boxShadow="xl" // small shadow for 3D effect
             textAlign="center"
           >
             <Box p={4}>
@@ -95,7 +102,7 @@ const createNewAvatar = async (event) => {
           </Box>
         ))}
         <Divider />
-        <ElaiAvatars />
+
       </Flex>
       <Drawer
         placement="bottom"

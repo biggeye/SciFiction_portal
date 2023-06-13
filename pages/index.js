@@ -29,7 +29,7 @@ export default function Home() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-{/*
+
   if (!user)
     return (
       <Auth
@@ -40,20 +40,20 @@ export default function Home() {
         socialLayout="horizontal"
       />
     )
-    */}
+
   return (
     <Layout>
       <Box as="section" bg="black" _dark={{ bg: "brand.800" }} minH="100vh" overflowX="none" overflowY="auto">
         <Navbar handlePageChange={handlePageChange}/> 
         <Box bg="gray.900" as="main" p="2">
             {/*Assets*/}
-            {currentPage === "Avatars" && <Avatars supabaseClient={supabaseClient}/>}
-            {currentPage === "VoiceModels" && <VoiceModels supabaseClient={supabaseClient} />}
-            {currentPage === "Voiceovers" && <Voiceovers supabaseClient={supabaseClient}/>}
-            {currentPage === "Scripts" && <Scripts supabaseClient={supabaseClient}/>}
+            {currentPage === "Avatars" && <Avatars supabaseClient={supabaseClient} user={user}/>}
+            {currentPage === "VoiceModels" && <VoiceModels supabaseClient={supabaseClient} user={user} />}
+            {currentPage === "Voiceovers" && <Voiceovers supabaseClient={supabaseClient} user={user}/>}
+            {currentPage === "Scripts" && <Scripts supabaseClient={supabaseClient} user={user}/>}
             {/*Content*/}
-            {currentPage === "Videos" && <Videos />}
-            {currentPage === "Campaigns" && <Campaigns />}
+            {currentPage === "Videos" && <Videos supabaseClient={supabaseClient} user={user}/>}
+            {currentPage === "Campaigns" && <Campaigns supabaseClient={supabaseClient} user={user}/>}
              {/*Social Media*/}          
             {currentPage === "DashBoard" && <DashBoard />}
             {currentPage === "Twitter" && <Twitter />}

@@ -89,7 +89,7 @@ export default function ElaiAvatars() {
     >
 {data.map((card) => (
   <Box
-    key={card.variant_id}
+    key={card.avatar_id}
     bg="white"
     _dark={{ bg: "brand.800" }}
     m={4} // some margin for separation

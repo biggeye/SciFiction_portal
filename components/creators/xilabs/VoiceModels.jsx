@@ -225,16 +225,19 @@ export default function VoiceModels() {
         flexWrap="wrap" // allow cards to wrap to new lines
       >
         {data.map((token, tid) => (
-          <Box
-            key={tid}
-            bg="white"
-            _dark={{ bg: "brand.800" }}
-            m={4} // some margin for separation
-            borderRadius="md" // rounded corners
-            overflow="hidden" // keep child boundaries within card
-            boxShadow="sm" // small shadow for 3D effect
-            textAlign="center"
-          >
+    <Box
+    key={tid}
+    w="200px"
+    bg="brand.200"
+    _dark={{ bg: "gray.900" }}
+    m={4}
+    borderWidth="3px"
+    borderColor="brand.400"
+    borderRadius="md" // rounded corners
+    overflow="hidden" // keep child boundaries within card
+    boxShadow="xl" // small shadow for 3D effect
+    textAlign="center"
+  >
             <Box p={4}>
               {Object.keys(token).map((x) => {
                 if (x === "voice_id") return null;

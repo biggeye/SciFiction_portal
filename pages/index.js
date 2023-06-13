@@ -29,7 +29,7 @@ export default function Home() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
+{/*
   if (!user)
     return (
       <Auth
@@ -40,7 +40,7 @@ export default function Home() {
         socialLayout="horizontal"
       />
     )
-
+    */}
   return (
     <Layout>
       <Box as="section" bg="black" _dark={{ bg: "brand.800" }} minH="100vh" overflowX="none" overflowY="auto">

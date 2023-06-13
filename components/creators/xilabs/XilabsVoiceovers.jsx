@@ -7,6 +7,9 @@ import {
   IconButton,
   Text,
   useColorModeValue,
+  Spacer,
+  HStack,
+  Divider
 } from "@chakra-ui/react";
 import {
   RiDeleteBin2Line,
@@ -126,22 +129,29 @@ export default function XilabsVoiceovers() {
 >
       {data.map((token, tid) => (
         <Box
+        w="300px"
+  
+        color="gray.700"
           key={tid}
-          bg="white"
+          bg= "gray.300"
+          p={1.5}
           _dark={{ bg: "brand.800" }}
           m={4} // some margin for separation
-          borderRadius="md" // rounded corners
+          borderRadius="sm" // rounded corners
           overflow="hidden" // keep child boundaries within card
           boxShadow="sm" // small shadow for 3D effect
           textAlign="center"
         >
           <Flex direction="column">
-            <Text>{token.voice}</Text>
-            <Text>{token.date}</Text>
-            <Text>{token.script}</Text>
+            <HStack display="flex" justifyContent="space-between"> <Text size="md" as="b">{token.voice}</Text>
+            <Text size="xs" as="i">{token.date}</Text>
+            </HStack>
+          
+            <Text size="sm">{token.script}</Text>
             </Flex>
 
           <Flex justifyContent="flex-end" p={1}>
+            <Spacer />
             <IconButton
             tooltip="Download"
               size="xs"
@@ -150,6 +160,7 @@ export default function XilabsVoiceovers() {
               aria-label="Up"
               onClick={() => downloadRow(token["voiceover_id"])}
             />
+         
             <IconButton
             tooltip="Delete"
               size="xs"

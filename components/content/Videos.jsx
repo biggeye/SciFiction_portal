@@ -1,8 +1,9 @@
+import Talks from "../creators/did/Talks";
 
 
 const Videos = () => {
     return (
-  <p>Hello</p>
+      <Talks />
     );
   };
   

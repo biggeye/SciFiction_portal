@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Flex, Image, Input, Text, Divider, Card, Drawer, DrawerHeader, DrawerBody, DrawerFooter, DrawerContent, DrawerOverlay, FormControl, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Flex, Image, Input, Text, VStack, ivider, Card, Drawer, DrawerHeader, DrawerBody, DrawerFooter, DrawerContent, DrawerOverlay, FormControl, useDisclosure } from "@chakra-ui/react";
 import { upload_avatar } from "../../utils/production/upload";
 
 const convertToDataURI = (file) =>
@@ -91,6 +91,7 @@ else return newAvatarUuid;
             textAlign="center"
           >
             <Box p={4}>
+              <VStack>
               <Image src={avatar.url} alt="Avatar Image" />
               <Text size="md" as="b">
                 {avatar.name}
@@ -98,10 +99,12 @@ else return newAvatarUuid;
               <Text size="md" as="b">
                 {avatar.title}
               </Text>
+              </VStack>
             </Box>
+            
           </Box>
         ))}
-        <Divider />
+<hr />
 
       </Flex>
       <Drawer

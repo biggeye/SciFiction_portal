@@ -22,6 +22,13 @@ import {
   Tab,
   TabList,
   VStack,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import {
   RiChatVoiceLine,
@@ -35,11 +42,25 @@ import {
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose, AiOutlineMenu, AiFillHome } from "react-icons/ai";
 import { useState } from "react";
+import AccountForm from "./auth/AccountForm";
 
-export default function Navbar({ handlePageChange }) {
+export default function Navbar({ handlePageChange, supabaseClient, user }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [session, setSession] = useState(null);
   const mobileNav = useDisclosure();
+  const userProfileModalDisclosure = useDisclosure(); // New instance for the modal
+
   const [currentTab, setTabList] = useState(""); // Added state hook here
+
+  const profileSession = async () => {
+    const session = await supabaseClient.auth.getSession();
+    setSession(session);
+    if (!session) {
+      console.log("no supabase client")
+    }
+  };
+  
+
   const headerItems = [
     {
       name: "Social Media",
@@ -213,7 +234,11 @@ export default function Navbar({ handlePageChange }) {
               ))}
             </HStack>
 
-            <Avatar zIndex="1" size="sm" name="Dan Abrahmov" />
+            <Avatar
+              onClick={userProfileModalDisclosure.onOpen}
+              zIndex="1"
+              size="sm"
+            />
           </HStack>
         </Flex>
       </chakra.header>
@@ -255,6 +280,23 @@ export default function Navbar({ handlePageChange }) {
         </Tabs>
         <Spacer />
       </Flex>
+      <Modal
+        onClose={userProfileModalDisclosure.onClose}
+        isOpen={userProfileModalDisclosure.isOpen}
+        isCentered
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>User Profile</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+          <AccountForm supabaseClient={supabaseClient} user={user} />
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={userProfileModalDisclosure.onClose}>Close</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }

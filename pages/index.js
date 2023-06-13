@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 //PROPRIETARY
 import Layout from "../components/Layout";
 import Navbar from "../components/Navbar";
+
 //SOCIAL MEDIA
 import DashBoard from "../components/social/DashBoard";
 import Twitter from "../components/social/Twitter";
@@ -15,7 +16,10 @@ import Voiceovers from "../components/assets/Voiceovers";
 //CONTENT
 import Videos from "../components/content/Videos";
 import Campaigns from "../components/content/Campaigns";
-import { Box } from "@chakra-ui/react";
+import { 
+  Box,
+
+ } from "@chakra-ui/react";
 //AUTH & DB
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
@@ -44,7 +48,7 @@ export default function Home() {
   return (
     <Layout>
       <Box as="section" bg="black" _dark={{ bg: "brand.800" }} minH="100vh" overflowX="none" overflowY="auto">
-        <Navbar handlePageChange={handlePageChange}/> 
+        <Navbar handlePageChange={handlePageChange} supabaseClient={supabaseClient} user={user} /> 
         <Box bg="gray.900" as="main" p="2">
             {/*Assets*/}
             {currentPage === "Avatars" && <Avatars supabaseClient={supabaseClient} user={user}/>}

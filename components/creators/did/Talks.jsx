@@ -30,32 +30,29 @@ export default function Talks() {
       setData(filteredData);
     });
   }, []);
-  
-
-  
 
   const fetchYourData = async () => {
     const options = {
-      method: "GET",
-      url: "https://api.d-id.com/talks",
-      params: { limit: "100" },
+      method: 'GET',
+      url: 'https://api.d-id.com/talks?limit=100',
       headers: {
-        accept: "application/json",
-        authorization:
-          "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik53ek53TmV1R3ptcFZTQjNVZ0J4ZyJ9.eyJodHRwczovL2QtaWQuY29tL2ZlYXR1cmVzIjoidGFsa3MiLCJodHRwczovL2QtaWQuY29tL2N4X2xvZ2ljX2lkIjoiIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLmQtaWQuY29tLyIsInN1YiI6ImF1dGgwfDY0MjhiNjgyMWU2MDA2YjY1N2VhZTNmOSIsImF1ZCI6WyJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY4NjI0OTcwNCwiZXhwIjoxNjg2MzM2MTA0LCJhenAiOiJHenJOSTFPcmU5Rk0zRWVEUmYzbTN6M1RTdzBKbFJZcSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgcmVhZDpjdXJyZW50X3VzZXIgdXBkYXRlOmN1cnJlbnRfdXNlcl9tZXRhZGF0YSBvZmZsaW5lX2FjY2VzcyJ9.HauUndVHsL89IohoMEqDIzOvzb9LFPy6glcsoqITOa8pw6kw9HfkWo7ba_mdBGd4ILktEvNKvnn-aikRveK-TTd0-CjfVcdZHkuZlvY9cTOwX0nzDpsIORgXrathx9ifaCandFfgI9p3jDnWZNYMCkwN2GD4Q82JV-jH-KcGjCHiWUQV0lx-pfkMWM76okfFAFtnAJYBMcqb7sV1D-wDkN8sPQVygm1P0HVfbl-R7ZSYENaHn2X8kkLljZOioZaZ5NluKtmG9RwoHgw2bLNowX13HX-Nl5tqVjNKcjvRoa4FOxLpvu-TOKuoHMIhSH38-FELLW5B_pYUNyOEDCZbCw",
+        accept: 'application/json',
+        authorization: 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik53ek53TmV1R3ptcFZTQjNVZ0J4ZyJ9.eyJodHRwczovL2QtaWQuY29tL2ZlYXR1cmVzIjoidGFsa3MiLCJodHRwczovL2QtaWQuY29tL2N4X2xvZ2ljX2lkIjoiIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLmQtaWQuY29tLyIsInN1YiI6ImF1dGgwfDY0MjhiNjgyMWU2MDA2YjY1N2VhZTNmOSIsImF1ZCI6WyJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY4NjY2ODc3MSwiZXhwIjoxNjg2NzU1MTcxLCJhenAiOiJHenJOSTFPcmU5Rk0zRWVEUmYzbTN6M1RTdzBKbFJZcSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgcmVhZDpjdXJyZW50X3VzZXIgdXBkYXRlOmN1cnJlbnRfdXNlcl9tZXRhZGF0YSBvZmZsaW5lX2FjY2VzcyJ9.3FnKv2-Ysi_pTQwu56EINMnNnp1VE1oanbrRMkz7hGwVWshR--9xsdvegRzPX0_CGVEbVVUV3raVKAt-mMsrA-nY16s0BjqBrYdCEnrDCgChg2vN84k0wqGMT-TfAP8HkxU1BHLXt3v4LLmhgbyjCjuWGi0QLTuqGgmC-rOL8VRz81brIiJI2x3UuXU6u6Ggt-27UBWiNIkf4gHi-5wV5OgETB6iqzeArSJV400xOumfu4KCQgyO2_fkwG3bp0-swCYFJaEp3WVlMqnfIcsNt6VmNPf5Irdzd2_5JQrN36QDjO7BsE7p_VmuuX2uLQSB23E14qLxz4JP-C84nkhQHQ'
+  
       },
     };
-
+  
     let response;
     try {
       response = await axios.request(options);
       console.log(response.data);
     } catch (error) {
       console.error(error);
+      throw error;  // Propagate the error
     }
-
+  
     const talks = response.data.talks;
-
+  
     const tableData = talks.map((talk) => {
       return {
         name: talk.name,
@@ -64,31 +61,28 @@ export default function Talks() {
         talk_id: talk.id,
         status: talk.status
       };
-
     });
-     
+  
     return tableData;
   };
-
+  
   const downloadRow = async (talk_id) => {
-    setTalkId(talk_id);
     const options = {
-      mode: 'no-cors',
-      method: "GET",
-      url: `https://api.d-id.com/talks/${talkId}`,
+      method: 'GET',
+      url: `https://api.d-id.com/talks/${talk_id}`,
       headers: {
-        accept: "application/json",
-        authorization: "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik53ek53TmV1R3ptcFZTQjNVZ0J4ZyJ9.eyJodHRwczovL2QtaWQuY29tL2ZlYXR1cmVzIjoidGFsa3MiLCJodHRwczovL2QtaWQuY29tL2N4X2xvZ2ljX2lkIjoiIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLmQtaWQuY29tLyIsInN1YiI6ImF1dGgwfDY0MjhiNjgyMWU2MDA2YjY1N2VhZTNmOSIsImF1ZCI6WyJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY4NjI0OTcwNCwiZXhwIjoxNjg2MzM2MTA0LCJhenAiOiJHenJOSTFPcmU5Rk0zRWVEUmYzbTN6M1RTdzBKbFJZcSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgcmVhZDpjdXJyZW50X3VzZXIgdXBkYXRlOmN1cnJlbnRfdXNlcl9tZXRhZGF0YSBvZmZsaW5lX2FjY2VzcyJ9.HauUndVHsL89IohoMEqDIzOvzb9LFPy6glcsoqITOa8pw6kw9HfkWo7ba_mdBGd4ILktEvNKvnn-aikRveK-TTd0-CjfVcdZHkuZlvY9cTOwX0nzDpsIORgXrathx9ifaCandFfgI9p3jDnWZNYMCkwN2GD4Q82JV-jH-KcGjCHiWUQV0lx-pfkMWM76okfFAFtnAJYBMcqb7sV1D-wDkN8sPQVygm1P0HVfbl-R7ZSYENaHn2X8kkLljZOioZaZ5NluKtmG9RwoHgw2bLNowX13HX-Nl5tqVjNKcjvRoa4FOxLpvu-TOKuoHMIhSH38-FELLW5B_pYUNyOEDCZbCw",
-
+        accept: 'application/json',
+        authorization: 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik53ek53TmV1R3ptcFZTQjNVZ0J4ZyJ9.eyJodHRwczovL2QtaWQuY29tL2ZlYXR1cmVzIjoidGFsa3MiLCJodHRwczovL2QtaWQuY29tL2N4X2xvZ2ljX2lkIjoiIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLmQtaWQuY29tLyIsInN1YiI6ImF1dGgwfDY0MjhiNjgyMWU2MDA2YjY1N2VhZTNmOSIsImF1ZCI6WyJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY4NjY2ODc3MSwiZXhwIjoxNjg2NzU1MTcxLCJhenAiOiJHenJOSTFPcmU5Rk0zRWVEUmYzbTN6M1RTdzBKbFJZcSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgcmVhZDpjdXJyZW50X3VzZXIgdXBkYXRlOmN1cnJlbnRfdXNlcl9tZXRhZGF0YSBvZmZsaW5lX2FjY2VzcyJ9.3FnKv2-Ysi_pTQwu56EINMnNnp1VE1oanbrRMkz7hGwVWshR--9xsdvegRzPX0_CGVEbVVUV3raVKAt-mMsrA-nY16s0BjqBrYdCEnrDCgChg2vN84k0wqGMT-TfAP8HkxU1BHLXt3v4LLmhgbyjCjuWGi0QLTuqGgmC-rOL8VRz81brIiJI2x3UuXU6u6Ggt-27UBWiNIkf4gHi-5wV5OgETB6iqzeArSJV400xOumfu4KCQgyO2_fkwG3bp0-swCYFJaEp3WVlMqnfIcsNt6VmNPf5Irdzd2_5JQrN36QDjO7BsE7p_VmuuX2uLQSB23E14qLxz4JP-C84nkhQHQ'
+  
       },
     };
   
     try {
       const response = await axios.request(options);
-      if (response.data.status === "error") {
-        console.log("Video is corrupt");
-      } else if (response.data.status === "done") {
-        const filename = `${talkId}.mp4`;
+      if (response.data.status === 'error') {
+        console.log('Video is corrupt');
+      } else if (response.data.status === 'done') {
+        const filename = `${talk_id}.mp4`;
         const videoUrl = response.data.result_url;
         downloadUrl(videoUrl, filename, 'video/mp4');
       }
@@ -96,7 +90,6 @@ export default function Talks() {
       console.error(error);
     }
   };
-  
 
   const deleteRow = async (talk_id) => {
     setTalkId(talk_id);
@@ -105,8 +98,7 @@ export default function Talks() {
       url: `https://api.d-id.com/talks/${talkId}`,
       headers: {
         accept: "application/json",
-        authorization:
-          "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik53ek53TmV1R3ptcFZTQjNVZ0J4ZyJ9.eyJodHRwczovL2QtaWQuY29tL2ZlYXR1cmVzIjoidGFsa3MiLCJodHRwczovL2QtaWQuY29tL2N4X2xvZ2ljX2lkIjoiIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLmQtaWQuY29tLyIsInN1YiI6ImF1dGgwfDY0MjhiNjgyMWU2MDA2YjY1N2VhZTNmOSIsImF1ZCI6WyJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY4NjI0OTcwNCwiZXhwIjoxNjg2MzM2MTA0LCJhenAiOiJHenJOSTFPcmU5Rk0zRWVEUmYzbTN6M1RTdzBKbFJZcSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgcmVhZDpjdXJyZW50X3VzZXIgdXBkYXRlOmN1cnJlbnRfdXNlcl9tZXRhZGF0YSBvZmZsaW5lX2FjY2VzcyJ9.HauUndVHsL89IohoMEqDIzOvzb9LFPy6glcsoqITOa8pw6kw9HfkWo7ba_mdBGd4ILktEvNKvnn-aikRveK-TTd0-CjfVcdZHkuZlvY9cTOwX0nzDpsIORgXrathx9ifaCandFfgI9p3jDnWZNYMCkwN2GD4Q82JV-jH-KcGjCHiWUQV0lx-pfkMWM76okfFAFtnAJYBMcqb7sV1D-wDkN8sPQVygm1P0HVfbl-R7ZSYENaHn2X8kkLljZOioZaZ5NluKtmG9RwoHgw2bLNowX13HX-Nl5tqVjNKcjvRoa4FOxLpvu-TOKuoHMIhSH38-FELLW5B_pYUNyOEDCZbCw",
+        authorization: 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik53ek53TmV1R3ptcFZTQjNVZ0J4ZyJ9.eyJodHRwczovL2QtaWQuY29tL2ZlYXR1cmVzIjoidGFsa3MiLCJodHRwczovL2QtaWQuY29tL2N4X2xvZ2ljX2lkIjoiIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLmQtaWQuY29tLyIsInN1YiI6ImF1dGgwfDY0MjhiNjgyMWU2MDA2YjY1N2VhZTNmOSIsImF1ZCI6WyJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY4NjY2ODc3MSwiZXhwIjoxNjg2NzU1MTcxLCJhenAiOiJHenJOSTFPcmU5Rk0zRWVEUmYzbTN6M1RTdzBKbFJZcSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgcmVhZDpjdXJyZW50X3VzZXIgdXBkYXRlOmN1cnJlbnRfdXNlcl9tZXRhZGF0YSBvZmZsaW5lX2FjY2VzcyJ9.3FnKv2-Ysi_pTQwu56EINMnNnp1VE1oanbrRMkz7hGwVWshR--9xsdvegRzPX0_CGVEbVVUV3raVKAt-mMsrA-nY16s0BjqBrYdCEnrDCgChg2vN84k0wqGMT-TfAP8HkxU1BHLXt3v4LLmhgbyjCjuWGi0QLTuqGgmC-rOL8VRz81brIiJI2x3UuXU6u6Ggt-27UBWiNIkf4gHi-5wV5OgETB6iqzeArSJV400xOumfu4KCQgyO2_fkwG3bp0-swCYFJaEp3WVlMqnfIcsNt6VmNPf5Irdzd2_5JQrN36QDjO7BsE7p_VmuuX2uLQSB23E14qLxz4JP-C84nkhQHQ'
       },
     };
 

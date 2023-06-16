@@ -150,9 +150,11 @@ export default function Navbar({ handlePageChange, supabaseClient, user }) {
   return (
     <Box>
       <chakra.header
-        bg="gray.500"
-        borderColor="gray.200"
+        bg="brand.100"
+        _dark={{ color: "brand.900" }}
+        borderColor="brand.700"
         borderBottomWidth={1}
+        color="brand.800"
         w="full"
         px={{ base: 1, sm: 3 }}
         py={2}
@@ -164,7 +166,7 @@ export default function Navbar({ handlePageChange, supabaseClient, user }) {
                 display={{ base: "flex", md: "none" }}
                 aria-label="Open menu"
                 fontSize="20px"
-                color="gray.900"
+                color="brand.900"
                 _dark={{ color: "inherit" }}
                 variant="ghost"
                 icon={<AiOutlineMenu />}
@@ -180,7 +182,7 @@ export default function Navbar({ handlePageChange, supabaseClient, user }) {
                 p={2}
                 pb={4}
                 mt={15}
-                bg="gray.300"
+                bg="brand.200"
                 spacing={3}
                 rounded="sm"
                 shadow="sm"
@@ -243,9 +245,9 @@ export default function Navbar({ handlePageChange, supabaseClient, user }) {
         </Flex>
       </chakra.header>
       <Flex
-        w="100vw"
-        bg="gray.700"
-        color="gray.200"
+        w="fill"
+        bg="brand.300"
+        color="brand.900"
         alignItems="center"
         justifyContent="space-between"
         borderWidth={0}
@@ -254,7 +256,7 @@ export default function Navbar({ handlePageChange, supabaseClient, user }) {
         <Tabs
           defaultIndex={0}
           borderBottomColor="transparent"
-          colorScheme="gray.200"
+          colorScheme="brand.500"
         >
           {selectedTab && (
             <TabList>

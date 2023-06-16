@@ -43,6 +43,7 @@ import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
 import axios from "axios";
 import AudioPlayer from "../../shared/AudioPlayer";
 import AudioRecorder from "../../shared/AudioRecorder";
+import XilabsVoiceovers from "./XilabsVoiceovers";
 
 export default function VoiceModels() {
   const [isLoading, setIsLoading] = useState(false);
@@ -217,7 +218,7 @@ export default function VoiceModels() {
       </Box>
       <Flex
         w="full"
-        bg="gray.700"
+        bg="brand.700"
         _dark={{ bg: "#3e3e3e" }}
         p={50}
         alignItems="center"
@@ -229,7 +230,7 @@ export default function VoiceModels() {
     key={tid}
     w="200px"
     bg="brand.200"
-    _dark={{ bg: "gray.900" }}
+    _dark={{ bg: "brand.900" }}
     m={4}
     borderWidth="3px"
     borderColor="brand.400"
@@ -287,7 +288,7 @@ export default function VoiceModels() {
           </Box>
         ))}
       </Flex>
-
+<XilabsVoiceovers />
       <Drawer
         size={sizes}
         isOpen={isOpen}
@@ -327,7 +328,9 @@ export default function VoiceModels() {
                       <VStack>
                         <Text>Stability Value</Text>
                         <Slider
-                          w="75%"
+        step={0.01}
+                          min={0}
+                          max={1}
                           aria-label="slider-stability"
                           onChange={(val) => setStabilityValue(val)}
                         >
@@ -345,14 +348,16 @@ export default function VoiceModels() {
 
                         <Text>Similarity Value</Text>
                         <Slider
-                          w="75%"
+                        min={0}
+                        max={1}
+                        step={0.01}
                           aria-label="slider-similarity"
                           onChange={(val) => setSimilarityValue(val)}
                         >
                           <SliderMark
                             value={similarityValue}
                             textAlign="center"
-                            bg="gray.500"
+                            bg="brand.500"
                             color="white"
                           ></SliderMark>
                           <SliderTrack>

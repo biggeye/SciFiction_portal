@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { Box, Main } from "@chakra-ui/react";
 
 
 const Layout = ({ children }) => {
@@ -12,7 +13,7 @@ const Layout = ({ children }) => {
         <link rel="icon" href="/bigeye_100.png" />
       </Head>
 
-        <main>{children}</main>
+        <Box>{children}</Box>
 
     </div>
   );

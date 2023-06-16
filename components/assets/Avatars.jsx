@@ -20,7 +20,7 @@ export default function Avatars({ supabaseClient, user }) {
   const [userInFile, setUserInFile] = useState([]);
   const { isOpen: isNewAvatarOpen, onOpen: onNewAvatarOpen, onClose: onNewAvatarClose } = useDisclosure();
 
-const userId = user
+const userId = user;
 
   useEffect(() => {
     fetchAvatars();
@@ -55,8 +55,8 @@ else return newAvatarUuid;
 };
 
   return (
-    <Box width="fill" height="fill">
-      <Box position="absolute" mt={2} ml={2}>
+    <Box width="fill" height="fill" overflowX="none">
+      <Box overflowX="none" position="absolute" mt={2} ml={2}>
         <Button
           size="xs"
           colorScheme="blue"
@@ -69,7 +69,7 @@ else return newAvatarUuid;
       </Box>
       <Flex
         w="full"
-        bg="gray.700"
+        bg="brand.700"
         _dark={{ bg: "#3e3e3e" }}
         p={50}
         alignItems="center"
@@ -81,7 +81,7 @@ else return newAvatarUuid;
             key={avatar.uuid}
             w="200px"
             bg="brand.200"
-            _dark={{ bg: "gray.900" }}
+            _dark={{ bg: "brand.900" }}
             m={4}
             borderWidth="3px"
             borderColor="brand.400"

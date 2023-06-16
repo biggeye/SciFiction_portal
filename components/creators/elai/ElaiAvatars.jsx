@@ -80,7 +80,7 @@ export default function ElaiAvatars() {
   return (
     <Flex
       w="full"
-      bg="gray.700"
+      bg="brand.700"
       _dark={{ bg: "#3e3e3e" }}
       p={50}
       alignItems="center"

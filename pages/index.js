@@ -26,8 +26,8 @@ import { ThemeSupa } from '@supabase/auth-ui-shared'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
 export default function Home() {
-  const supabaseClient = useSupabaseClient()
-  const user = useUser()
+  const supabaseClient = useSupabaseClient();
+  const user = useUser();
   const [currentPage, setCurrentPage] = useState("");
 
   const handlePageChange = (page) => {
@@ -46,10 +46,10 @@ export default function Home() {
     )
 
   return (
-    <Layout>
-      <Box as="section" bg="black" _dark={{ bg: "brand.800" }} minH="100vh" overflowX="none" overflowY="auto">
+    <Layout overflowX="none">
+      <Box as="section" bg="brand.50" _dark={{ bg: "brand.900" }} minH="100vh" overflowX="none" overflowY="auto">
         <Navbar handlePageChange={handlePageChange} supabaseClient={supabaseClient} user={user} /> 
-        <Box bg="gray.900" as="main" p="2">
+        <Box bg="brand.800" as="main" p="10">
             {/*Assets*/}
             {currentPage === "Avatars" && <Avatars supabaseClient={supabaseClient} user={user}/>}
             {currentPage === "VoiceModels" && <VoiceModels supabaseClient={supabaseClient} user={user} />}

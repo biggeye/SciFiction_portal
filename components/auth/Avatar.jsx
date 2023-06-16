@@ -59,7 +59,7 @@ export default function Avatar({ supabaseClient, user, uid, url, size, onUpload 
           alt="Avatar"
         />
       ) : (
-        <Box boxSize={size} bg="gray.200" />
+        <Box boxSize={size} bg="brand.200" />
       )}
       <Box w={size}>
         <Input

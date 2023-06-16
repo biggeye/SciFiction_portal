@@ -20,11 +20,14 @@ import axios from "axios";
 import sliceWords from "../../../utils/sliceWords";
 import convertDate from "../../../utils/convertDate";
 import { downloadFile } from "../../../utils/downloadFile";
+import { upload_voiceover } from "../../../utils/production/upload";
 
-export default function XilabsVoiceovers() {
+export default function XilabsVoiceovers({ supabaseClient, user }) {
+  const userId = user;
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [charactersUsed, setCharactersUsed] = useState("");
+  const [voiceOverData, setVoiceOverData] = useState([]);
 
   useEffect(() => {
     fetchYourData().then((fetchedData) => {
@@ -55,7 +58,7 @@ export default function XilabsVoiceovers() {
       script: sliceWords(vo.text),
       voiceover_id: vo.history_item_id,
     }));
-
+    setVoiceOverData(tableData);
     return tableData;
   };
   const playRow = async (voiceover_id) => {
@@ -79,8 +82,9 @@ export default function XilabsVoiceovers() {
     );
     console.log(response);
     const filename = "voiceover.mp3"; // Set the desired filename for the downloaded audio file
-
+     
     downloadFile(response.data, filename, "audio/mpeg");
+    upload_voiceover(response.data, voiceOverData.voice, voiceOverData.script, userId, supabaseClient);
   };
   const deleteRow = async (voiceoverId) => {
     const confirmation = window.confirm("Are you sure you want to delete?");
@@ -108,20 +112,9 @@ export default function XilabsVoiceovers() {
 
   return (
     <Box width="fill" height="fill">
-    <Box position="absolute" mt={2} ml={2}>
-        <Button
-          size="xs"
-          colorScheme="blue"
-          onClick={() => {
-            onNewAvatarOpen();
-          }}
-        >
-          New
-        </Button>
-      </Box>
-    <Flex
+       <Flex
     w="full"
-    bg="gray.700"
+    bg="brand.700"
     _dark={{ bg: "#3e3e3e" }}
     p={50}
     alignItems="center"
@@ -132,10 +125,10 @@ export default function XilabsVoiceovers() {
         <Box
         w="300px"
   
-        color="gray.700"
+        color="brand.700"
           key={tid}
           bg="brand.200"
-          _dark={{ bg: "gray.900" }}
+          _dark={{ bg: "brand.900" }}
           m={4}
           borderWidth="3px"
           borderColor="brand.400"

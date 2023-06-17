@@ -41,7 +41,7 @@ import {
   Select,
   Stack,
 } from "@chakra-ui/react";
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const convertToDataURI = (file) =>
   new Promise((resolve, reject) => {
@@ -50,11 +50,6 @@ const convertToDataURI = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-
-
-
-
-
 
 export default function Voiceovers() {
   const [isLoading, setIsLoading] = useState(false);
@@ -73,23 +68,22 @@ export default function Voiceovers() {
   }, []);
   useEffect(() => {
     if (deleteVoiceoverUuid) {
-        deleteVoiceover();
+      deleteVoiceover();
     }
-}, [deleteVoiceoverUuid]);
+  }, [deleteVoiceoverUuid]);
 
-
-const fetchVoiceovers = async (supabaseClient) => {
-  try {
-    const { data, error } = await supabaseClient
-      .from("voiceover_")
-      .select("*");
-    if (error) throw error;
-    setVoiceovers(data);
-    return (data);
-  } catch (error) {
-    console.error("Error fetching voiceovers:", error.message);
-  }
-};
+  const fetchVoiceovers = async (supabaseClient) => {
+    try {
+      const { data, error } = await supabaseClient
+        .from("voiceover_")
+        .select("*");
+      if (error) throw error;
+      setVoiceovers(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching voiceovers:", error.message);
+    }
+  };
 
   const handleAudioUpload = async (event) => {
     const file = event.target.files[0];
@@ -109,25 +103,25 @@ const fetchVoiceovers = async (supabaseClient) => {
       supabaseClient
     );
     setIsLoading(false);
-fetchVoiceovers(supabaseClient);
-onClose();
+    fetchVoiceovers(supabaseClient);
+    onClose();
   };
 
-const deleteVoiceover = async() => {
-  setIsLoading(true);
-  const { data, error } = await supabaseClient
-  .from('voiceover_')
-  .delete()
-  .eq('uuid', deleteVoiceoverUuid)
-if (!error) {
-  setIsLoading(false);
-  fetchVoiceovers(supabaseClient);
-  onClose();
-}
-}
+  const deleteVoiceover = async () => {
+    setIsLoading(true);
+    const { data, error } = await supabaseClient
+      .from("voiceover_")
+      .delete()
+      .eq("uuid", deleteVoiceoverUuid);
+    if (!error) {
+      setIsLoading(false);
+      fetchVoiceovers(supabaseClient);
+      onClose();
+    }
+  };
 
   return (
-      <Box layerStyle="subPage">
+    <Box layerStyle="subPage">
       <Box overflowX="none" position="absolute" mt={2} ml={2}>
         <Button
           size="xs"
@@ -136,31 +130,33 @@ if (!error) {
             onOpen();
           }}
         >
-          Upload 
+          Upload
         </Button>
       </Box>
       <Flex
-   p={50}
-   alignItems="center"
-   justifyContent="center"
-   flexWrap="wrap"// allow cards to wrap to new lines
+        p={50}
+        alignItems="center"
+        justifyContent="center"
+        flexWrap="wrap" // allow cards to wrap to new lines
       >
-      {voiceovers.map((voiceover) => (
-        
-          <Card key={voiceover.uuid}
-          layerStyle="card">
+        {voiceovers.map((voiceover) => (
+          <Card key={voiceover.uuid} layerStyle="card">
             <AudioPlayer src={voiceover.url} />
-       
-             <Text > {voiceover.name}</Text>
-     
-            <Text size="sm">{voiceover.title}</Text>
-            <Button isLoading={isLoading} size="xs" onClick={() => setDeleteVoiceoverUuid(voiceover.uuid)}>delete</Button>
-            </Card>
-        
-      ))}
 
-    </Flex>
-    <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+            <Text> {voiceover.name}</Text>
+
+            <Text size="sm">{voiceover.title}</Text>
+            <Button
+              isLoading={isLoading}
+              size="xs"
+              onClick={() => setDeleteVoiceoverUuid(voiceover.uuid)}
+            >
+              delete
+            </Button>
+          </Card>
+        ))}
+      </Flex>
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
@@ -208,6 +204,6 @@ if (!error) {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-</Box>
+    </Box>
   );
 }

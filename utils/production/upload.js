@@ -82,7 +82,7 @@ async function upload_voiceover(audio, name, title, user, supabaseClient) {
 
   // Create a row in the "voiceover_" table
 }
-async function upload_video(result_url, title, user, supabaseClient) {
+async function upload_video(result_url, name, title, user, supabaseClient) {
   const userId = user;
   const result_mp4 = await fetch(result_url);
   const mp4 = await result_mp4.blob();
@@ -98,13 +98,14 @@ async function upload_video(result_url, title, user, supabaseClient) {
   if (videoError) {
     return;
   } else {
-    const { videoTableData, videoTableError } = await supabaseClient  .rpc('add_video', {
-      p_uuid: uuid,
-      p_name: title,
-      p_title: "SciFiction",
-      p_url: url, 
-      p_created_by: userId.id.toString(),
-    });
+    const { videoTableData, videoTableError } = await supabaseClient.from("videos_")
+    .insert([{
+      uuid,
+      name,
+      title,
+      url, 
+      created_by: userId.id.toString(),
+    }]);
 
     if (videoTableError) {
       console.error("Error posting video data to Supabase:", error);

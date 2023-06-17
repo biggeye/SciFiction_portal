@@ -137,6 +137,10 @@ export default function Navbar({ handlePageChange }) {
           name: "Eleven Labs",
           action: () => handlePageChange("ElevenLabs"),
         },
+        {
+          name: "D-ID",
+          action: () => handlePageChange("DID"),
+        }
       ],
     },
   ];
@@ -146,11 +150,8 @@ export default function Navbar({ handlePageChange }) {
   return (
     <Box>
       <chakra.header
-
-     
         borderColor="brand.700"
         borderBottomWidth={1}
-
         w="full"
         px={{ base: 1, sm: 3 }}
         py={2}

@@ -53,18 +53,7 @@ const convertToDataURI = (file) =>
 
 
 
-  export const fetchVoiceovers = async (supabaseClient, setVoiceovers) => {
-    try {
-      const { data, error } = await supabaseClient
-        .from("voiceover_")
-        .select("*");
-      if (error) throw error;
-      setVoiceovers(data);
-      return (data);
-    } catch (error) {
-      console.error("Error fetching voiceovers:", error.message);
-    }
-  };
+
 
 
 export default function Voiceovers() {
@@ -74,6 +63,7 @@ export default function Voiceovers() {
   const [userInFile, setUserInFile] = useState([]);
   const [uploadVoiceoverName, setUploadVoiceoverName] = useState("");
   const [uploadVoiceoverTitle, setUploadVoiceoverTitle] = useState("");
+  const [deleteVoiceoverUuid, setDeleteVoiceoverUuid] = useState("");
 
   const userId = useUser();
   const supabaseClient = useSupabaseClient();
@@ -81,7 +71,25 @@ export default function Voiceovers() {
   useEffect(() => {
     fetchVoiceovers(supabaseClient, setVoiceovers);
   }, []);
+  useEffect(() => {
+    if (deleteVoiceoverUuid) {
+        deleteVoiceover();
+    }
+}, [deleteVoiceoverUuid]);
 
+
+const fetchVoiceovers = async (supabaseClient) => {
+  try {
+    const { data, error } = await supabaseClient
+      .from("voiceover_")
+      .select("*");
+    if (error) throw error;
+    setVoiceovers(data);
+    return (data);
+  } catch (error) {
+    console.error("Error fetching voiceovers:", error.message);
+  }
+};
 
   const handleAudioUpload = async (event) => {
     const file = event.target.files[0];
@@ -99,8 +107,20 @@ export default function Voiceovers() {
       userId,
       supabaseClient
     );
-fetchVoiceovers();
+fetchVoiceovers(supabaseClient);
   };
+
+const deleteVoiceover = async() => {
+  setIsLoading(true);
+  const { data, error } = await supabaseClient
+  .from('voiceover_')
+  .delete()
+  .eq('uuid', deleteVoiceoverUuid)
+if (!error) {
+  setIsLoading(false);
+  fetchVoiceovers(supabaseClient);
+}
+}
 
   return (
       <Box layerStyle="subPage">
@@ -130,6 +150,7 @@ fetchVoiceovers();
              <Text > {voiceover.name}</Text>
      
             <Text size="sm">{voiceover.title}</Text>
+            <Button isLoading={isLoading} size="xs" onClick={() => setDeleteVoiceoverUuid(voiceover.uuid)}>delete</Button>
             </Card>
         
       ))}

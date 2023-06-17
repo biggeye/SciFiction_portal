@@ -34,6 +34,7 @@ const convertToDataURI = (file) =>
 export default function Avatars() {
   const [isLoading, setIsLoading] = useState(false);
   const [avatars, setAvatars] = useState([]);
+  const [deleteAvatarUuid, setDeleteAvatarUuid] = useState("");
   const [newAvatarName, setNewAvatarName] = useState("");
   const [newAvatarImage, setNewAvatarImage] = useState("");
   const [newAvatarDescription, setNewAvatarDescription] = useState("");
@@ -49,7 +50,11 @@ export default function Avatars() {
   useEffect(() => {
     fetchAvatars(supabaseClient, setAvatars);
   }, []);
-
+  useEffect(() => {
+    if (deleteAvatarUuid) {
+        deleteAvatar();
+    }
+}, [deleteAvatarUuid]);
 const fetchAvatars = async (supabaseClient) => {
     try {
       const { data, error } = await supabaseClient.from("avatar_").select("*");
@@ -82,7 +87,23 @@ const fetchAvatars = async (supabaseClient) => {
     if (!newAvatarUuid) {
       console.log("Avatar upload failed.");
     } else return newAvatarUuid;
+    fetchAvatars();
+    onNewAvatarClose();
     setIsLoading(false);
+  };
+
+
+  const deleteAvatar = async (event) => {
+    setIsLoading(true);
+  const { data, error } = await supabaseClient
+  .from('avatar_')
+  .delete()
+  .eq('uuid', deleteAvatarUuid);
+  if (!error) {
+  setIsLoading(false);
+   
+  fetchAvatars(supabaseClient);
+}
   };
 
   return (
@@ -110,8 +131,10 @@ const fetchAvatars = async (supabaseClient) => {
             <Card key={avatar.uuid} layerStyle="card">
               <Image src={avatar.url} alt="Avatar Image" />
 
-              {avatar.name}
-              {avatar.title}
+              {avatar.name}<br />
+              {avatar.title}<br />
+              <Button isLoading={isLoading} size="xs" onClick={() => setDeleteAvatarUuid(avatar.uuid)}>delete</Button>
+
             </Card>
         
         ))}

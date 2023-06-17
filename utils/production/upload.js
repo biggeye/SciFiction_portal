@@ -1,9 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
-import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 
-async function upload_avatar(image, name, description) {
-  const supabaseClient = useSupabaseClient();
-  const userId = useUser();
+async function upload_avatar(image, name, description, user, supabaseClient) {
+  const userId = user;
   const response = await fetch(image);
   const imageBlob = await response.blob();
   const uuid = uuidv4();
@@ -34,9 +32,8 @@ async function upload_avatar(image, name, description) {
     return imageTableData;
   }
 }
-async function upload_script(content, title) {
-  const supabaseClient = useSupabaseClient();
-  const userId = useUser();
+async function upload_script(content, title, user, supabaseClient) {
+  const userId = user;
   // Generate UUID
   const uuid = uuidv4();
 
@@ -53,10 +50,9 @@ async function upload_script(content, title) {
   // Return the UUID
   return uuid;
 }
-async function upload_voiceover(audio, name, title) {
+async function upload_voiceover(audio, name, title, user, supabaseClient) {
   // Generate UUID
-  const supabaseClient = useSupabaseClient();
-  const userId = useUser();
+  const userId = user;
   const mp3 = await fetch(audio);
   const audioBlob = await mp3.blob();
   const uuid = uuidv4();
@@ -86,9 +82,8 @@ async function upload_voiceover(audio, name, title) {
 
   // Create a row in the "voiceover_" table
 }
-async function upload_video(result_url, name, duration) {
-  const supabaseClient = useSupabaseClient();
-  const userId = useUser();
+async function upload_video(result_url, name, duration, user, supabaseClient) {
+  const userId = user;
   const result_mp4 = await fetch(result_url);
   const mp4 = await result_mp4.blob();
 

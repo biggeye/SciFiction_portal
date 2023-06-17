@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@chakra-ui/react";
+import { Input, Box, Card, Textarea, Button } from "@chakra-ui/react";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { upload_script } from "../../utils/production/upload";
 
 export default function Scripts() {
+  const [isLoading, setIsLoading] = useState(false);
   const [scripts, setScripts] = useState([]);
+  const [script, setScript] = useState("");
+  const [title, setTitle] = useState("");
+  const [deleteScriptUuid, setDeleteScriptUuid] = useState("");
 
   const user = useUser();
   const supabaseClient = useSupabaseClient();
@@ -11,6 +16,13 @@ export default function Scripts() {
   useEffect(() => {
     fetchScripts();
   }, []);
+
+  useEffect(() => {
+    if (deleteScriptUuid) {
+        deleteScript();
+    }
+}, [deleteScriptUuid]);
+
 
   const fetchScripts = async () => {
     try {
@@ -22,17 +34,56 @@ export default function Scripts() {
     }
   };
 
+
+
+  const submitScript = async (event) => {
+    setIsLoading(true);
+    event.preventDefault();
+    const newScriptUuid = await upload_script(
+      script,
+      title,
+      user,
+      supabaseClient
+    );
+    if (!newScriptUuid) {  // Corrected here
+      console.log("Script upload failed.");
+    } else return newScriptUuid;
+    
+    setIsLoading(false);
+    fetchScripts(supabaseClient);
+  };
+  
+  const deleteScript = async (event) => {
+    setIsLoading(true);
+  const { data, error } = await supabaseClient
+  .from('script_')
+  .delete()
+  .eq('uuid', deleteScriptUuid);
+  if (!error) {
+  setIsLoading(false);
+   
+  fetchScripts(supabaseClient);
+}
+  };
+
+
   return (
-<Box layerStyle="subPage">
-      <h1>Scripts</h1>
-      <ul>
-        {scripts.map((script) => (
-          <li key={script.uuid}>
+<Box layerStyle="subPage" p={3}>
+              {scripts.map((script) => (
+          <Card key={script.uuid} p={2} mb={4}>
+                <strong>Title:</strong> {script.title}
             <strong>Content:</strong> {script.content},{" "}
-            <strong>Title:</strong> {script.title}
-          </li>
+        
+            <Button isLoading={isLoading} size="xs" onClick={() => setDeleteScriptUuid(script.uuid)}>delete</Button>
+        </Card>
         ))}
-      </ul>
-      </Box>
+      
+    
+      <Card>
+        <Input onChange={(event) => setTitle(event.target.value)} placeholder="Title" />
+      <Textarea onChange={(event) => setScript(event.target.value)} placeholder="Enter script here" />
+        <Button onClick={submitScript}>Save</Button>        
+      </Card>
+  </Box>
   );
 }

@@ -79,11 +79,11 @@ export default function Navbar({ handlePageChange }) {
       }, // Capitalized here
     },
     {
-      name: "Content",
+      name: "Vendors",
       icon: RiBallPenLine,
       action: () => {
-        setTabList("Content"), // Capitalized here
-          handlePageChange("Videos");
+        setTabList("Vendors"), // Capitalized here
+          handlePageChange("ElevenLabs");
       },
     },
   ];
@@ -125,21 +125,17 @@ export default function Navbar({ handlePageChange }) {
           action: () => handlePageChange("Scripts"),
         },
         {
-          name: "Eleven Labs",
-          action: () => handlePageChange("ElevenLabs"),
+          name: "Videos",
+          action: () => handlePageChange("Videos"),
         },
       ],
     },
     {
-      name: "Content",
+      name: "Vendors",
       tabList: [
         {
-          name: "Videos",
-          action: () => handlePageChange("Videos"),
-        },
-        {
-          name: "Campaigns",
-          action: () => handlePageChange("Campaigns"),
+          name: "Eleven Labs",
+          action: () => handlePageChange("ElevenLabs"),
         },
       ],
     },

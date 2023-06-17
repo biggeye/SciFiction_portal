@@ -100,6 +100,7 @@ const fetchVoiceovers = async (supabaseClient) => {
   };
   const uploadVoiceover = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     const newVoiceOverUuid = await upload_voiceover(
       userInFile,
       uploadVoiceoverName,
@@ -107,7 +108,9 @@ const fetchVoiceovers = async (supabaseClient) => {
       userId,
       supabaseClient
     );
+    setIsLoading(false);
 fetchVoiceovers(supabaseClient);
+onClose();
   };
 
 const deleteVoiceover = async() => {
@@ -119,6 +122,7 @@ const deleteVoiceover = async() => {
 if (!error) {
   setIsLoading(false);
   fetchVoiceovers(supabaseClient);
+  onClose();
 }
 }
 

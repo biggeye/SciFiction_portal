@@ -40,7 +40,7 @@ async function upload_script(content, title, user, supabaseClient) {
   // Create a row in the "script_" table
   const { data, error } = await supabaseClient
     .from("script_")
-    .insert([{ uuid, content, title, created_by: user.id }]);
+    .insert([{ uuid, content, title, created_by: userId.id.toString() }]);
 
   if (error) {
     // Handle error
@@ -82,7 +82,7 @@ async function upload_voiceover(audio, name, title, user, supabaseClient) {
 
   // Create a row in the "voiceover_" table
 }
-async function upload_video(result_url, name, duration, user, supabaseClient) {
+async function upload_video(result_url, title, user, supabaseClient) {
   const userId = user;
   const result_mp4 = await fetch(result_url);
   const mp4 = await result_mp4.blob();
@@ -99,11 +99,11 @@ async function upload_video(result_url, name, duration, user, supabaseClient) {
     return;
   } else {
     const { videoTableData, videoTableError } = await supabaseClient  .rpc('add_video', {
-      p_created_by: userId.id.toString(),
-      p_duration: duration, 
-      p_name: name, 
-      p_url: url, 
       p_uuid: uuid,
+      p_name: title,
+      p_title: "SciFiction",
+      p_url: url, 
+      p_created_by: userId.id.toString(),
     });
 
     if (videoTableError) {

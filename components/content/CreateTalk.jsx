@@ -18,36 +18,50 @@ import {
   IconButton,
   Input,
   Select,
-
   Spacer,
-
   Text,
-
   useDisclosure,
-
-} from "@chakra-ui/react";
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogContent,
+    AlertDialogOverlay,
+    AlertDialogCloseButton,
+    useClipboard
+  } from "@chakra-ui/react";
 import { downloadUrl } from "../../utils/downloadUrl";
 import { upload_video } from "../../utils/production/upload";
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+import axios from "axios";
 
 export default function CreateTalk() {
+  const [newUrl, setNewUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const btnRef = React.useRef();
-  const sizes = ["xs", "sm", "md", "lg", "xl"];
   const [data, setData] = useState([]);
-  const [tabIndex, setTabIndex] = useState(0);
-  //createNewVoiceover
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [title, setTitle] = useState("");
   const [avatar, setAvatar] = useState("");
   const [voiceOver, setVoiceOver] = useState("");
   const [newTalk, setNewTalk] = useState(null);
-  const [newUrl, setNewUrl] = useState();
   const [avatars, setAvatars] = useState(null);
   const [voiceovers, setVoiceovers] = useState(null);
-  const [duration, setDuration] = useState("");
+  const [talkData, setTalkData] = useState([]);
+
+  //createNewVoiceover    **** this is the drawer component which is currently using useDisclosure
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+// Alert Modal 
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const { hasCopied, onCopy } = useClipboard(newUrl);
+  const onAlertClose = () => setIsAlertOpen(false);
+  const cancelRef = React.useRef();
+
+  const sizes = ["xs", "sm", "md", "lg", "xl"];
 
   const supabaseClient = useSupabaseClient();
+  const user = useUser();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,22 +70,19 @@ export default function CreateTalk() {
     };
     fetchData();
   }, []);
-
-
-
-const fetchVoiceovers = async (supabaseClient) => {
+  const fetchVoiceovers = async (supabaseClient) => {
     try {
       const { data, error } = await supabaseClient
         .from("voiceover_")
         .select("*");
       if (error) throw error;
       setVoiceovers(data);
-      return (data);
+      return data;
     } catch (error) {
       console.error("Error fetching voiceovers:", error.message);
     }
   };
-const fetchAvatars = async (supabaseClient) => {
+  const fetchAvatars = async (supabaseClient) => {
     try {
       const { data, error } = await supabaseClient.from("avatar_").select("*");
       if (error) throw error;
@@ -80,6 +91,29 @@ const fetchAvatars = async (supabaseClient) => {
     } catch (error) {
       console.error("Error fetching avatars:", error.message);
     }
+  };
+
+  const fetchTalkData = async (talkId) => {
+    const getOptions = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        authorization:
+          "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik53ek53TmV1R3ptcFZTQjNVZ0J4ZyJ9.eyJodHRwczovL2QtaWQuY29tL2ZlYXR1cmVzIjoidGFsa3MiLCJodHRwczovL2QtaWQuY29tL2N4X2xvZ2ljX2lkIjoiIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLmQtaWQuY29tLyIsInN1YiI6ImF1dGgwfDY0MjhiNjgyMWU2MDA2YjY1N2VhZTNmOSIsImF1ZCI6WyJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY4Njk4NDM3NywiZXhwIjoxNjg3MDcwNzc3LCJhenAiOiJHenJOSTFPcmU5Rk0zRWVEUmYzbTN6M1RTdzBKbFJZcSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgcmVhZDpjdXJyZW50X3VzZXIgdXBkYXRlOmN1cnJlbnRfdXNlcl9tZXRhZGF0YSBvZmZsaW5lX2FjY2VzcyJ9.i0tBuiYtqjWIjYUieaAwsqVjpiVUJeil-FX3A8eoJ1h3V_t9qLuYfO0Yqe5LTpHfsuJaigEM3BfWw4shifEY5hGzDLLKWabiit2HyjbCrvzIN_XarAcEjxBSby6ZGEy8kz43UXN7kEp3QUHBhbZPlxbek44fYXIdZFcVuxp1shdoi6RqewmcjCNeA1oS2A7z3coK_rzSysndtK2iI0jSm0eyQkx7uibD91sypB7AHRNcG8WU0l8BL17fcKWwl9q5v4dCvqcGSCuYoOggw2X7ncAsEApeDNPFE1EsqKX5R5edK_rYEmS-JWkb7yF4L8QVQg5By6U5pnrntqpdRHrj7w",
+      },
+    };
+    let talkData;
+    do {
+      const talkResponse = await fetch(
+        `https://api.d-id.com/talks/${talkId}`,
+        getOptions
+      );
+      talkData = await talkResponse.json();
+      if (talkData.status !== "done") {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    } while (talkData.status !== "done");
+    return talkData;
   };
 
   const createTalk = async (event) => {
@@ -92,58 +126,47 @@ const fetchAvatars = async (supabaseClient) => {
       headers: {
         accept: "application/json",
         "content-type": "application/json",
-        authorization: process.env.NEXT_PUBLIC_DID_BEARER_TOKEN,
+        authorization:
+          "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik53ek53TmV1R3ptcFZTQjNVZ0J4ZyJ9.eyJodHRwczovL2QtaWQuY29tL2ZlYXR1cmVzIjoidGFsa3MiLCJodHRwczovL2QtaWQuY29tL2N4X2xvZ2ljX2lkIjoiIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLmQtaWQuY29tLyIsInN1YiI6ImF1dGgwfDY0MjhiNjgyMWU2MDA2YjY1N2VhZTNmOSIsImF1ZCI6WyJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY4Njk4NDM3NywiZXhwIjoxNjg3MDcwNzc3LCJhenAiOiJHenJOSTFPcmU5Rk0zRWVEUmYzbTN6M1RTdzBKbFJZcSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgcmVhZDpjdXJyZW50X3VzZXIgdXBkYXRlOmN1cnJlbnRfdXNlcl9tZXRhZGF0YSBvZmZsaW5lX2FjY2VzcyJ9.i0tBuiYtqjWIjYUieaAwsqVjpiVUJeil-FX3A8eoJ1h3V_t9qLuYfO0Yqe5LTpHfsuJaigEM3BfWw4shifEY5hGzDLLKWabiit2HyjbCrvzIN_XarAcEjxBSby6ZGEy8kz43UXN7kEp3QUHBhbZPlxbek44fYXIdZFcVuxp1shdoi6RqewmcjCNeA1oS2A7z3coK_rzSysndtK2iI0jSm0eyQkx7uibD91sypB7AHRNcG8WU0l8BL17fcKWwl9q5v4dCvqcGSCuYoOggw2X7ncAsEApeDNPFE1EsqKX5R5edK_rYEmS-JWkb7yF4L8QVQg5By6U5pnrntqpdRHrj7w",
       },
-      body: JSON.stringify({
+      data: {
         script: {
           type: "audio",
           subtitles: "false",
+          provider: { type: "microsoft", voice_id: "en-US-JennyNeural" },
+          ssml: "false",
           reduce_noise: "false",
           audio_url: voiceOver,
         },
         config: { fluent: "false", pad_audio: "0.0" },
-        name: title,
-        persist: true,
         source_url: avatar,
-      }),
+        name: title,
+      },
     };
 
-    try {
-      const response = await fetch("https://api.d-id.com/talks", options);
-      const data = await response.json();
+    const response = await axios.request("https://api.d-id.com/talks", options);
+    const data = await response.data;
+    if (data) {
+      try {
+        const talkData = await fetchTalkData(data.id);
+        setTalkData(talkData);
+        const newUrl = talkData.result_url;
+        console.log(newUrl);
 
-      const getOptions = {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          authorization: process.env.NEXT_PUBLIC_DID_BEARER_TOKEN,
-        },
-      };
-      let talkData;
-      do {
-        const talkResponse = await fetch(
-          `https://api.d-id.com/talks/${data.id}`,
-          getOptions
-        );
-        talkData = await talkResponse.json();
-        if (talkData.status !== "done") {
-          await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 1 second before retry
-        }
-      } while (talkData.status !== "done");
+        setNewUrl(newUrl);  // Set the URL
+        setIsOpen(true);  
+        setAlertOpen(true); // Set the alertOpen to true
 
-      setNewTalk(data);
-      setNewUrl(talkData.result_url);
-      setDuration(talkData.duration);
-    } catch (err) {
-      console.error(err);
+      } catch (err) {
+        console.error(err);
+      }
+
+      setIsLoading(false);
     }
-    await downloadUrl(newUrl);
-    await upload_video(newUrl, title, duration);
-    setIsLoading(false);
   };
 
   return (
-    <Box layerStyle="subPage">
+    <Box>
       <Box position="absolute" mt={2} ml={2}>
         <Button
           size="xs"
@@ -178,43 +201,45 @@ const fetchAvatars = async (supabaseClient) => {
           <DrawerBody>
             <Flex direction="column">
               <FormControl>
-              <form id="newTalk" onSubmit={createTalk}>
-                <Input
-                  rows="auto"
-                  placeholder="Type or paste the script here"
-                  name="script"
-                  onChange={(val) => setTitle(val.target.value)}
-                />
+                <form id="newTalk" onSubmit={createTalk}>
+                  <Input
+                    rows="auto"
+                    placeholder="Name of video..."
+                    name="script"
+                    onChange={(val) => setTitle(val.target.value)}
+                  />
 
-                <FormLabel>Select Avatar
-                                  <Select onChange={(val) => setAvatar(val.target.value)}>
-                  {avatars && avatars.map((avatar, index) => {
-
-                    return (
-                      <option
-                        key={avatar.uuid}
-                        value={avatar.url}
-                        label={avatar.name}
-                      />
-                    );
-                  })}
-                </Select>
-                </FormLabel>
-                <FormLabel>Select Voiceover
-                    <Select onChange={(val) => setVoiceover(val.target.value)}>
-                  {voiceovers && voiceovers.map((voiceover) => {
-                    return (
-                      <option
-                        key={voiceover.uuid}
-                        value={voiceover.url}
-                        label={voiceover.name}
-                      />
-                    );
-                  })}
-                  
-                </Select>
-              </FormLabel>
-              </form>
+                  <FormLabel>
+                    Select Avatar
+                    <Select onChange={(val) => setAvatar(val.target.value)}>
+                      {avatars &&
+                        avatars.map((avatar) => {
+                          return (
+                            <option
+                              key={avatar.uuid}
+                              value={avatar.url}
+                              label={avatar.name}
+                            />
+                          );
+                        })}
+                    </Select>
+                  </FormLabel>
+                  <FormLabel>
+                    Select Voiceover
+                    <Select onChange={(val) => setVoiceOver(val.target.value)}>
+                      {voiceovers &&
+                        voiceovers.map((voiceover) => {
+                          return (
+                            <option
+                              key={voiceover.uuid}
+                              value={voiceover.url}
+                              label={voiceover.name}
+                            />
+                          );
+                        })}
+                    </Select>
+                  </FormLabel>
+                </form>
               </FormControl>
             </Flex>
           </DrawerBody>
@@ -223,7 +248,7 @@ const fetchAvatars = async (supabaseClient) => {
             <Flex>
               <Button
                 type="submit"
-                form="TTS"
+                form="newTalk"
                 colorScheme="blue"
                 isLoading={isLoading}
               >
@@ -234,6 +259,32 @@ const fetchAvatars = async (supabaseClient) => {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
+      <AlertDialog
+      isOpen={isAlertOpen}
+      leastDestructiveRef={cancelRef}
+      onClose={onClose}
+    >
+      <AlertDialogOverlay>
+        <AlertDialogContent>
+          <AlertDialogHeader fontSize="lg" fontWeight="bold">
+            Copy URL
+          </AlertDialogHeader>
+
+          <AlertDialogBody>
+            <Input value={newUrl} isReadOnly placeholder="Your URL" />
+          </AlertDialogBody>
+
+          <AlertDialogFooter>
+            <Button ref={cancelRef} onClick={onAlertClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="blue" onClick={onCopy} ml={3}>
+              {hasCopied ? "Copied" : "Copy"}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialogOverlay>
+    </AlertDialog>
     </Box>
   );
 }

@@ -44,7 +44,7 @@ import { AiOutlineClose, AiOutlineMenu, AiFillHome } from "react-icons/ai";
 import { useState } from "react";
 import AccountForm from "./auth/AccountForm";
 
-export default function Navbar({ handlePageChange, supabaseClient, user }) {
+export default function Navbar({ handlePageChange }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [session, setSession] = useState(null);
   const mobileNav = useDisclosure();
@@ -117,16 +117,16 @@ export default function Navbar({ handlePageChange, supabaseClient, user }) {
           action: () => handlePageChange("Avatars"),
         },
         {
-          name: "Voice Models",
-          action: () => handlePageChange("VoiceModels"),
-        },
-        {
           name: "Voiceovers",
           action: () => handlePageChange("Voiceovers"),
         },
         {
           name: "Scripts",
           action: () => handlePageChange("Scripts"),
+        },
+        {
+          name: "Eleven Labs",
+          action: () => handlePageChange("ElevenLabs"),
         },
       ],
     },
@@ -150,17 +150,17 @@ export default function Navbar({ handlePageChange, supabaseClient, user }) {
   return (
     <Box>
       <chakra.header
-        bg="brand.100"
-        _dark={{ color: "brand.900" }}
+
+     
         borderColor="brand.700"
         borderBottomWidth={1}
-        color="brand.800"
+
         w="full"
         px={{ base: 1, sm: 3 }}
         py={2}
       >
         <Flex alignItems="center" justifyContent="space-between" mx="auto">
-          <HStack spacing={4} display="flex" alignItems="center">
+          <HStack color="brand.900" spacing={4} display="flex" alignItems="center">
             <Box display={{ base: "inline-flex", md: "none" }}>
               <IconButton
                 display={{ base: "flex", md: "none" }}
@@ -223,13 +223,15 @@ export default function Navbar({ handlePageChange, supabaseClient, user }) {
             </chakra.a>
           </HStack>
           <HStack spacing={3} display="flex" alignItems="center">
-            <HStack spacing={3} display={{ base: "none", md: "inline-flex" }}>
+            <HStack color="brand.900" spacing={3} display={{ base: "none", md: "inline-flex" }}>
               {headerItems.map((item, index) => (
                 <Button
                   key={index}
                   variant="ghost"
                   size="sm"
                   onClick={item.action}
+                  color="brand.900"
+                  layerStyle="navHeader"
                 >
                   {item.name}
                 </Button>
@@ -245,18 +247,14 @@ export default function Navbar({ handlePageChange, supabaseClient, user }) {
         </Flex>
       </chakra.header>
       <Flex
-        w="fill"
-        bg="brand.300"
-        color="brand.900"
-        alignItems="center"
-        justifyContent="space-between"
-        borderWidth={0}
-        overflowX="auto"
+      layerStyle="navSubMenu"
+
       >
         <Tabs
           defaultIndex={0}
           borderBottomColor="transparent"
-          colorScheme="brand.500"
+          layerStyle="navSubMenu"
+          colorScheme="darkGray"
         >
           {selectedTab && (
             <TabList>
@@ -292,7 +290,7 @@ export default function Navbar({ handlePageChange, supabaseClient, user }) {
           <ModalHeader>User Profile</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <AccountForm supabaseClient={supabaseClient} user={user} />
+          <AccountForm  />
           </ModalBody>
           <ModalFooter>
             <Button onClick={userProfileModalDisclosure.onClose}>Close</Button>

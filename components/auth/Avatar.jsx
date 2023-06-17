@@ -1,10 +1,14 @@
-'use client';
 import React, { useEffect, useState } from 'react';
 import { Box, Image, Button, Input, useDisclosure, Spinner } from "@chakra-ui/react";
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
-export default function Avatar({ supabaseClient, user, uid, url, size, onUpload }) {
+
+export default function Avatar({ uid, url, size, onUpload }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [uploading, setUploading] = useState(false);
+
+  const supabaseClient = useSupabaseClient();
+  const user = useUser();
 
   useEffect(() => {
     async function downloadImage(path) {

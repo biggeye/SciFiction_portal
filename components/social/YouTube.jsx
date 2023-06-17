@@ -1,9 +1,11 @@
-
+import { Box } from "@chakra-ui/react";
 
 const YouTube = () => {
   return (
-<p>Hello</p>
-  );
+<Box layerStyle="subPage">
+
+</Box>
+  )
 };
 
 export default YouTube;

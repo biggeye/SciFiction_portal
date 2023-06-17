@@ -9,7 +9,7 @@ import Twitter from "../components/social/Twitter";
 import YouTube from "../components/social/YouTube";
 import Facebook from "../components/social/Facebook";
 //ASSETS
-import VoiceModels from "../components/creators/xilabs/VoiceModels";
+import ElevenLabs from "../components/creators/xilabs/ElevenLabs";
 import Avatars from "../components/assets/Avatars";
 import Scripts from "../components/assets/Scripts";
 import Voiceovers from "../components/assets/Voiceovers";
@@ -21,8 +21,8 @@ import {
 
  } from "@chakra-ui/react";
 //AUTH & DB
-import { Auth } from '@supabase/auth-ui-react'
-import { ThemeSupa } from '@supabase/auth-ui-shared'
+import { Auth } from '@supabase/auth-ui-react';
+import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
 export default function Home() {
@@ -47,23 +47,23 @@ export default function Home() {
 
   return (
     <Layout overflowX="none">
-      <Box as="section" bg="brand.50" _dark={{ bg: "brand.900" }} minH="100vh" overflowX="none" overflowY="auto">
-        <Navbar handlePageChange={handlePageChange} supabaseClient={supabaseClient} user={user} /> 
-        <Box bg="brand.800" as="main" p="10">
-            {/*Assets*/}
-            {currentPage === "Avatars" && <Avatars supabaseClient={supabaseClient} user={user}/>}
-            {currentPage === "VoiceModels" && <VoiceModels supabaseClient={supabaseClient} user={user} />}
-            {currentPage === "Voiceovers" && <Voiceovers supabaseClient={supabaseClient} user={user}/>}
-            {currentPage === "Scripts" && <Scripts supabaseClient={supabaseClient} user={user}/>}
+      <Box layerStyle="main" minH="100vh" overflowX="none" overflowY="auto">
+        <Navbar handlePageChange={handlePageChange}  /> 
+
+            {/*Assets*/}  
+            {currentPage === "Avatars" && <Avatars />}
+            {currentPage === "ElevenLabs" && <ElevenLabs  />}
+            {currentPage === "Voiceovers" && <Voiceovers />}
+            {currentPage === "Scripts" && <Scripts />}
             {/*Content*/}
-            {currentPage === "Videos" && <Videos supabaseClient={supabaseClient} user={user}/>}
-            {currentPage === "Campaigns" && <Campaigns supabaseClient={supabaseClient} user={user}/>}
+            {currentPage === "Videos" && <Videos />}
+            {currentPage === "Campaigns" && <Campaigns />}
              {/*Social Media*/}          
             {currentPage === "DashBoard" && <DashBoard />}
             {currentPage === "Twitter" && <Twitter />}
             {currentPage === "Facebook" && <Facebook />}
             {currentPage === "YouTube" && <YouTube />}
-        </Box>
+
       </Box>
     </Layout>
   );

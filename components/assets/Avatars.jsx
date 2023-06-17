@@ -1,6 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Flex, Image, Input, Text, VStack, ivider, Card, Drawer, DrawerHeader, DrawerBody, DrawerFooter, DrawerContent, DrawerOverlay, FormControl, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Image,
+  Input,
+  Text,
+  VStack,
+  ivider,
+  Card,
+  Drawer,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
+  DrawerContent,
+  DrawerOverlay,
+  FormControl,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { upload_avatar } from "../../utils/production/upload";
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+
+
 
 const convertToDataURI = (file) =>
   new Promise((resolve, reject) => {
@@ -10,23 +31,26 @@ const convertToDataURI = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-export default function Avatars({ supabaseClient, user }) {
+export default function Avatars() {
   const [isLoading, setIsLoading] = useState(false);
   const [avatars, setAvatars] = useState([]);
   const [newAvatarName, setNewAvatarName] = useState("");
   const [newAvatarImage, setNewAvatarImage] = useState("");
   const [newAvatarDescription, setNewAvatarDescription] = useState("");
-  
   const [userInFile, setUserInFile] = useState([]);
-  const { isOpen: isNewAvatarOpen, onOpen: onNewAvatarOpen, onClose: onNewAvatarClose } = useDisclosure();
-
-const userId = user;
+  const {
+    isOpen: isNewAvatarOpen,
+    onOpen: onNewAvatarOpen,
+    onClose: onNewAvatarClose,
+  } = useDisclosure();
+  const user = useUser();
+  const supabaseClient = useSupabaseClient();
 
   useEffect(() => {
-    fetchAvatars();
+    fetchAvatars(supabaseClient, setAvatars);
   }, []);
 
-  const fetchAvatars = async () => {
+const fetchAvatars = async (supabaseClient) => {
     try {
       const { data, error } = await supabaseClient.from("avatar_").select("*");
       if (error) throw error;
@@ -46,16 +70,23 @@ const userId = user;
     }
   };
   const createNewAvatar = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
-  const newAvatarUuid = await upload_avatar(userInFile, newAvatarName, newAvatarDescription, user, supabaseClient);
-  if (!newAvatarUuid) {
-    console.log("Avatar upload failed.");
-}
-else return newAvatarUuid;
-};
+    const newAvatarUuid = await upload_avatar(
+      userInFile,
+      newAvatarName,
+      newAvatarDescription,
+      user,
+      supabaseClient
+    );
+    if (!newAvatarUuid) {
+      console.log("Avatar upload failed.");
+    } else return newAvatarUuid;
+    setIsLoading(false);
+  };
 
   return (
-    <Box width="fill" height="fill" overflowX="none">
+    <Box layerStyle="subPage">
       <Box overflowX="none" position="absolute" mt={2} ml={2}>
         <Button
           size="xs"
@@ -68,44 +99,23 @@ else return newAvatarUuid;
         </Button>
       </Box>
       <Flex
-        w="full"
-        bg="brand.700"
-        _dark={{ bg: "#3e3e3e" }}
         p={50}
         alignItems="center"
         justifyContent="center"
         flexWrap="wrap" // allow cards to wrap to new lines
       >
-        {avatars.map((avatar) => (
-          <Box
-            key={avatar.uuid}
-            w="200px"
-            bg="brand.200"
-            _dark={{ bg: "brand.900" }}
-            m={4}
-            borderWidth="3px"
-            borderColor="brand.400"
-            borderRadius="md" // rounded corners
-            overflow="hidden" // keep child boundaries within card
-            boxShadow="xl" // small shadow for 3D effect
-            textAlign="center"
-          >
-            <Box p={4}>
-              <VStack>
+  
+        {avatars && avatars.map((avatar, index) => (
+        
+            <Card key={avatar.uuid} layerStyle="card">
               <Image src={avatar.url} alt="Avatar Image" />
-              <Text size="md" as="b">
-                {avatar.name}
-              </Text>
-              <Text size="md" as="b">
-                {avatar.title}
-              </Text>
-              </VStack>
-            </Box>
-            
-          </Box>
-        ))}
-<hr />
 
+              {avatar.name}
+              {avatar.title}
+            </Card>
+        
+        ))}
+        <hr />
       </Flex>
       <Drawer
         placement="bottom"
@@ -138,15 +148,19 @@ else return newAvatarUuid;
                 <Card>
                   <Text>Avatar Sample</Text>
                   <Box w="20vw">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                />
-                {newAvatarImage && (
-                  <Image src={newAvatarImage} alt="Image To Upload" w="15vw" />
-                )}
-              </Box>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                    />
+                    {newAvatarImage && (
+                      <Image
+                        src={newAvatarImage}
+                        alt="Image To Upload"
+                        w="15vw"
+                      />
+                    )}
+                  </Box>
                   <Button
                     type="submit"
                     colorScheme="blue"

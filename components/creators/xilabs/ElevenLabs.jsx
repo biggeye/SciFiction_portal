@@ -37,15 +37,15 @@ import {
   RadioGroup,
   Stack,
 } from "@chakra-ui/react";
-import { RiDeleteBin2Line
-} from "react-icons/ri";
+import { RiDeleteBin2Line } from "react-icons/ri";
 import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
 import axios from "axios";
 import AudioPlayer from "../../shared/AudioPlayer";
 import AudioRecorder from "../../shared/AudioRecorder";
 import XilabsVoiceovers from "./XilabsVoiceovers";
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
-export default function VoiceModels() {
+export default function ElevenLabs() {
   const [isLoading, setIsLoading] = useState(false);
   const btnRef = React.useRef();
   const sizes = ["xs", "sm", "md", "lg", "xl"];
@@ -76,6 +76,8 @@ export default function VoiceModels() {
   const [editVoiceFile1, setEditVoiceFile1] = useState(null);
   const [editVoiceFile2, setEditVoiceFile2] = useState(null);
 
+const user = useUser();
+const supabaseClient = useSupabaseClient();
   const labelStyles = {
     mt: "2",
     ml: "-2.5",
@@ -135,15 +137,15 @@ export default function VoiceModels() {
     formData.append("labels", newVoiceLabels);
     formData.append("description", newVoiceDescription);
     formData.append("file1", newVoiceFile);
-      const response = await axios.post(
-        "https://flask-vercel-silk.vercel.app/api/xilabs/create_new_voice",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+    const response = await axios.post(
+      "https://flask-vercel-silk.vercel.app/api/xilabs/create_new_voice",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     setIsLoading(false);
     onNewVoiceClose();
   };
@@ -169,10 +171,9 @@ export default function VoiceModels() {
           },
         }
       );
-
     } catch (error) {
       if (response.status === 413) {
-        console.log("File Size Too Large")
+        console.log("File Size Too Large");
       }
     }
 
@@ -184,27 +185,27 @@ export default function VoiceModels() {
 
     if (confirmation) {
       setIsLoading(true);
-    
-    const response = await axios.post(
+
+      const response = await axios.post(
         "https://flask-vercel-silk.vercel.app/api/xilabs/delete_voice",
-        { "voice_id": voice_id }
-    );
-    if (response.status === 200) {
-      window.alert("Voice Model Deleted.");
-      fetchYourData().then((fetchedData) => {
-        setData(fetchedData);
-      });
-    } else {
-      window.alert("Something went wrong.");
+        { voice_id: voice_id }
+      );
+      if (response.status === 200) {
+        window.alert("Voice Model Deleted.");
+        fetchYourData().then((fetchedData) => {
+          setData(fetchedData);
+        });
+      } else {
+        window.alert("Something went wrong.");
+      }
+      setIsLoading(false);
+      fetchYourData();
+      onClose();
     }
-    setIsLoading(false);
-    fetchYourData();
-    onClose();
-};
   };
 
   return (
-    <Box width="fill" height="fill">
+    <Box layerStyle="subPage">
       <Box position="absolute" mt={2} ml={2}>
         <Button
           size="xs"
@@ -217,28 +218,16 @@ export default function VoiceModels() {
         </Button>
       </Box>
       <Flex
-        w="full"
-        bg="brand.700"
-        _dark={{ bg: "#3e3e3e" }}
         p={50}
         alignItems="center"
         justifyContent="center"
         flexWrap="wrap" // allow cards to wrap to new lines
       >
         {data.map((token, tid) => (
-    <Box
-    key={tid}
-    w="200px"
-    bg="brand.200"
-    _dark={{ bg: "brand.900" }}
-    m={4}
-    borderWidth="3px"
-    borderColor="brand.400"
-    borderRadius="md" // rounded corners
-    overflow="hidden" // keep child boundaries within card
-    boxShadow="xl" // small shadow for 3D effect
-    textAlign="center"
-  >
+          <Card
+            key={tid}
+              layerStyle="card"
+          >
             <Box p={4}>
               {Object.keys(token).map((x) => {
                 if (x === "voice_id") return null;
@@ -248,11 +237,9 @@ export default function VoiceModels() {
                     {x === "sample" ? (
                       <AudioPlayer src={token[x]} />
                     ) : (
-           
-                        <Text size="md" as="b">
-                          {token[x]}
-                          </Text>
-   
+                      <Text size="md" as="b">
+                        {token[x]}
+                      </Text>
                     )}
                   </Text>
                 );
@@ -261,7 +248,7 @@ export default function VoiceModels() {
 
             <Flex justifyContent="flex-end" p={1}>
               <IconButton
-              tooltip="Create Voiceover"
+                tooltip="Create Voiceover"
                 size="xs"
                 colorScheme="blue"
                 icon={<BsBoxArrowUpRight />}
@@ -272,8 +259,8 @@ export default function VoiceModels() {
                   onOpen();
                 }}
               />
-               <IconButton
-               tooltip="Delete"
+              <IconButton
+                tooltip="Delete"
                 size="xs"
                 colorScheme="red"
                 icon={<RiDeleteBin2Line />}
@@ -285,10 +272,10 @@ export default function VoiceModels() {
                 }}
               />
             </Flex>
-          </Box>
+          </Card>
         ))}
       </Flex>
-<XilabsVoiceovers />
+      <XilabsVoiceovers />
       <Drawer
         size={sizes}
         isOpen={isOpen}
@@ -328,7 +315,7 @@ export default function VoiceModels() {
                       <VStack>
                         <Text>Stability Value</Text>
                         <Slider
-        step={0.01}
+                          step={0.01}
                           min={0}
                           max={1}
                           aria-label="slider-stability"
@@ -348,9 +335,9 @@ export default function VoiceModels() {
 
                         <Text>Similarity Value</Text>
                         <Slider
-                        min={0}
-                        max={1}
-                        step={0.01}
+                          min={0}
+                          max={1}
+                          step={0.01}
                           aria-label="slider-similarity"
                           onChange={(val) => setSimilarityValue(val)}
                         >
@@ -537,6 +524,6 @@ export default function VoiceModels() {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-      </Box>
+    </Box>
   );
 }

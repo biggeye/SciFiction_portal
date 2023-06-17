@@ -1,12 +1,5 @@
 :root {
-  --black: #070708ff;
-  --onyx: #454545ff;
-  --pear: #D2DC28ff;
-  --yellow-green: #A9C83Cff;
-  --silver: #C3C2C3ff;
-  --seasalt: #F6F6F6ff;
-  --max-width: 1100px;
-  --border-radius: 12px;
+
   --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
     'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
     'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
@@ -29,8 +22,3 @@ ul span:hover {
 }
 
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}

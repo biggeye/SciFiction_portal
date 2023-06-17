@@ -1,8 +1,8 @@
-
+import CreateTalk from "./CreateTalk";
 
 const Videos = () => {
     return (
-      <p>Hi.</p>
+      <CreateTalk />
     );
   };
   

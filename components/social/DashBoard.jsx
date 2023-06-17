@@ -36,8 +36,7 @@ const metrics = [
 export default function DashBoard() {
 
 return(
-  <Container maxW="3xl" py={10} px={4} color="white">
-  <Box border="1px solid" borderColor="brand.400" rounded="md" boxShadow="lg" overflow="hidden">
+  <Box layerStyle="subPage">
     <Flex justify="left" p={5}>
       <chakra.h3 fontSize="md" fontWeight="bold" textAlign="center">
         Social Media Traffic
@@ -65,7 +64,6 @@ return(
       </Table>
     </TableContainer>
   </Box>
-</Container>
 )
 
 }

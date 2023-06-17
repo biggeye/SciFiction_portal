@@ -9,7 +9,8 @@ import {
   useColorModeValue,
   Spacer,
   HStack,
-  Divider
+  Divider,
+  Card
 } from "@chakra-ui/react";
 import {
   RiDeleteBin2Line,
@@ -21,9 +22,11 @@ import sliceWords from "../../../utils/sliceWords";
 import convertDate from "../../../utils/convertDate";
 import { downloadFile } from "../../../utils/downloadFile";
 import { upload_voiceover } from "../../../utils/production/upload";
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
-export default function XilabsVoiceovers({ supabaseClient, user }) {
-  const userId = user;
+export default function XilabsVoiceovers() {
+  const userId = useUser();
+  const supabaseClient = useSupabaseClient();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [charactersUsed, setCharactersUsed] = useState("");
@@ -111,31 +114,17 @@ export default function XilabsVoiceovers({ supabaseClient, user }) {
 };
 
   return (
-    <Box width="fill" height="fill">
+
        <Flex
-    w="full"
-    bg="brand.700"
-    _dark={{ bg: "#3e3e3e" }}
-    p={50}
-    alignItems="center"
-    justifyContent="center"
-    flexWrap="wrap" // allow cards to wrap to new lines
+   p={50}
+   alignItems="center"
+   justifyContent="center"
+   flexWrap="wrap" // allow cards to wrap to new lines
 >
       {data.map((token, tid) => (
-        <Box
-        w="300px"
-  
-        color="brand.700"
-          key={tid}
-          bg="brand.200"
-          _dark={{ bg: "brand.900" }}
-          m={4}
-          borderWidth="3px"
-          borderColor="brand.400"
-          borderRadius="md" // rounded corners
-          overflow="hidden" // keep child boundaries within card
-          boxShadow="xl" // small shadow for 3D effect
-          textAlign="center"
+        <Card  
+         key={tid}
+          layerStyle="card"
         >
           <Flex direction="column">
             <HStack display="flex" justifyContent="space-between"> <Text size="md" as="b">{token.voice}</Text>
@@ -165,9 +154,9 @@ export default function XilabsVoiceovers({ supabaseClient, user }) {
               onClick={() => deleteRow(token["voiceover_id"])}
             />
           </Flex>
-        </Box>
+        </Card>
       ))}
     </Flex>
-    </Box>
+
   );
 }

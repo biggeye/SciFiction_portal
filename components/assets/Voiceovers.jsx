@@ -41,6 +41,7 @@ import {
   Select,
   Stack,
 } from "@chakra-ui/react";
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
 const convertToDataURI = (file) =>
   new Promise((resolve, reject) => {
@@ -50,7 +51,23 @@ const convertToDataURI = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-export default function Voiceovers({ supabaseClient, user }) {
+
+
+  export const fetchVoiceovers = async (supabaseClient, setVoiceovers) => {
+    try {
+      const { data, error } = await supabaseClient
+        .from("voiceover_")
+        .select("*");
+      if (error) throw error;
+      setVoiceovers(data);
+      return (data);
+    } catch (error) {
+      console.error("Error fetching voiceovers:", error.message);
+    }
+  };
+
+
+export default function Voiceovers() {
   const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [voiceovers, setVoiceovers] = useState([]);
@@ -58,22 +75,14 @@ export default function Voiceovers({ supabaseClient, user }) {
   const [uploadVoiceoverName, setUploadVoiceoverName] = useState("");
   const [uploadVoiceoverTitle, setUploadVoiceoverTitle] = useState("");
 
-  const userId = user;
+  const userId = useUser();
+  const supabaseClient = useSupabaseClient();
 
   useEffect(() => {
-    fetchVoiceovers();
+    fetchVoiceovers(supabaseClient, setVoiceovers);
   }, []);
-  const fetchVoiceovers = async () => {
-    try {
-      const { data, error } = await supabaseClient
-        .from("voiceover_")
-        .select("*");
-      if (error) throw error;
-      setVoiceovers(data);
-    } catch (error) {
-      console.error("Error fetching voiceovers:", error.message);
-    }
-  };
+
+
   const handleAudioUpload = async (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -94,7 +103,7 @@ fetchVoiceovers();
   };
 
   return (
-      <Box width="fill" height="fill" overflowX="none">
+      <Box layerStyle="subPage">
       <Box overflowX="none" position="absolute" mt={2} ml={2}>
         <Button
           size="xs"
@@ -107,36 +116,22 @@ fetchVoiceovers();
         </Button>
       </Box>
       <Flex
-        w="full"
-        bg="brand.700"
-        _dark={{ bg: "#3e3e3e" }}
-        p={50}
-        alignItems="center"
-        justifyContent="center"
-        flexWrap="wrap" // allow cards to wrap to new lines
+   p={50}
+   alignItems="center"
+   justifyContent="center"
+   flexWrap="wrap"// allow cards to wrap to new lines
       >
       {voiceovers.map((voiceover) => (
-        <Box
-          key={voiceover.uuid}
-          w="200px"
-          bgImage="radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(215,215,215,1) 17%, rgba(181,181,181,0.7343312324929971) 67%, rgba(144,190,226,0.42620798319327735) 100%)"
-          _dark={{ bg: "brand.900" }}
-          m={4}
-          borderWidth="1px"
-          borderColor="brand.200"
-          borderRadius="md" // rounded corners
-          overflow="hidden" // keep child boundaries within card
-          boxShadow="xl" // small shadow for 3D effect
-          textAlign="center"
-        >
-          <Box p={4}>
+        
+          <Card key={voiceover.uuid}
+          layerStyle="card">
             <AudioPlayer src={voiceover.url} />
-            <Text size="md" as="b">
-              {voiceover.name}
-            </Text>
+       
+             <Text > {voiceover.name}</Text>
+     
             <Text size="sm">{voiceover.title}</Text>
-          </Box>
-        </Box>
+            </Card>
+        
       ))}
 
     </Flex>

@@ -1,14 +1,21 @@
-'use client'
 import { useCallback, useEffect, useState } from 'react';
 import { Button, Box, FormControl, FormLabel, Input, Text } from "@chakra-ui/react";
 import Avatar from "./Avatar";
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
-export default function AccountForm({ supabaseClient, user }) {
+export default function AccountForm() {
+  const supabaseClient = useSupabaseClient();
+  const user = useUser();
+
   const [loading, setLoading] = useState(true)
   const [fullname, setFullname] = useState(null)
   const [username, setUsername] = useState(null)
   const [website, setWebsite] = useState(null)
   const [avatar_url, setAvatarUrl] = useState(null)
+
+
+
+
 
   const getProfile = useCallback(async () => {
     try {

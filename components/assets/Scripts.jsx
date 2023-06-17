@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Box } from "@chakra-ui/react";
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 
-export default function Scripts({ supabaseClient }) {
+export default function Scripts() {
   const [scripts, setScripts] = useState([]);
 
+  const user = useUser();
+  const supabaseClient = useSupabaseClient();
+  
   useEffect(() => {
     fetchScripts();
   }, []);
@@ -18,7 +23,7 @@ export default function Scripts({ supabaseClient }) {
   };
 
   return (
-    <div>
+<Box layerStyle="subPage">
       <h1>Scripts</h1>
       <ul>
         {scripts.map((script) => (
@@ -28,6 +33,6 @@ export default function Scripts({ supabaseClient }) {
           </li>
         ))}
       </ul>
-    </div>
+      </Box>
   );
 }

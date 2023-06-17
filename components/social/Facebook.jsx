@@ -1,8 +1,10 @@
-
+import { Box } from "@chakra-ui/react";
 
 const Facebook = () => {
   return (
-<p>Hello</p>
+<Box layerStyle="subPage">
+
+</Box>
   );
 };
 

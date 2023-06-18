@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import WarningModal from "../shared/WarningModal";
+
 import {
   Box,
   Button,
@@ -21,8 +23,6 @@ import {
 import { upload_avatar } from "../../utils/production/upload";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 
-
-
 const convertToDataURI = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -32,6 +32,8 @@ const convertToDataURI = (file) =>
   });
 
 export default function Avatars() {
+  const user = useUser();
+  const supabaseClient = useSupabaseClient();
   const [isLoading, setIsLoading] = useState(false);
   const [avatars, setAvatars] = useState([]);
   const [deleteAvatarUuid, setDeleteAvatarUuid] = useState("");
@@ -44,18 +46,32 @@ export default function Avatars() {
     onOpen: onNewAvatarOpen,
     onClose: onNewAvatarClose,
   } = useDisclosure();
-  const user = useUser();
-  const supabaseClient = useSupabaseClient();
 
+
+  const {
+    isOpen: isDeleteAvatarOpen,
+    onOpen: onDeleteAvatarOpen,
+    onClose: onDeleteAvatarClose,
+  } = useDisclosure();
+
+  const handleDelete = (uuid) => {
+    setDeleteAvatarUuid(uuid);
+    onDeleteAvatarOpen();
+  };
+  const handleDeleteConfirm = async () => {
+    onDeleteAvatarClose();
+    await deleteAvatar();
+  };
+  useEffect(() => {
+    if (deleteAvatarUuid) {
+      onDeleteAvatarOpen();
+    }
+  }, [deleteAvatarUuid]);
+  
   useEffect(() => {
     fetchAvatars(supabaseClient, setAvatars);
   }, []);
-  useEffect(() => {
-    if (deleteAvatarUuid) {
-        deleteAvatar();
-    }
-}, [deleteAvatarUuid]);
-const fetchAvatars = async (supabaseClient) => {
+  const fetchAvatars = async (supabaseClient) => {
     try {
       const { data, error } = await supabaseClient.from("avatar_").select("*");
       if (error) throw error;
@@ -64,7 +80,6 @@ const fetchAvatars = async (supabaseClient) => {
       console.error("Error fetching avatars:", error.message);
     }
   };
-
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -91,19 +106,17 @@ const fetchAvatars = async (supabaseClient) => {
     onNewAvatarClose();
     setIsLoading(false);
   };
-
-
   const deleteAvatar = async (event) => {
     setIsLoading(true);
-  const { data, error } = await supabaseClient
-  .from('avatar_')
-  .delete()
-  .eq('uuid', deleteAvatarUuid);
-  if (!error) {
-  setIsLoading(false);
-   
-  fetchAvatars(supabaseClient);
-}
+    const { data, error } = await supabaseClient
+      .from("avatar_")
+      .delete()
+      .eq("uuid", deleteAvatarUuid);
+    if (!error) {
+      setIsLoading(false);
+
+      fetchAvatars(supabaseClient);
+    }
   };
 
   return (
@@ -120,27 +133,39 @@ const fetchAvatars = async (supabaseClient) => {
         </Button>
       </Box>
       <Box>
-      <Flex
-        p={50}
-        alignItems="center"
-        justifyContent="center"
-        flexWrap="wrap" // allow cards to wrap to new lines
-      >
-  
-        {avatars && avatars.map((avatar, index) => (
-        
-            <Box layerStyle="card" key={avatar.uuid}>
-              <Image h="200" src={avatar.url} alt="Avatar Image" />
+        <Flex
+          p={50}
+          alignItems="center"
+          justifyContent="center"
+          flexWrap="wrap" // allow cards to wrap to new lines
+        >
+          {avatars &&
+            avatars.map((avatar, index) => (
+              <Box layerStyle="card" key={avatar.uuid}>
+                <Image h="200" src={avatar.url} alt="Avatar Image" />
 
-             <strong> {avatar.name}</strong>
-             <italic> {avatar.title}</italic>
-              <Button isLoading={isLoading} size="xs" onClick={() => setDeleteAvatarUuid(avatar.uuid)}>delete</Button>
+                <strong> {avatar.name}</strong>
+                <italic> {avatar.title}</italic>
+                <Button
+                  isLoading={isLoading}
+                  size="xs"
+                  onClick={() => handleDelete(avatar.uuid)}
+                >
+                  Delete
+                </Button>
+              </Box>
+            ))}
 
-            </Box>
-        
-        ))}
-        <hr />
-      </Flex>
+          <WarningModal
+            isOpen={isDeleteAvatarOpen}
+            onClose={onDeleteAvatarClose}
+            onConfirm={handleDeleteConfirm}
+            title="Confirm Delete"
+            content="Are you sure you want to delete this avatar?"
+          />
+
+          <hr />
+        </Flex>
       </Box>
       <Drawer
         placement="bottom"

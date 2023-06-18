@@ -41,6 +41,7 @@ import {
   Select,
   Stack,
 } from "@chakra-ui/react";
+import WarningModal from "../shared/WarningModal";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const convertToDataURI = (file) =>
@@ -63,14 +64,35 @@ export default function Voiceovers() {
   const userId = useUser();
   const supabaseClient = useSupabaseClient();
 
+
+  const {
+    isOpen: isDeleteVoiceoverOpen,
+    onOpen: onDeleteVoiceoverOpen,
+    onClose: onDeleteVoiceoverClose,
+  } = useDisclosure();
+
+  const handleDelete = (uuid) => {
+    setDeleteVoiceoverUuid(uuid);
+    onDeleteVoiceoverOpen();
+  };
+  const handleDeleteConfirm = async () => {
+    onDeleteVoiceoverClose();
+    await deleteVoiceover();
+  };
+  useEffect(() => {
+    if (deleteVoiceoverUuid) {
+      onDeleteVoiceoverOpen();
+    }
+  }, [deleteVoiceoverUuid]);
+
+
+
+
+
   useEffect(() => {
     fetchVoiceovers(supabaseClient, setVoiceovers);
   }, []);
-  useEffect(() => {
-    if (deleteVoiceoverUuid) {
-      deleteVoiceover();
-    }
-  }, [deleteVoiceoverUuid]);
+
 
   const fetchVoiceovers = async (supabaseClient) => {
     try {
@@ -149,12 +171,21 @@ export default function Voiceovers() {
             <Button
               isLoading={isLoading}
               size="xs"
-              onClick={() => setDeleteVoiceoverUuid(voiceover.uuid)}
+              onClick={() => handleDelete(voiceover.uuid)}
             >
               delete
             </Button>
           </Box>
         ))}
+
+<WarningModal
+            isOpen={isDeleteVoiceoverOpen}
+            onClose={onDeleteVoiceoverClose}
+            onConfirm={handleDeleteConfirm}
+            title="Confirm Delete"
+            content="Are you sure you want to delete this Voiceover?"
+          />
+
       </Flex>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Input, Box, Card, Textarea, Button } from "@chakra-ui/react";
+import { Input, Box, Card, Textarea, Button, useDisclosure } from "@chakra-ui/react";
+import WarningModal from "../shared/WarningModal";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { upload_script } from "../../utils/production/upload";
 
@@ -13,15 +14,33 @@ export default function Scripts() {
   const user = useUser();
   const supabaseClient = useSupabaseClient();
   
-  useEffect(() => {
-    fetchScripts();
-  }, []);
+
+  const {
+    isOpen: isDeleteScriptOpen,
+    onOpen: onDeleteScriptOpen,
+    onClose: onDeleteScriptClose,
+  } = useDisclosure();
+
+  const handleDelete = (uuid) => {
+    setDeleteScriptUuid(uuid);
+    onDeleteScriptOpen();
+  };
+  const handleDeleteConfirm = async () => {
+    onDeleteScriptClose();
+    await deleteScript();
+  };
 
   useEffect(() => {
     if (deleteScriptUuid) {
-        deleteScript();
+      onDeleteScriptOpen();
     }
-}, [deleteScriptUuid]);
+  }, [deleteScriptUuid]);
+
+
+
+  useEffect(() => {
+    fetchScripts(supabaseClient, setScripts);
+  }, []);
 
 
   const fetchScripts = async () => {
@@ -74,10 +93,17 @@ export default function Scripts() {
                 <strong>Title:</strong> {script.title}
             <strong>Content:</strong> {script.content},{" "}
         
-            <Button isLoading={isLoading} size="xs" onClick={() => setDeleteScriptUuid(script.uuid)}>delete</Button>
+            <Button isLoading={isLoading} size="xs" onClick={() => handleDelete(script.uuid)}>delete</Button>
         </Card>
         ))}
       
+      <WarningModal
+            isOpen={isDeleteScriptOpen}
+            onClose={onDeleteScriptClose}
+            onConfirm={handleDeleteConfirm}
+            title="Confirm Delete"
+            content="Are you sure you want to delete this script?"
+          />
     
       <Card>
         <Input onChange={(event) => setTitle(event.target.value)} placeholder="Title" />

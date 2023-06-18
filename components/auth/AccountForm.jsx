@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Button, Box, FormControl, FormLabel, Input, Text } from "@chakra-ui/react";
 import Avatar from "./Avatar";
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
+import SignOut from "./SignOut";
 
 export default function AccountForm() {
   const supabaseClient = useSupabaseClient();
@@ -128,11 +129,7 @@ export default function AccountForm() {
         Update
       </Button>
   
-      <form action="/auth/signout" method="post">
-        <Button mt={4} colorScheme="red" type="submit">
-          Sign out
-        </Button>
-      </form>
+      <SignOut />
     </Box>
   )  
 }

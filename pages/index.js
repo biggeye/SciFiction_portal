@@ -41,7 +41,7 @@ export default function Home() {
         redirectTo="/"
         appearance={{ theme: ThemeSupa }}
         supabaseClient={supabaseClient}
-        providers={['twitter']}
+        providers={['google']}
         socialLayout="horizontal"
       />
     )

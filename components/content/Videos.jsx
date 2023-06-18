@@ -24,6 +24,7 @@ import {
 import { upload_video } from "../../utils/production/upload";
 import VideoPlayer from "../shared/VideoPlayer";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+import WarningModal from "../shared/WarningModal";
 
 const convertToDataURI = (file) =>
   new Promise((resolve, reject) => {
@@ -49,9 +50,23 @@ export default function Videos() {
     fetchVideos(supabaseClient);
   }, []);
 
+  const {
+    isOpen: isDeleteVideoOpen,
+    onOpen: onDeleteVideoOpen,
+    onClose: onDeleteVideoClose,
+  } = useDisclosure();
+
+  const handleDelete = (uuid) => {
+    setDeleteVideoUuid(uuid);
+    onDeleteVideoOpen();
+  };
+  const handleDeleteConfirm = async () => {
+    onDeleteVideoClose();
+    await deleteVideo();
+  };
   useEffect(() => {
     if (deleteVideoUuid) {
-      deleteVideo();
+      onDeleteVideoOpen();
     }
   }, [deleteVideoUuid]);
 
@@ -133,7 +148,7 @@ export default function Videos() {
                   <Button
                     isLoading={isLoading}
                     size="xs"
-                    onClick={() => setDeleteVideoUuid(video.uuid)}
+                    onClick={() => handleDelete(video.uuid)}
                   >
                     delete
                   </Button>
@@ -141,6 +156,14 @@ export default function Videos() {
  
             </Box>
           ))}
+          
+<WarningModal
+            isOpen={isDeleteVideoOpen}
+            onClose={onDeleteVideoClose}
+            onConfirm={handleDeleteConfirm}
+            title="Confirm Delete"
+            content="Are you sure you want to delete this Video?"
+          />
         <hr />
       </Flex>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>

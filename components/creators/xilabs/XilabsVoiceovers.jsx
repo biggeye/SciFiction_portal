@@ -124,7 +124,7 @@ export default function XilabsVoiceovers() {
       {data.map((token, tid) => (
         <Card  
          key={tid}
-          layerStyle="card"
+          layerStyle="miniCard"
         >
           <Flex direction="column">
             <HStack display="flex" justifyContent="space-between"> <Text size="md" as="b">{token.voice}</Text>

@@ -121,8 +121,8 @@ export default function Videos() {
       >
         {videos &&
           videos.map((video) => (
-            <Card key={video.uuid} p={5}>
-              <Box p={5}>
+            <Box layerStyle="videoCard" key={video.uuid} p={5}>
+ 
                 <VideoPlayer s3Url={video.url}/>
                 <Center>
                   {video.name}
@@ -138,8 +138,8 @@ export default function Videos() {
                     delete
                   </Button>
                 </Flex>
-              </Box>
-            </Card>
+ 
+            </Box>
           ))}
         <hr />
       </Flex>

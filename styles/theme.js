@@ -20,27 +20,51 @@ const config = {
   
 };
 
+const baseCardStyle = {
+  bg: ' linear-gradient(169deg, rgba(236, 236, 236, 1) 0%, rgba(127, 134, 146, 1) 100%)',
+  color: 'brand.800',
+  m: '5px',
+  borderWidth: '1px',
+  borderColor: 'brand.700',
+  borderRadius: '10px',
+  overflow: "hidden", // keep child boundaries within card
+  boxShadow: "md", // small shadow for 3D effect
+  textAlign: "center",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "space-between"
+};
+
 const layerStyles = {
-    card: {
-      bg: 'brand.200',
-      color: 'brand.100',
-      w: '200px',
-      m: '5px',
-      borderWidth: '4px',
-      borderColor: 'brand.700',
-      borderRadius: '10px',
-      overflow: "hidden", // keep child boundaries within card
-      boxShadow: "md", // small shadow for 3D effect
-      textAlign: "center"
-    },
+  card: {
+    ...baseCardStyle,
+    w: '250px',
+    h: '300px',
+  },
+  miniCard:{
+    ...baseCardStyle,
+    w: '200px',
+    h: '150px',
+  },
+  videoCard: {
+    ...baseCardStyle,
+    w: '425px',
+    h: '550px',
+  },
+  voiceoverCard: {
+    ...baseCardStyle,
+    w: '300px',
+    h: '175px',
+  },
     main: {
       bg: 'brand.50',
       color: 'brand.900',
     },
     pageFrame: {
       bg: 'brand.800',
-      color: 'brand.700',
-      width: 'fill',
+      color: 'brand.100',
+      width: '100vw',
       height: '100%',
       overflowX: 'none',
       bgImage: "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(215,215,215,1) 17%, rgba(181,181,181,0.7343312324929971) 67%, rgba(144,190,226,0.42620798319327735) 100%)"

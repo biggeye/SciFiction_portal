@@ -226,7 +226,7 @@ const supabaseClient = useSupabaseClient();
         {data.map((token, tid) => (
           <Card
             key={tid}
-              layerStyle="card"
+              layerStyle="miniCard"
           >
             <Box p={4}>
               {Object.keys(token).map((x) => {

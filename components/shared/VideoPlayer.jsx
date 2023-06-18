@@ -5,7 +5,7 @@ const VideoPlayer = ({ s3Url }) => {
   
 
   return (
-  <Box>
+  <Box w={400}>
   <ReactPlayer url={s3Url} controls={true} width="100%" height="100%"/>;
   </Box>
 )

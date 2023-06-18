@@ -140,7 +140,7 @@ export default function Voiceovers() {
         flexWrap="wrap" // allow cards to wrap to new lines
       >
         {voiceovers.map((voiceover) => (
-          <Card key={voiceover.uuid} layerStyle="card">
+          <Box key={voiceover.uuid} layerStyle="voiceoverCard">
             <AudioPlayer src={voiceover.url} />
 
             <Text> {voiceover.name}</Text>
@@ -153,7 +153,7 @@ export default function Voiceovers() {
             >
               delete
             </Button>
-          </Card>
+          </Box>
         ))}
       </Flex>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>

@@ -119,6 +119,7 @@ const fetchAvatars = async (supabaseClient) => {
           New
         </Button>
       </Box>
+      <Box>
       <Flex
         p={50}
         alignItems="center"
@@ -128,18 +129,19 @@ const fetchAvatars = async (supabaseClient) => {
   
         {avatars && avatars.map((avatar, index) => (
         
-            <Card key={avatar.uuid} layerStyle="card">
-              <Image src={avatar.url} alt="Avatar Image" />
+            <Box layerStyle="card" key={avatar.uuid}>
+              <Image h="200" src={avatar.url} alt="Avatar Image" />
 
-              {avatar.name}<br />
-              {avatar.title}<br />
+             <strong> {avatar.name}</strong>
+             <italic> {avatar.title}</italic>
               <Button isLoading={isLoading} size="xs" onClick={() => setDeleteAvatarUuid(avatar.uuid)}>delete</Button>
 
-            </Card>
+            </Box>
         
         ))}
         <hr />
       </Flex>
+      </Box>
       <Drawer
         placement="bottom"
         onClose={onNewAvatarClose}

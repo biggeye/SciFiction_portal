@@ -21,7 +21,7 @@ const config = {
 };
 
 const baseCardStyle = {
-  bg: ' linear-gradient(169deg, rgba(236, 236, 236, 1) 0%, rgba(127, 134, 146, 1) 100%)',
+  bg: 'linear-gradient(11deg, rgba(180, 184, 190, 1) 0%, rgba(153, 159, 168, 1) 47%, rgba(236, 236, 236, 1) 100%)',
   color: 'brand.800',
   m: '5px',
   borderWidth: '1px',

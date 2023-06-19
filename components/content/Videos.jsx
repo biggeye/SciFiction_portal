@@ -42,34 +42,16 @@ export default function Videos() {
   const [uploadVideoName, setUploadVideoName] = useState("");
   const [uploadVideoTitle, setUploadVideoTitle] = useState("");
   const [userInFile, setUserInFile] = useState(null);
-
   const userId = useUser();
   const supabaseClient = useSupabaseClient();
-
-  useEffect(() => {
-    fetchVideos(supabaseClient);
-  }, []);
-
   const {
     isOpen: isDeleteVideoOpen,
     onOpen: onDeleteVideoOpen,
     onClose: onDeleteVideoClose,
   } = useDisclosure();
-
-  const handleDelete = (uuid) => {
-    setDeleteVideoUuid(uuid);
-    onDeleteVideoOpen();
-  };
-  const handleDeleteConfirm = async () => {
-    onDeleteVideoClose();
-    await deleteVideo();
-  };
   useEffect(() => {
-    if (deleteVideoUuid) {
-      onDeleteVideoOpen();
-    }
-  }, [deleteVideoUuid]);
-
+    fetchVideos(supabaseClient);
+  }, []);
   const fetchVideos = async (supabaseClient) => {
     try {
       const { data, error } = await supabaseClient.from("videos_").select("*");
@@ -79,7 +61,30 @@ export default function Videos() {
       console.error("Error fetching videos:", error.message);
     }
   };
-
+  useEffect(() => {
+    if (deleteVideoUuid) {
+      onDeleteVideoOpen();
+    }
+  }, [deleteVideoUuid]);
+  const handleDelete = (uuid) => {
+    setDeleteVideoUuid(uuid);
+    onDeleteVideoOpen();
+  };
+  const handleDeleteConfirm = async () => {
+    onDeleteVideoClose();
+    await deleteVideo();
+  };
+  const deleteVideo = async (event) => {
+    setIsLoading(true);
+    const { data, error } = await supabaseClient
+      .from("videos_")
+      .delete()
+      .eq("uuid", deleteVideoUuid);
+    if (!error) {
+      setIsLoading(false);
+      fetchVideos(supabaseClient);
+    }
+  };
   const handleVideoUpload = async (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -87,7 +92,7 @@ export default function Videos() {
       setUserInFile(URI);
     }
   };
-
+  
   const uploadVideo = async (event) => {
     event.preventDefault();
     setIsLoading(true);
@@ -101,18 +106,6 @@ export default function Videos() {
     setIsLoading(false);
     fetchVideos(supabaseClient);
     onClose();
-  };
-
-  const deleteVideo = async (event) => {
-    setIsLoading(true);
-    const { data, error } = await supabaseClient
-      .from("videos_")
-      .delete()
-      .eq("uuid", deleteVideoUuid);
-    if (!error) {
-      setIsLoading(false);
-      fetchVideos(supabaseClient);
-    }
   };
 
   return (

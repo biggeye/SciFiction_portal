@@ -87,7 +87,6 @@ export default function XilabsVoiceovers() {
     const filename = "voiceover.mp3"; // Set the desired filename for the downloaded audio file
      
     downloadFile(response.data, filename, "audio/mpeg");
-    upload_voiceover(response.data, voiceOverData.voice, voiceOverData.script, userId, supabaseClient);
   };
   const deleteRow = async (voiceoverId) => {
     const confirmation = window.confirm("Are you sure you want to delete?");

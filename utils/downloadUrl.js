@@ -1,4 +1,4 @@
-async function downloadUrl(url, filename, type) {
+async function downloadUrl(url, filename) {
   const options = {
     method: "GET",
     mode: "no-cors", // Add the "no-cors" mode option

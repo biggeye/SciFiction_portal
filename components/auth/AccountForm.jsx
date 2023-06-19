@@ -50,6 +50,7 @@ export default function AccountForm() {
   }, [user, getProfile])
 
   async function updateProfile({
+    fullname,
     username,
     website,
     avatar_url,

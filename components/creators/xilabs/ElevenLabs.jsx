@@ -116,8 +116,8 @@ const supabaseClient = useSupabaseClient();
       stability_amt: stabilityValue,
       similarity_amt: similarityValue,
     };
-
-    const response = await axios.post(
+  
+    const apiCall = axios.post(
       "https://flask-vercel-silk.vercel.app/api/xilabs/tts",
       data,
       {
@@ -126,8 +126,25 @@ const supabaseClient = useSupabaseClient();
         },
       }
     );
-    setIsLoading(false); // set loading state to false when the function ends
-    onClose();
+  
+    const timeout = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject(new Error("Timeout exceeded"));
+      }, 8000);
+    });
+  
+    try {
+      const response = await Promise.race([apiCall, timeout]);
+  
+      setIsLoading(false); // set loading state to false when the function ends
+      onClose();
+    } catch (error) {
+      // Handle the timeout error
+      setIsLoading(false); // set loading state to false when the function ends
+  
+      // Code to generate the modal
+      alert("Please check back soon for the results");
+    }
   };
   const createNewVoice = async (event) => {
     event.preventDefault();

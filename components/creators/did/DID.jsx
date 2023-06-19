@@ -27,6 +27,8 @@ import {
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import axios from "axios";
 import AudioPlayer from "../../shared/AudioPlayer";
+import { downloadUrl } from "../../../utils/downloadUrl";
+import { upload_video } from "../../../utils/production/upload";
 
 export default function DID() {
   const [isLoading, setIsLoading] = useState(false);
@@ -53,9 +55,10 @@ export default function DID() {
 
   const sizes = ["xs", "sm", "md", "lg", "xl"];
 
+  const didBearerToken = process.env.NEXT_PUBLIC_DID_BEARER_TOKEN;
   const supabaseClient = useSupabaseClient();
   const user = useUser();
-
+  // fetch data used to populate selections for avatar & voiceover
   useEffect(() => {
     const fetchData = async () => {
       const avatarsData = await fetchAvatars(supabaseClient);
@@ -63,23 +66,21 @@ export default function DID() {
     };
     fetchData();
   }, []);
-
   useEffect(() => {
     const fetchData = async () => {
       const avatarsData = await fetchAvatars();
       const voiceoversData = await fetchVoiceovers();
-      
+
       setAvatars(avatarsData);
       setAvatar(avatarsData[0]?.url);
       setAvatarName(avatarsData[0]?.name);
-  
+
       setVoiceovers(voiceoversData);
       setVoiceover(voiceoversData[0]?.url);
       setVoiceoverName(voiceoversData[0]?.name);
     };
     fetchData();
   }, []);
-
   const fetchAvatars = async () => {
     try {
       const { data: avatarData, error } = await supabaseClient
@@ -92,7 +93,6 @@ export default function DID() {
     }
     return [];
   };
-
   const fetchVoiceovers = async () => {
     try {
       const { data: voiceoverData, error } = await supabaseClient
@@ -105,32 +105,40 @@ export default function DID() {
     }
     return [];
   };
-
-
+  // fetch data returned from initial API call
   const fetchTalkData = async (talkId) => {
     const getOptions = {
       method: "GET",
       headers: {
         accept: "application/json",
-        authorization:
-          "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik53ek53TmV1R3ptcFZTQjNVZ0J4ZyJ9.eyJodHRwczovL2QtaWQuY29tL2ZlYXR1cmVzIjoidGFsa3MiLCJodHRwczovL2QtaWQuY29tL2N4X2xvZ2ljX2lkIjoiIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLmQtaWQuY29tLyIsInN1YiI6ImF1dGgwfDY0MjhiNjgyMWU2MDA2YjY1N2VhZTNmOSIsImF1ZCI6WyJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY4Njk4NDM3NywiZXhwIjoxNjg3MDcwNzc3LCJhenAiOiJHenJOSTFPcmU5Rk0zRWVEUmYzbTN6M1RTdzBKbFJZcSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgcmVhZDpjdXJyZW50X3VzZXIgdXBkYXRlOmN1cnJlbnRfdXNlcl9tZXRhZGF0YSBvZmZsaW5lX2FjY2VzcyJ9.i0tBuiYtqjWIjYUieaAwsqVjpiVUJeil-FX3A8eoJ1h3V_t9qLuYfO0Yqe5LTpHfsuJaigEM3BfWw4shifEY5hGzDLLKWabiit2HyjbCrvzIN_XarAcEjxBSby6ZGEy8kz43UXN7kEp3QUHBhbZPlxbek44fYXIdZFcVuxp1shdoi6RqewmcjCNeA1oS2A7z3coK_rzSysndtK2iI0jSm0eyQkx7uibD91sypB7AHRNcG8WU0l8BL17fcKWwl9q5v4dCvqcGSCuYoOggw2X7ncAsEApeDNPFE1EsqKX5R5edK_rYEmS-JWkb7yF4L8QVQg5By6U5pnrntqpdRHrj7w",
+        authorization: process.env.NEXT_PUBLIC_DID_BEARER_TOKEN,
       },
     };
     let apiData;
     do {
-      const talkResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, getOptions);
+      const talkResponse = await fetch(
+        `https://api.d-id.com/talks/${talkId}`,
+        getOptions
+      );
       if (!talkResponse.ok) {
-          throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
       apiData = await talkResponse.json();
-      
+
       if (apiData.status !== "done") {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     } while (apiData.status !== "done");
     setTalkData(apiData);
+    console.log(
+      "Result of fetchTalkData (apiData): ",
+      apiData,
+      "Result of fetchTalkData (talkData): ",
+      talkData
+    );
     return apiData;
   };
+  // send data to D-ID API for video creation
   const createTalk = async (event) => {
     event.preventDefault();
     setIsLoading(true);
@@ -139,8 +147,7 @@ export default function DID() {
       headers: {
         accept: "application/json",
         "content-type": "application/json",
-        authorization:
-          "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik53ek53TmV1R3ptcFZTQjNVZ0J4ZyJ9.eyJodHRwczovL2QtaWQuY29tL2ZlYXR1cmVzIjoidGFsa3MiLCJodHRwczovL2QtaWQuY29tL2N4X2xvZ2ljX2lkIjoiIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLmQtaWQuY29tLyIsInN1YiI6ImF1dGgwfDY0MjhiNjgyMWU2MDA2YjY1N2VhZTNmOSIsImF1ZCI6WyJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJodHRwczovL2QtaWQudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTY4Njk4NDM3NywiZXhwIjoxNjg3MDcwNzc3LCJhenAiOiJHenJOSTFPcmU5Rk0zRWVEUmYzbTN6M1RTdzBKbFJZcSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwgcmVhZDpjdXJyZW50X3VzZXIgdXBkYXRlOmN1cnJlbnRfdXNlcl9tZXRhZGF0YSBvZmZsaW5lX2FjY2VzcyJ9.i0tBuiYtqjWIjYUieaAwsqVjpiVUJeil-FX3A8eoJ1h3V_t9qLuYfO0Yqe5LTpHfsuJaigEM3BfWw4shifEY5hGzDLLKWabiit2HyjbCrvzIN_XarAcEjxBSby6ZGEy8kz43UXN7kEp3QUHBhbZPlxbek44fYXIdZFcVuxp1shdoi6RqewmcjCNeA1oS2A7z3coK_rzSysndtK2iI0jSm0eyQkx7uibD91sypB7AHRNcG8WU0l8BL17fcKWwl9q5v4dCvqcGSCuYoOggw2X7ncAsEApeDNPFE1EsqKX5R5edK_rYEmS-JWkb7yF4L8QVQg5By6U5pnrntqpdRHrj7w",
+        authorization: process.env.NEXT_PUBLIC_DID_BEARER_TOKEN,
       },
       data: {
         script: {
@@ -152,12 +159,37 @@ export default function DID() {
         },
         config: { fluent: "false", pad_audio: "0.0" },
         source_url: avatar,
-        name: title,
+        name: name,
       },
     };
-    const { data: response } = await axios.request("https://api.d-id.com/talks", options);
-    const data = response.data;
-    
+    let data;
+    try {
+      const response = await axios.request(
+        "https://api.d-id.com/talks",
+        options
+      );
+      data = response.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        const errorData = error.response.data;
+        if (errorData.kind && errorData.description && errorData.details) {
+          console.log("Error Kind:", errorData.kind);
+          console.log("Error Description:", errorData.description);
+          console.log("Error Details:", errorData.details);
+        } else {
+          console.log(errorData);
+        }
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+    }
+
     if (data) {
       try {
         const talkData = await fetchTalkData(data.id);
@@ -166,9 +198,8 @@ export default function DID() {
           console.log(newUrl);
 
           setNewUrl(newUrl); // Set the URL
-          setIsOpen(true);
-          setAlertOpen(true);
-        } // Set the alertOpen to true
+          alertDisclosure.onOpen();
+        }
       } catch (err) {
         console.error(err);
       }
@@ -218,8 +249,7 @@ export default function DID() {
                     avatars.find((avatar) => avatar.url === e.target.value).url
                   );
                   setAvatarName(
-                    avatars.find((avatar) => avatar.url === e.target.value)
-                      .name
+                    avatars.find((avatar) => avatar.url === e.target.value).name
                   );
                 }}
               >
@@ -307,9 +337,10 @@ export default function DID() {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onAlertClose}>
+              <Button ref={cancelRef} onClick={alertDisclosure.onClose}>
                 Cancel
               </Button>
+
               <Button colorScheme="blue" onClick={onCopy} ml={3}>
                 {hasCopied ? "Copied" : "Copy"}
               </Button>

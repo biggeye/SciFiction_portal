@@ -9,128 +9,145 @@ export default function AccountForm() {
   const user = useUser();
 
   const [loading, setLoading] = useState(true)
-  const [fullname, setFullname] = useState(null)
-  const [username, setUsername] = useState(null)
-  const [website, setWebsite] = useState(null)
-  const [avatar_url, setAvatarUrl] = useState(null)
+  const [profileDetails, setProfileDetails] = useState({
+    full_name: null,
+    username: null,
+    website: null,
+    avatar_url: null
+  });
 
-
-
-
+  const { full_name, username, website, avatar_url } = profileDetails;
 
   const getProfile = useCallback(async () => {
     try {
       setLoading(true)
 
-      let { data, error, status } = await supabaseClient
+      const { data, error, status } = await supabaseClient
         .from('profiles')
         .select(`full_name, username, website, avatar_url`)
         .eq('id', user?.id)
-        .single()
+        .single();
 
       if (error && status !== 406) {
-        throw error
+        throw error;
       }
 
       if (data) {
-        setFullname(data.full_name)
-        setUsername(data.username)
-        setWebsite(data.website)
-        setAvatarUrl(data.avatar_url)
+        setProfileDetails(data);
       }
     } catch (error) {
-      alert('Error loading user data!')
+      alert('Error loading user data!');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [user, supabaseClient])
+  }, [user?.id, supabaseClient]);
+
+
+  /*
+  useEffect(() => {
+    if (avatar_url) {
+      updateProfile();
+    }
+  }, [profileDetails]);
+  */
 
   useEffect(() => {
-    getProfile()
-  }, [user, getProfile])
+    getProfile();
+  }, [getProfile, user?.id]);
 
-  async function updateProfile({
-    fullname,
-    username,
-    website,
-    avatar_url,
-  }) {
+  async function updateProfile(e) {
+
     try {
-      setLoading(true)
+      setLoading(true);
 
-      let { error } = await supabase.from('profiles').upsert({
-        id: user?.id,
-        full_name: fullname,
-        username,
-        website,
-        avatar_url,
-        updated_at: new Date().toISOString(),
-      })
-      if (error) throw error
-      alert('Profile updated!')
+      const { error } = await supabaseClient
+        .from('profiles')
+        .upsert({
+          id: user?.id,
+          full_name,
+          username,
+          website,
+          avatar_url,
+          updated_at: new Date().toISOString(),
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      alert('Profile updated!');
     } catch (error) {
-      alert('Error updating the data!')
+      alert('Error updating the data!');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    setProfileDetails({ ...profileDetails, [name]: value });
+  }
 
   return (
     <Box>
       <Avatar
         supabaseClient={supabaseClient}
         user={user}
-        uid={user.id}
+        uid={user?.id}
         url={avatar_url}
         size={150}
         onUpload={(url) => {
-          setAvatarUrl(url)
-          updateProfile({ fullname, username, website, avatar_url: url })
+          setProfileDetails({ ...profileDetails, avatar_url: url });
+          updateProfile();
         }}
       />
-      <FormControl id="email" isDisabled>
-        <FormLabel>Email</FormLabel>
-        <Input type="text" value={user?.email || ''} />
-      </FormControl>
-  
-      <FormControl id="fullName">
-        <FormLabel>Full Name</FormLabel>
-        <Input
-          type="text"
-          value={fullname || ''}
-          onChange={(e) => setFullname(e.target.value)}
-        />
-      </FormControl>
-  
-      <FormControl id="username">
-        <FormLabel>Username</FormLabel>
-        <Input
-          type="text"
-          value={username || ''}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </FormControl>
-  
-      <FormControl id="website">
-        <FormLabel>Website</FormLabel>
-        <Input
-          type="url"
-          value={website || ''}
-          onChange={(e) => setWebsite(e.target.value)}
-        />
-      </FormControl>
-  
-      <Button
-        mt={4}
-        colorScheme="teal"
-        isLoading={loading}
-        onClick={() => updateProfile({ fullname, username, website, avatar_url })}
-      >
-        Update
-      </Button>
-  
+      <form onSubmit={updateProfile}>
+        <FormControl id="email" isDisabled>
+          <FormLabel>Email</FormLabel>
+          <Input type="text" defaultValue={user?.email || ''} />
+        </FormControl>
+
+        <FormControl id="fullName">
+          <FormLabel>Full Name</FormLabel>
+          <Input
+            type="text"
+            name="full_name"
+            value={full_name || ''}
+            onChange={handleInputChange}
+          />
+        </FormControl>
+
+        <FormControl id="username">
+          <FormLabel>Username</FormLabel>
+          <Input
+            type="text"
+            name="username"
+            value={username || ''}
+            onChange={handleInputChange}
+          />
+        </FormControl>
+
+        <FormControl id="website">
+          <FormLabel>Website</FormLabel>
+          <Input
+            type="url"
+            name="website"
+            value={website || ''}
+            onChange={handleInputChange}
+          />
+        </FormControl>
+
+        <Button
+          mt={4}
+          colorScheme="teal"
+          isLoading={loading}
+          type="submit"
+        >
+          Update
+        </Button>
+      </form>
+
       <SignOut />
     </Box>
-  )  
+  )
 }

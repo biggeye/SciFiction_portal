@@ -1,9 +1,10 @@
-import { useUser } from '@supabase/auth-helpers-react'
-import { useRouter } from 'next/router'
+import { useUser } from '@supabase/auth-helpers-react';
+import { useRouter } from 'next/router';
 
 export default function SignOut() {
-  const { user, signOut } = useUser()
-  const router = useRouter()
+  const user = useUser();
+
+  const router = useRouter();
 
   async function handleSignOut() {
     await signOut()

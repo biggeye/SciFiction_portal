@@ -89,29 +89,8 @@ const layerStyles = {
     }
   };
 
-const components = {
-  Scrollbars: {
-    baseStyle: {
-      "::-webkit-scrollbar": {
-        width: "16px",
-        height: "16px",
-      },
-      "::-webkit-scrollbar-track": {
-        background: "brand.100",  // adjust according to your brand colors
-      },
-      "::-webkit-scrollbar-thumb": {
-        background: "brand.500",  // adjust according to your brand colors
-        borderRadius: "8px",
-        border: "4px solid transparent",
-        backgroundClip: "content-box",
-      },
-      "::-webkit-scrollbar-thumb:hover": {
-        background: "brand.700",  // adjust according to your brand colors
-      },
-    },
-  },
-};
 
-const theme = extendTheme({ colors, config, components, layerStyles });
+
+const theme = extendTheme({ colors, config, layerStyles });
 
 export default theme;

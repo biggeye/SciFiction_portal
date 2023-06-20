@@ -41,27 +41,26 @@ import {
 } from "react-icons/ri";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose, AiOutlineMenu, AiFillHome } from "react-icons/ai";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AccountForm from "./auth/AccountForm";
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 
-export default function Navbar({ handlePageChange }) {
+ export default function Navbar({ handlePageChange }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [session, setSession] = useState(null);
   const mobileNav = useDisclosure();
-  const userProfileModalDisclosure = useDisclosure(); // New instance for the modal
+  const userProfileModalDisclosure = useDisclosure();
+   const [currentTab, setTabList] = useState("");
+  const supabaseClient = useSupabaseClient();
 
-  const [currentTab, setTabList] = useState(""); // Added state hook here
-
-  const profileSession = async () => {
+/*
+   const [session, setSession] = useState(null);
+   const profileSession = async () => {
     const session = await supabaseClient.auth.getSession();
     setSession(session);
-    if (!session) {
-      console.log("no supabase client")
-    }
   };
-  
+*/
 
-  const headerItems = [
+   const headerItems = [
     {
       name: "Social Media",
       icon: RiVipCrown2Line,
@@ -76,13 +75,13 @@ export default function Navbar({ handlePageChange }) {
       action: () => {
         setTabList("Assets");
         handlePageChange("Avatars");
-      }, // Capitalized here
+      },
     },
     {
       name: "Vendors",
       icon: RiBallPenLine,
       action: () => {
-        setTabList("Vendors"), // Capitalized here
+        setTabList("Vendors"),
           handlePageChange("ElevenLabs");
       },
     },
@@ -144,10 +143,10 @@ export default function Navbar({ handlePageChange }) {
       ],
     },
   ];
+   const selectedTab = tabs.find((tab) => tab.name === currentTab);
 
-  const selectedTab = tabs.find((tab) => tab.name === currentTab); // Get the current selected tab
 
-  return (
+   return (
     <Box>
       <chakra.header
         borderColor="brand.700"
@@ -234,8 +233,7 @@ export default function Navbar({ handlePageChange }) {
                 </Button>
               ))}
             </HStack>
-
-            <Avatar
+             <Avatar
               onClick={userProfileModalDisclosure.onOpen}
               zIndex="1"
               size="sm"
@@ -245,7 +243,6 @@ export default function Navbar({ handlePageChange }) {
       </chakra.header>
       <Flex
       layerStyle="navSubMenu"
-
       >
         <Tabs
           defaultIndex={0}
@@ -258,7 +255,7 @@ export default function Navbar({ handlePageChange }) {
               {selectedTab.tabList.map(
                 (
                   item,
-                  index // We use selectedTab here
+                  index
                 ) => (
                   <Tab
                     size="xs"

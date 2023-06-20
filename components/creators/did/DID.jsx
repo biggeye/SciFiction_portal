@@ -46,6 +46,9 @@ export default function DID() {
   //API State
   const [talkData, setTalkData] = useState([]);
   const [newUrl, setNewUrl] = useState(null);
+  const [talkId, setTalkId] = useState(null);
+  const [errorKind, setErrorKind] = useState(null);
+  const [errorDescription, setErrorDescription] = useState(null);
   // Alert Modal
   const alertDisclosure = useDisclosure(); // Second useDisclosure hook
   const { hasCopied, onCopy } = useClipboard(newUrl);
@@ -142,6 +145,7 @@ export default function DID() {
   const createTalk = async (event) => {
     event.preventDefault();
     setIsLoading(true);
+  
     const options = {
       method: "POST",
       headers: {
@@ -162,51 +166,59 @@ export default function DID() {
         name: name,
       },
     };
-    let data;
+    
     try {
       const response = await axios.request(
         "https://api.d-id.com/talks",
         options
       );
-      data = response.data;
+  
+      // Move switch from .then() block to the main try block
+      // We don't need to use .then() because we are using async/await
+      switch(response.status) {
+        case 400:
+        case 401:
+        case 402:
+        case 403:
+        case 451:
+          setErrorKind(response.data.kind);
+          setErrorDescription(response.data.description);
+          break;
+        case 201:
+          setTalkId(response.data.id);
+          break;
+        default:
+          console.log(`Received unexpected status code: ${response.status}`);
+      }
+    
+      // Moved inside the try block to be a part of asynchronous operation
+      if (talkId) {
+        try {
+          const talkData = await fetchTalkData(talkId);
+          if (talkData.result_url) {
+            const newUrl = talkData.result_url;
+            console.log(newUrl);
+            setNewUrl(newUrl); // Set the URL
+            alertDisclosure.onOpen();
+          }
+        } catch (err) {
+          console.error(err);
+        }
+        
+        if (errorKind) {
+          console.clear();
+          console.log("Error Type: ", errorKind, "Error Description: ", errorDescription);
+          return;
+        }
+      }
+  
     } catch (error) {
-      if (error.response && error.response.data) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        const errorData = error.response.data;
-        if (errorData.kind && errorData.description && errorData.details) {
-          console.log("Error Kind:", errorData.kind);
-          console.log("Error Description:", errorData.description);
-          console.log("Error Details:", errorData.details);
-        } else {
-          console.log(errorData);
-        }
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log("Error", error.message);
-      }
-    }
-
-    if (data) {
-      try {
-        const talkData = await fetchTalkData(data.id);
-        if (talkData.result_url) {
-          const newUrl = talkData.result_url;
-          console.log(newUrl);
-
-          setNewUrl(newUrl); // Set the URL
-          alertDisclosure.onOpen();
-        }
-      } catch (err) {
-        console.error(err);
-      }
-
+      console.error('Error:', error);
+    } finally {
       setIsLoading(false);
     }
-  };
+  }
+  
 
   return (
     <Box p={10} layerStyle="subPage">

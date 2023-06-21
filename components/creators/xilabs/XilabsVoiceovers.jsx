@@ -65,7 +65,7 @@ export default function XilabsVoiceovers() {
     return tableData;
   };
   const playRow = async (voiceover_id) => {
-    const xiApiKey = process.env.XI_API_KEY;
+    const xiApiKey = process.env.NEXT_PUBLIC_XI_API_KEY;
 
     const playAudio = await axios.get(
       `"https://api.elevenlabs.io/v1/history${voiceover_id}/audio"`,
@@ -81,6 +81,7 @@ export default function XilabsVoiceovers() {
     const voData = { voiceoverId: voiceoverId };
     const response = await axios.post(
       "https://flask-vercel-silk.vercel.app/api/xilabs/download_voiceover",
+      
       voData
     );
     console.log(response);

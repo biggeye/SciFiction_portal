@@ -1,6 +1,7 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { exchangeCodeForToken } from '../../../../utils/auth/oauth2token'
 
 export async function GET(req) {
   const supabase = createRouteHandlerClient({ cookies })
@@ -8,8 +9,9 @@ export async function GET(req) {
   const code = searchParams.get('code')
 
   if (code) {
-    await supabase.auth.exchangeCodeForSession(code)
+    await supabase.auth.exchangeCodeForSession(code);
+    
   }
 
-  return NextResponse.redirect(new URL('/account', req.url))
+  return NextResponse.redirect(new URL('/', req.url))
 }

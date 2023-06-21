@@ -44,8 +44,12 @@ export default function Home() {
       <Auth
         supabaseClient={supabaseClient}
         appearance={appearanceOptions}
-        redirectTo="/"
+        redirectTo="http://localhost:3000"
         providers={['google']}
+        queryParams={{
+            scopes:  "https://www.googleapis.com/auth/youtube",
+            redirectTo:  "http://localhost:3000/"
+        }}
         socialLayout="horizontal"
       />
     )

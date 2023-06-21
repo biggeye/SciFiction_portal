@@ -44,8 +44,16 @@ import { AiOutlineClose, AiOutlineMenu, AiFillHome } from "react-icons/ai";
 import { useState, useEffect } from "react";
 import AccountForm from "./auth/AccountForm";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useProfile } from '../contexts/UserContext';
+
+
+
+
+
 
  export default function Navbar({ handlePageChange }) {
+  
+  const { profile, updateProfile } = useProfile();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const mobileNav = useDisclosure();
   const userProfileModalDisclosure = useDisclosure();
@@ -234,6 +242,7 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
               ))}
             </HStack>
              <Avatar
+             src={profile?.avatar_url} alt="User avatar"
               onClick={userProfileModalDisclosure.onOpen}
               zIndex="1"
               size="sm"

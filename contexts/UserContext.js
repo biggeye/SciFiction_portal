@@ -7,11 +7,11 @@ export function UserProvider({ children }) {
   const [profile, setProfile] = useState(null);
 
   const supabase=useSupabaseClient();
-  
+  const user=useUser();
 
   useEffect(() => {
     // Set the initial user profile state
-    setProfile(supabase.auth.user());
+    setProfile(user);
 
     // Subscribe to profile updates
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {

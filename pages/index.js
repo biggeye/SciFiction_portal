@@ -4,7 +4,7 @@ import {
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import Layout from "../components/Layout";
-import TermsOfServiceModal from "../components/TermsOfServiceModal";
+import TermsOfServiceModal from "TermsOfServiceModal";
 
 // Social Media
 import DashBoard from "../components/social/DashBoard";

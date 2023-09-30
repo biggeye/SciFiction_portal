@@ -103,6 +103,10 @@ import { useProfile } from '../contexts/UserContext';
           action: () => handlePageChange("DashBoard"),
         },
         {
+          name: "Connections",
+          action: () => handlePageChange("Connections"),
+        },
+        {
           name: "Twitter",
           action: () => handlePageChange("Twitter"),
         },

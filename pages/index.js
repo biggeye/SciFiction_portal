@@ -7,6 +7,7 @@ import Layout from "../components/Layout";
 
 // Social Media
 import DashBoard from "../components/social/DashBoard";
+import Connections from "../components/social/Connections";
 import Twitter from "../components/social/Twitter";
 import YouTube from "../components/social/YouTube";
 import Facebook from "../components/social/Facebook";
@@ -72,6 +73,7 @@ export default function Home() {
 
         {/*Social Media*/}
         {currentPage === "DashBoard" && <DashBoard />}
+        {currentPage === "Connections" && <Connections />}
         {currentPage === "Twitter" && <Twitter />}
         {currentPage === "Facebook" && <Facebook />}
         {currentPage === "YouTube" && <YouTube />}

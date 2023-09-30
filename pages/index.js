@@ -86,7 +86,7 @@ export default function Home() {
 
         {/* Social Media */}
         {/* ... (other code) */}
-      </Box>
+      
       
       {/* Footer Section */}
       <Box py={4} bg="gray.200">
@@ -109,7 +109,7 @@ export default function Home() {
           </Box>
         </Flex>
       </Box>
-
+</Box>
       {/* Render the ToS modal */}
       <TermsOfServiceModal isOpen={isTermsOfServiceModalOpen} onClose={closeTermsOfServiceModal} />
     </Layout>

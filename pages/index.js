@@ -4,6 +4,7 @@ import {
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import Layout from "../components/Layout";
+import TermsOfServiceModal from "../components/TermsOfServiceModal";
 
 // Social Media
 import DashBoard from "../components/social/DashBoard";
@@ -31,6 +32,8 @@ export default function Home() {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
   const [currentPage, setCurrentPage] = useState("");
+  // State to manage the modal's open/close state
+  const [isTermsOfServiceModalOpen, setIsTermsOfServiceModalOpen] = useState(false);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -56,6 +59,18 @@ export default function Home() {
     )
   }
 
+    
+
+    // Function to open the ToS modal
+    const openTermsOfServiceModal = () => {
+      setIsTermsOfServiceModalOpen(true);
+    };
+  
+    // Function to close the ToS modal
+    const closeTermsOfServiceModal = () => {
+      setIsTermsOfServiceModalOpen(false);
+    };
+
   return (
     <Layout overflowX="none">
       <Box layerStyle="main" minH="100vh" overflowX="none" overflowY="auto" minW={400}>
@@ -77,6 +92,12 @@ export default function Home() {
         {currentPage === "Twitter" && <Twitter />}
         {currentPage === "Facebook" && <Facebook />}
         {currentPage === "YouTube" && <YouTube />}
+              {/* Button to open the ToS modal */}
+              <Button onClick={openTermsOfServiceModal}>View Terms of Service</Button>
+
+{/* Render the ToS modal */}
+<TermsOfServiceModal isOpen={isTermsOfServiceModalOpen} onClose={closeTermsOfServiceModal} />
+
       </Box>
     </Layout>
   );

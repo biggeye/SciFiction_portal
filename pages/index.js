@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box,
+  Flex, // Import Flex for layout
+  Button,
+  Spacer, // Import Spacer to align content
+  Link, // Import Link for placeholder links
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import Layout from "../components/Layout";
-import TermsOfServiceModal from "TermsOfServiceModal";
+import TermsOfServiceModal from "./TermsOfServiceModal"; // Correct the import path
 
 // Social Media
 import DashBoard from "../components/social/DashBoard";
@@ -39,7 +43,7 @@ export default function Home() {
     setCurrentPage(page);
   };
 
-  //If user is not authenticated, render the Auth component
+  //If the user is not authenticated, render the Auth component
   if (!user) {
     const appearanceOptions = {
       theme: ThemeSupa,
@@ -59,46 +63,55 @@ export default function Home() {
     )
   }
 
-    
+  // Function to open the ToS modal
+  const openTermsOfServiceModal = () => {
+    setIsTermsOfServiceModalOpen(true);
+  };
 
-    // Function to open the ToS modal
-    const openTermsOfServiceModal = () => {
-      setIsTermsOfServiceModalOpen(true);
-    };
-  
-    // Function to close the ToS modal
-    const closeTermsOfServiceModal = () => {
-      setIsTermsOfServiceModalOpen(false);
-    };
+  // Function to close the ToS modal
+  const closeTermsOfServiceModal = () => {
+    setIsTermsOfServiceModalOpen(false);
+  };
 
   return (
     <Layout overflowX="none">
       <Box layerStyle="main" minH="100vh" overflowX="none" overflowY="auto" minW={400}>
         <Navbar handlePageChange={handlePageChange}  /> 
 
-        {/*Assets*/}
-        {currentPage === "Avatars" && <Avatars />}
-        {currentPage === "Voiceovers" && <Voiceovers />}
-        {currentPage === "Scripts" && <Scripts />}
-        {currentPage === "Videos" && <Videos />}
+        {/* Assets */}
+        {/* ... (other code) */}
 
-        {/*Vendors*/}
-        {currentPage === "ElevenLabs" && <ElevenLabs  />}
-        {currentPage === "DID" && <DID />}
+        {/* Vendors */}
+        {/* ... (other code) */}
 
-        {/*Social Media*/}
-        {currentPage === "DashBoard" && <DashBoard />}
-        {currentPage === "Connections" && <Connections />}
-        {currentPage === "Twitter" && <Twitter />}
-        {currentPage === "Facebook" && <Facebook />}
-        {currentPage === "YouTube" && <YouTube />}
-              {/* Button to open the ToS modal */}
-              <Button onClick={openTermsOfServiceModal}>View Terms of Service</Button>
-
-{/* Render the ToS modal */}
-<TermsOfServiceModal isOpen={isTermsOfServiceModalOpen} onClose={closeTermsOfServiceModal} />
-
+        {/* Social Media */}
+        {/* ... (other code) */}
       </Box>
+      
+      {/* Footer Section */}
+      <Box py={4} bg="gray.200">
+        <Flex align="center">
+          <Box flex="1">
+            <Link href="#">Privacy Policy</Link>
+          </Box>
+          <Spacer />
+          <Box flex="1">
+            <Link href="#">Terms of Service</Link>
+          </Box>
+          <Spacer />
+          <Box flex="1">
+            <Link href="#">Contact Us</Link>
+          </Box>
+          <Spacer />
+          <Box flex="1">
+            {/* Button to open the ToS modal */}
+            <Button onClick={openTermsOfServiceModal}>View Terms of Service</Button>
+          </Box>
+        </Flex>
+      </Box>
+
+      {/* Render the ToS modal */}
+      <TermsOfServiceModal isOpen={isTermsOfServiceModalOpen} onClose={closeTermsOfServiceModal} />
     </Layout>
   );
 }

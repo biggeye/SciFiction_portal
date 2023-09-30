@@ -85,14 +85,9 @@ export default function Voiceovers() {
     }
   }, [deleteVoiceoverUuid]);
 
-
-
-
-
   useEffect(() => {
     fetchVoiceovers(supabaseClient, setVoiceovers);
   }, []);
-
 
   const fetchVoiceovers = async (supabaseClient) => {
     try {

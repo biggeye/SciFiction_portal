@@ -13,13 +13,13 @@ import {
   Th,
   Tr,
   Td,
+  Button, // Added for connect buttons
   useColorModeValue
 } from '@chakra-ui/react';
 
 import axios from 'axios';
 
-
-export default function Connections() {
+export default function SocialMediaConnections() {
   const [youTubeFollowers, setYouTubeFollowers] = useState("");
   const [youTubePosts, setYouTubePosts] = useState("");
   const youTubechannelId = "UCSMqjzwL0hZ0GEIpvLTOwYw";
@@ -27,21 +27,16 @@ export default function Connections() {
   
   const metrics = [
     {
-      name: 'Twitter',
-      followers: '',
-      posts: ''
+      name: 'TikTok',
+      followers: '', // Add TikTok follower count state
+      posts: '',     // Add TikTok post count state
     },
     {
       name: 'YouTube',
       followers: youTubeFollowers,
       posts: youTubePosts,
     },
-    {
-      name: 'Facebook',
-      followers: '',
-      posts: '',
-    },
-    ];
+  ];
 
   useEffect(() => {
     const channelId = "UCSMqjzwL0hZ0GEIpvLTOwYw";
@@ -87,35 +82,45 @@ export default function Connections() {
 
   }, []);
 
-return(
-  <Box layerStyle="subPage">
-    <Flex justify="left" p={5}>
-      <chakra.h3 fontSize="md" fontWeight="bold" textAlign="center">
-        Social Media Traffic
-      </chakra.h3>
-    </Flex>
-    <Divider />
-    <TableContainer>
-      <Table size="md">
-        <Thead>
-          <Tr fontWeight="900">
-            <Th>Network</Th>
-            <Th>Followers</Th>
-            <Th>Posts</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {metrics.map((item, index) => (
-            <Tr key={index}>
-              <Td fontSize="sm">{item.name}</Td>
-              <Td fontSize="sm">{item.followers}</Td>
-              <Td fontSize="sm">{item.posts}</Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </TableContainer>
-  </Box>
-)
+  // Add functions to connect TikTok and YouTube accounts here
 
+  return (
+    <Box layerStyle="subPage">
+      <Flex justify="left" p={5}>
+        <chakra.h3 fontSize="md" fontWeight="bold" textAlign="center">
+          Social Media Connections
+        </chakra.h3>
+      </Flex>
+      <Divider />
+      <TableContainer>
+        <Table size="md">
+          <Thead>
+            <Tr fontWeight="900">
+              <Th>Platform</Th>
+              <Th>Followers</Th>
+              <Th>Posts</Th>
+              <Th>Connect</Th> {/* Add a new column for connection buttons */}
+            </Tr>
+          </Thead>
+          <Tbody>
+            {metrics.map((item, index) => (
+              <Tr key={index}>
+                <Td fontSize="sm">{item.name}</Td>
+                <Td fontSize="sm">{item.followers}</Td>
+                <Td fontSize="sm">{item.posts}</Td>
+                <Td>
+                  {/* Add buttons for connecting TikTok and YouTube accounts */}
+                  {item.name === 'TikTok' ? (
+                    <Button colorScheme="blue">Connect</Button>
+                  ) : (
+                    <Button colorScheme="red">Connect</Button>
+                  )}
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    </Box>
+  );
 }

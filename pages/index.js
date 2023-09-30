@@ -3,7 +3,6 @@ import {
   Button,
   Box,
   Flex, // Import Flex for layout
-  Button,
   Spacer, // Import Spacer to align content
   Link, // Import Link for placeholder links
 } from "@chakra-ui/react";

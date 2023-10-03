@@ -84,9 +84,11 @@ export default function Home() {
     setIsPrivacyPolicyModalOpen(true);
   };
 
-  // Function to close the Privacy Policy modal
-  const closePrivacyPolicyModal = () => {
-    setIsPrivacyPolicyModalOpen(false);
+ // Function to close the Privacy Policy modal
+const closePrivacyPolicyModal = () => {
+  setIsPrivacyPolicyModalOpen(false);
+};
+
 
   return (
     <Layout overflowX="none">
@@ -126,5 +128,4 @@ export default function Home() {
       <TermsOfServiceModal isOpen={isTermsOfServiceModalOpen} onClose={closeTermsOfServiceModal} />
     </Layout>
   );
-}
 }

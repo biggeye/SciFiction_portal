@@ -38,6 +38,11 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState("");
   // State to manage the modal's open/close state
   const [isTermsOfServiceModalOpen, setIsTermsOfServiceModalOpen] = useState(false);
+  // State to manage the modal's open/close state for Privacy Policy
+  const [isPrivacyPolicyModalOpen, setIsPrivacyPolicyModalOpen] = useState(false);
+
+
+
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -73,6 +78,15 @@ export default function Home() {
     setIsTermsOfServiceModalOpen(false);
   };
 
+  // Function to open the Privacy Policy modal
+  const openPrivacyPolicyModal = () => {
+    setIsPrivacyPolicyModalOpen(true);
+  };
+
+  // Function to close the Privacy Policy modal
+  const closePrivacyPolicyModal = () => {
+    setIsPrivacyPolicyModalOpen(false);
+
   return (
     <Layout overflowX="none">
       <Box layerStyle="main" minH="100vh" overflowX="none" overflowY="auto" minW={400}>
@@ -88,30 +102,28 @@ export default function Home() {
         {/* ... (other code) */}
       
       
-      {/* Footer Section */}
-      <Box py={4} bg="gray.200">
-        <Flex align="center">
-          <Box flex="1">
-            <Link href="#">Privacy Policy</Link>
-          </Box>
-          <Spacer />
-          <Box flex="1">
-            <Link href="#">Terms of Service</Link>
-          </Box>
-          <Spacer />
-          <Box flex="1">
-            <Link href="#">Contact Us</Link>
-          </Box>
-          <Spacer />
-          <Box flex="1">
-            {/* Button to open the ToS modal */}
-            <Button onClick={openTermsOfServiceModal}>View Terms of Service</Button>
-          </Box>
-        </Flex>
+ {/* Footer Section */}
+ <Box py={4} bg="gray.200">
+          <Flex align="center">
+            <Box flex="1">
+              {/* Link to open the Privacy Policy modal */}
+              <Link onClick={openPrivacyPolicyModal}>Privacy Policy</Link>
+            </Box>
+            <Spacer />
+            <Box flex="1">
+              {/* Button to open the ToS modal */}
+              <Button onClick={openTermsOfServiceModal}>View Terms of Service</Button>
+            </Box>
+          </Flex>
+        </Box>
       </Box>
-</Box>
+      
+      {/* Render the Privacy Policy modal */}
+      <PrivacyPolicyModal isOpen={isPrivacyPolicyModalOpen} onClose={closePrivacyPolicyModal} />
+      
       {/* Render the ToS modal */}
       <TermsOfServiceModal isOpen={isTermsOfServiceModalOpen} onClose={closeTermsOfServiceModal} />
     </Layout>
   );
+}
 }

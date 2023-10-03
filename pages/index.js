@@ -9,6 +9,7 @@ import {
 import Navbar from "../components/Navbar";
 import Layout from "../components/Layout";
 import TermsOfServiceModal from "./TermsOfServiceModal"; // Correct the import path
+import PrivacyPolicyModal from "./PrivacyPolicy";
 
 // Social Media
 import DashBoard from "../components/social/DashBoard";

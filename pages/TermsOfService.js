@@ -10,7 +10,7 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react';
 
-const TermsOfServiceModal = ({ isOpen, onClose }) => {
+const TermsOfService = ({ isOpen, onClose }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -123,4 +123,4 @@ const TermsOfServiceModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default TermsOfServiceModal;
+export default TermsOfService;

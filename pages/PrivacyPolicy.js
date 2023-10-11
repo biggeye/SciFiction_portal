@@ -10,7 +10,7 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react';
 
-const PrivacyPolicyModal = ({ isOpen, onClose }) => {
+const PrivacyPolicy = ({ isOpen, onClose }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -85,4 +85,4 @@ const PrivacyPolicyModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default PrivacyPolicyModal;
+export default PrivacyPolicy;

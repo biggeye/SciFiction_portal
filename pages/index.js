@@ -8,8 +8,8 @@ import {
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import Layout from "../components/Layout";
-import TermsOfServiceModal from "./TermsOfServiceModal"; // Correct the import path
-import PrivacyPolicyModal from "./PrivacyPolicy";
+import TermsOfService from "./TermsOfService"; // Correct the import path
+import PrivacyPolicy from "./PrivacyPolicy";
 
 // Social Media
 import DashBoard from "../components/social/DashBoard";
@@ -38,9 +38,9 @@ export default function Home() {
   const user = useUser();
   const [currentPage, setCurrentPage] = useState("");
   // State to manage the modal's open/close state
-  const [isTermsOfServiceModalOpen, setIsTermsOfServiceModalOpen] = useState(false);
+  const [isTermsOfServiceOpen, setIsTermsOfServiceOpen] = useState(false);
   // State to manage the modal's open/close state for Privacy Policy
-  const [isPrivacyPolicyModalOpen, setIsPrivacyPolicyModalOpen] = useState(false);
+  const [isPrivacyPolicyOpen, setIsPrivacyPolicyOpen] = useState(false);
 
 
 
@@ -70,23 +70,23 @@ export default function Home() {
   }
 
   // Function to open the ToS modal
-  const openTermsOfServiceModal = () => {
-    setIsTermsOfServiceModalOpen(true);
+  const openTermsOfService = () => {
+    setIsTermsOfServiceOpen(true);
   };
 
   // Function to close the ToS modal
-  const closeTermsOfServiceModal = () => {
-    setIsTermsOfServiceModalOpen(false);
+  const closeTermsOfService = () => {
+    setIsTermsOfServiceOpen(false);
   };
 
   // Function to open the Privacy Policy modal
-  const openPrivacyPolicyModal = () => {
-    setIsPrivacyPolicyModalOpen(true);
+  const openPrivacyPolicy = () => {
+    setIsPrivacyPolicyOpen(true);
   };
 
  // Function to close the Privacy Policy modal
-const closePrivacyPolicyModal = () => {
-  setIsPrivacyPolicyModalOpen(false);
+const closePrivacyPolicy = () => {
+  setIsPrivacyPolicyOpen(false);
 };
 
 
@@ -110,22 +110,22 @@ const closePrivacyPolicyModal = () => {
           <Flex align="center">
             <Box flex="1">
               {/* Link to open the Privacy Policy modal */}
-              <Link onClick={openPrivacyPolicyModal}>Privacy Policy</Link>
+              <Link onClick={openPrivacyPolicy}>Privacy Policy</Link>
             </Box>
             <Spacer />
             <Box flex="1">
               {/* Button to open the ToS modal */}
-              <Button onClick={openTermsOfServiceModal}>View Terms of Service</Button>
+              <Button onClick={openTermsOfService}>View Terms of Service</Button>
             </Box>
           </Flex>
         </Box>
       </Box>
       
       {/* Render the Privacy Policy modal */}
-      <PrivacyPolicyModal isOpen={isPrivacyPolicyModalOpen} onClose={closePrivacyPolicyModal} />
+      <PrivacyPolicy isOpen={isPrivacyPolicyOpen} onClose={closePrivacyPolicy} />
       
       {/* Render the ToS modal */}
-      <TermsOfServiceModal isOpen={isTermsOfServiceModalOpen} onClose={closeTermsOfServiceModal} />
+      <TermsOfService isOpen={isTermsOfServiceOpen} onClose={closeTermsOfService} />
     </Layout>
   );
 }

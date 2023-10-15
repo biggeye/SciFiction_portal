@@ -12,7 +12,8 @@ import TermsOfService from "./TermsOfService"; // Correct the import path
 import PrivacyPolicy from "./PrivacyPolicy";
 
 // Social Media
-import TikTok from "../components/social/tiktok";
+import Dashboard from "../components/social/Dashboard";
+import TikTok from "../components/social/TikTok";
 
 // Vendors
 import DID from "../components/creators/did/DID";
@@ -65,63 +66,28 @@ export default function Home() {
     )
   }
 
-  // Function to open the ToS modal
-  const openTermsOfService = () => {
-    setIsTermsOfServiceOpen(true);
-  };
-
-  // Function to close the ToS modal
-  const closeTermsOfService = () => {
-    setIsTermsOfServiceOpen(false);
-  };
-
-  // Function to open the Privacy Policy modal
-  const openPrivacyPolicy = () => {
-    setIsPrivacyPolicyOpen(true);
-  };
-
- // Function to close the Privacy Policy modal
-const closePrivacyPolicy = () => {
-  setIsPrivacyPolicyOpen(false);
-};
-
 
   return (
     <Layout overflowX="none">
-      <Box layerStyle="main" minH="100vh" overflowX="none" overflowY="auto" minW={400}>
-        <Navbar handlePageChange={handlePageChange}  /> 
+    <Box layerStyle="main" minH="100vh" overflowX="none" overflowY="auto" minW={400}>
+      <Navbar handlePageChange={handlePageChange}  /> 
 
-        {/* Assets */}
-        {/* ... (other code) */}
+      {/*Assets*/}
+      {currentPage === "Avatars" && <Avatars />}
+      {currentPage === "Voiceovers" && <Voiceovers />}
+      {currentPage === "Scripts" && <Scripts />}
+      {currentPage === "Videos" && <Videos />}
 
-        {/* Vendors */}
-        {/* ... (other code) */}
+      {/*Vendors*/}
+      {currentPage === "ElevenLabs" && <ElevenLabs  />}
+      {currentPage === "DID" && <DID />}
 
-        {/* Social Media */}
-        {/* ... (other code) */}
-      
-      
- {/* Footer Section */}
- <Box py={4} bg="gray.200">
-          <Flex align="center">
-            <Box flex="1">
-              {/* Link to open the Privacy Policy modal */}
-              <Link onClick={openPrivacyPolicy}>Privacy Policy</Link>
-            </Box>
-            <Spacer />
-            <Box flex="1">
-              {/* Button to open the ToS modal */}
-              <Button onClick={openTermsOfService}>View Terms of Service</Button>
-            </Box>
-          </Flex>
-        </Box>
-      </Box>
-      
-      {/* Render the Privacy Policy modal */}
-      <PrivacyPolicy isOpen={isPrivacyPolicyOpen} onClose={closePrivacyPolicy} />
-      
-      {/* Render the ToS modal */}
-      <TermsOfService isOpen={isTermsOfServiceOpen} onClose={closeTermsOfService} />
-    </Layout>
+      {/*Social Media*/}
+
+      {currentPage === "Dashboard" && <Dashboard />}
+    
+      {currentPage === "TikTok" && <TikTok />}
+    </Box>
+  </Layout>
   );
 }

@@ -99,8 +99,8 @@ import { useProfile } from '../contexts/UserContext';
       name: "Social",
       tabList: [
         {
-          name: "TikTok",
-          action: () => handlePageChange("TikTok"),
+          name: "Dashboard",
+          action: () => handlePageChange("Dashboard"),
         },
       ],
     },

@@ -12,11 +12,7 @@ import TermsOfService from "./TermsOfService"; // Correct the import path
 import PrivacyPolicy from "./PrivacyPolicy";
 
 // Social Media
-import DashBoard from "../components/social/DashBoard";
-import Connections from "../components/social/Connections";
-import Twitter from "../components/social/Twitter";
-import YouTube from "../components/social/YouTube";
-import Facebook from "../components/social/Facebook";
+import TikTok from "../components/social/tiktok";
 
 // Vendors
 import DID from "../components/creators/did/DID";

@@ -8,8 +8,6 @@ import {
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import Layout from "../components/Layout";
-import TermsOfService from "./TermsOfService"; // Correct the import path
-import PrivacyPolicy from "./PrivacyPolicy";
 
 // Social Media
 import Dashboard from "../components/social/Dashboard";

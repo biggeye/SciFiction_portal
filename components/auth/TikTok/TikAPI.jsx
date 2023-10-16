@@ -14,17 +14,9 @@ import performOAuth2Authentication from "../../../utils/auth/oauth2"; // Import 
 const TikAPIConnectButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-<<<<<<< HEAD
-  // Function to open the TikAPI authorization page in a new window
-  const openTikAPIAuthorizationPage = () => {
-    const clientId = "JaDOtuymluYioUkHHJRIKqA9lkEdsPHYSK8GRYQyojaNsRZq"; // Replace with your TikAPI client_id
-    const redirectUri = "https://promo.scifiction.com"; // Replace with your TikAPI redirect_uri
-=======
-  // Function to construct the OAuth Link
   const constructOAuthLink = () => {
     const clientId = "c_BCLMWJVHOJ"; // Replace with your TikAPI client_id
     const redirectUri = "https://promo.scifiction.com"; // Replace with your TikAPI redirect_uri
->>>>>>> 87b256b3ffb34d87fad67323c60368c3853757e1
     const scope = "view_profile explore"; // Scope based on your requirements
     const oAuthLink = `https://tikapi.io/account/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
     window.open(oAuthLink, "TikAPIAuthorization", "width=600,height=400");

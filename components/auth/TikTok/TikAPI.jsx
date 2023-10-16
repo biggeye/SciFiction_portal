@@ -15,8 +15,8 @@ const TikAPIConnectButton = () => {
 
   // Function to construct the OAuth Link
   const constructOAuthLink = () => {
-    const clientId = "your_client_id"; // Replace with your TikAPI client_id
-    const redirectUri = "your_redirect_uri"; // Replace with your TikAPI redirect_uri
+    const clientId = "c_BCLMWJVHOJ"; // Replace with your TikAPI client_id
+    const redirectUri = "https://promo.scifiction.com"; // Replace with your TikAPI redirect_uri
     const scope = "view_profile explore"; // Scope based on your requirements
     const oAuthLink = `https://tikapi.io/account/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
     return oAuthLink;

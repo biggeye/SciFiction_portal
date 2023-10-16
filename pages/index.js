@@ -11,7 +11,6 @@ import Layout from "../components/Layout";
 
 // Social Media
 import Dashboard from "../components/social/Dashboard";
-import TikTok from "../components/social/TikTok";
 
 // Vendors
 import DID from "../components/creators/did/DID";

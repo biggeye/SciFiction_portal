@@ -15,7 +15,6 @@ const TikAPIConnectButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const supabase = useSupabaseClient();
   const user = useUser();
-
   const constructOAuthLink = () => {
     const clientId = "c_BCLMWJVHOJ"; // Replace with your TikAPI client_id
     const redirectUri = "https://promo.scifiction.com/index"; // Replace with your TikAPI redirect_uri
@@ -23,7 +22,6 @@ const TikAPIConnectButton = () => {
     const oAuthLink = `https://tikapi.io/account/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
     window.open(oAuthLink, "TikAPIAuthorization", "width=600,height=400");
   };
-
   // Function to handle the "Authorize" button click
   const handleAuthorizeClick = () => {
     openTikAPIAuthorizationPage();
@@ -31,7 +29,6 @@ const TikAPIConnectButton = () => {
     const accessToken = urlParams.get("access_token");
     const userId = user;
     const provider = "TikTok";
-
     const data = {
       id: YOUR_UUID_VALUE, // Replace with the actual UUID value
       user_id: userId,
@@ -42,7 +39,6 @@ const TikAPIConnectButton = () => {
       created_at: new Date(),
       updated_at: new Date(),
     };
-    
     // Insert the data into the oauth2_tokens table
     const insertData = async () => {
       try {
@@ -56,16 +52,13 @@ const TikAPIConnectButton = () => {
         console.error(error);
       }
     };
-
     insertData();
     // Close the modal after initiating the OAuth2 authorization
     setIsModalOpen(false);
   };
-
   return (
     <>
       <Button onClick={() => setIsModalOpen(true)}>Connect to TikAPI</Button>
-
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} size="lg">
         <ModalOverlay />
         <ModalContent>
@@ -85,5 +78,4 @@ const TikAPIConnectButton = () => {
     </>
   );
 };
-
 export default TikAPIConnectButton;

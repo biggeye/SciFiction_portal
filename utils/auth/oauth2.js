@@ -1,8 +1,9 @@
-import { createClient } from '@supabase/supabase-js';
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const supabaseUrl = 'https://xqdkoozsrecjixhnpoou.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxZGtvb3pzcmVjaml4aG5wb291Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY1ODc3MjQsImV4cCI6MjAwMjE2MzcyNH0.0EJtIbu2eJjtpgJqSCOO1wNrjHnMSOQUuLpRtOvOrTI';
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = useSupabaseClient(supabaseUrl, supabaseKey);
+const user_id = useUser();
 
 async function performOAuth2Authentication(authorizationUrl, scopes, platformName) {
   // Open a popup or redirect the user to the authorization URL
@@ -10,8 +11,8 @@ async function performOAuth2Authentication(authorizationUrl, scopes, platformNam
 
   // After successfully obtaining the access token, store it in your Supabase table
   const oauth2TokenData = {
-    id: 'YOUR_UUID',
-    user_id: 'USER_UUID',
+    id: '1234',
+    user_id: user_id,
     provider: platformName,
     access_token: 'YOUR_ACCESS_TOKEN',
     created_at: new Date().toISOString(),

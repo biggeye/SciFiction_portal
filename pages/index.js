@@ -48,12 +48,6 @@ export default function Home() {
       <Auth
         supabaseClient={supabaseClient}
         appearance={appearanceOptions}
-        redirectTo="https://promo.scifiction.com/"
-        providers={['google']}
-        queryParams={{
-            scopes:  "https://www.googleapis.com/auth/youtube",
-            redirectTo:  "https://promo.scifiction.com/"
-        }}
         socialLayout="horizontal"
       />
     )

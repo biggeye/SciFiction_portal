@@ -1,7 +1,7 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
-import { exchangeCodeForToken } from '../../../../utils/auth/oauth2token'
+import { exchangeCodeForToken } from '../../../../utils/auth/oauth2'
 
 export async function GET(req) {
   const supabase = createRouteHandlerClient({ cookies })

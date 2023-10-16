@@ -32,10 +32,6 @@ export default function Home() {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
   const [currentPage, setCurrentPage] = useState("");
-  // State to manage the modal's open/close state
-  const [isTermsOfServiceOpen, setIsTermsOfServiceOpen] = useState(false);
-  // State to manage the modal's open/close state for Privacy Policy
-  const [isPrivacyPolicyOpen, setIsPrivacyPolicyOpen] = useState(false);
 
 
 

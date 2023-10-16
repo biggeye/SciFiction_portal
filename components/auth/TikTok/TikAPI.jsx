@@ -9,15 +9,17 @@ import {
   ModalCloseButton,
   Text,
 } from "@chakra-ui/react";
-import performOAuth2Authentication from "../../../utils/auth/oauth2"; // Import the function
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const TikAPIConnectButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const supabase = useSupabaseClient();
+  const user = useUser();
 
   const constructOAuthLink = () => {
     const clientId = "c_BCLMWJVHOJ"; // Replace with your TikAPI client_id
     const redirectUri = "https://promo.scifiction.com/index"; // Replace with your TikAPI redirect_uri
-    const scope = "view_profile explore"; // Scope based on your requirements
+    const scope = "view_profile+live+explore"; // Scope based on your requirements
     const oAuthLink = `https://tikapi.io/account/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
     window.open(oAuthLink, "TikAPIAuthorization", "width=600,height=400");
   };
@@ -25,18 +27,37 @@ const TikAPIConnectButton = () => {
   // Function to handle the "Authorize" button click
   const handleAuthorizeClick = () => {
     openTikAPIAuthorizationPage();
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get("access_token");
+    const userId = user;
+    const provider = "TikTok";
 
-    // Add an event listener to capture the token from the callback URL
-    window.addEventListener("message", (event) => {
-      if (event.origin === "https://promo.scifiction.com/") {
-        // Extract the token from the event data
-        const accessToken = event.data;
-
-        // Call the performOAuth2Authentication function to store the token in Supabase
-        performOAuth2Authentication(accessToken, "TikAPI", "TikTok");
+    const data = {
+      id: YOUR_UUID_VALUE, // Replace with the actual UUID value
+      user_id: userId,
+      provider: provider,
+      access_token: accessToken,
+      refresh_token: null, // Replace with the actual refresh token value if available
+      expires_at: null, // Replace with the actual expiration timestamp if available
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+    
+    // Insert the data into the oauth2_tokens table
+    const insertData = async () => {
+      try {
+        const { data, error } = await supabase.from('oauth2_tokens').insert([data]);
+        if (error) {
+          console.error(error);
+        } else {
+          console.log('Data inserted successfully:', data);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    });
+    };
 
+    insertData();
     // Close the modal after initiating the OAuth2 authorization
     setIsModalOpen(false);
   };

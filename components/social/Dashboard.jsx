@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import TikAPIConnectButton from "./TikAPIConnectButton";
-import { checkAccessToken } from "./supabase"; // Assuming you have exported the checkAccessToken function
-
+import TikAPIConnectButton from "../auth/TikTok/TikAPI";
+import { checkAccessToken } from "./checkAccessToken"; // Assuming you have exported the checkAccessToken function
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+const supabase = useSupabaseClient();
+const user = useUser();
 const Dashboard = () => {
   const [accessToken, setAccessToken] = useState(null);
-
+  
   useEffect(() => {
     const fetchAccessToken = async () => {
-      const user_uuid = "your_user_uuid"; // Replace with the actual user_uuid
+      const user_uuid = "user"; // Replace with the actual user_uuid
       const token = await checkAccessToken(user_uuid);
       setAccessToken(token);
     };

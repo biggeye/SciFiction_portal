@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import TikAPIConnectButton from "./TikAPIConnectButton"; // Import your TikAPIConnectButton component
-import performOAuth2Authentication from "./performOAuth2Authentication"; // Import the performOAuth2Authentication function
+import TikAPIConnectButton from "../auth/TikTok/TikAPI"; // Import your TikAPIConnectButton component
+import performOAuth2Authentication from "../../utils/auth/oauth2"; // Import the performOAuth2Authentication function
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const supabase = useSupabaseClient();

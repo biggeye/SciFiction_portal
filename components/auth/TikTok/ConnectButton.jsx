@@ -30,8 +30,8 @@ const ConnectButton = ({ supabase, user_id }) => {
   };
 
   return (
-    <button onClick={handleConnect} disabled={isLoading}>
-      {isLoading ? 'Connecting...' : 'Connect to TikTok'}
+    <button onClick={handleConnect}>
+      Connect to TikTok
     </button>
   );
 };

@@ -3,12 +3,12 @@ import ConnectButton from "../auth/TikTok/ConnectButton";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 const supabase = useSupabaseClient();
 const user_id = useUser();
-const checkAccessToken = async (user) => {
+const checkAccessToken = async (user_id) => {
   try {
     const { data, error } = await supabase
       .from("oauth2_tokens")
       .select("access_token")
-      .eq("user_id", user)
+      .eq("user_id", _id)
       .eq("provider", "TikTok");
 
     if (error) {
@@ -34,7 +34,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchAccessToken = async () => {
       const user_uuid = "user"; // Replace with the actual user_uuid
-      const token = await checkAccessToken(user_uuid);
+      const token = await checkAccessToken(user_id);
       setAccessToken(token);
     };
 

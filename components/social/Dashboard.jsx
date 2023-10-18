@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import TikAPIConnectButton from "../auth/TikTok/TikAPI";
+import ConnectButton from "../auth/TikTok/ConnectButton";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 const supabase = useSupabaseClient();
-const user = useUser();
+const user_id = useUser();
 const checkAccessToken = async (user) => {
   try {
     const { data, error } = await supabase
@@ -53,7 +53,7 @@ const Dashboard = () => {
         <tbody>
           <tr>
             <td>TikTok</td>
-            <td>{accessToken ? "Connected" : <TikAPIConnectButton />}</td>
+            <td>{accessToken ? "Connected" : <ConnectButton supabase={supabase} user_id={user_id} />}</td>
           </tr>
           {/* Add rows for other social media platforms */}
         </tbody>

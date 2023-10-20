@@ -29,7 +29,7 @@ import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 export default function Home() {
   const supabaseClient = useSupabaseClient();
-  const user = useUser();
+  const user_id = useUser();
   const [currentPage, setCurrentPage] = useState("");
 
 
@@ -39,8 +39,8 @@ export default function Home() {
     setCurrentPage(page);
   };
 
-  //If the user is not authenticated, render the Auth component
-  if (!user) {
+  //If user is not authenticated, render the Auth component
+  if (!user_id) {
     const appearanceOptions = {
       theme: ThemeSupa,
     }

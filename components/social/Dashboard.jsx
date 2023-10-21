@@ -1,65 +1,57 @@
-import React, { useEffect, useState } from "react";
-import ConnectButton from "../auth/TikTok/ConnectButton";
-import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
-const supabase = useSupabaseClient();
-const user_id = useUser();
-const checkAccessToken = async (user_id) => {
-  try {
-    const { data, error } = await supabase
-      .from("oauth2_tokens")
-      .select("access_token")
-      .eq("user_id", _id)
-      .eq("provider", "TikTok");
+import { useEffect, useState } from 'react';
+import { Button } from '@chakra-ui/react';
+import fetchUserInfo from "./tiktok/profile";
+import createClientComponentClient from '@supabase/auth-helpers-nextjs';
 
-    if (error) {
-      console.error(error);
-      return null;
-    }
-
-    if (data && data.length > 0) {
-      // Access token exists
-      return data[0].access_token;
-    } else {
-      // Access token does not exist
-      return null;
-    }
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-const Dashboard = () => {
+export default function Dashboard() {
+  const supabase = createClientComponentClient();
   const [accessToken, setAccessToken] = useState(null);
-  
-  useEffect(() => {
-    const fetchAccessToken = async () => {
-      const user_uuid = "user"; // Replace with the actual user_uuid
-      const token = await checkAccessToken(user_id);
-      setAccessToken(token);
-    };
+  const [connected, setConnected] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
 
-    fetchAccessToken();
-  }, []);
+  const user_id = supabase.auth.getUser();
+
+  useEffect(() => {
+    if (accessToken) {
+      setConnected(true);
+      fetchUserInfo(accessToken);
+    }
+  }, [accessToken]);
+
+  const connectToTikTok = async () => {
+    const authWindow = window.open('https://tikapi.io/account/authorize?client_id=c_BCLMWJVHOJ&redirect_uri=https://tik-api-sandbox.vercel.app/dashboard&scope=view_profile+explore+live');
+    window.addEventListener('message', async (event) => {
+      if (event.origin === 'https://tikapi.io' && event.data.access_token) {
+        const accessToken = event.data.access_token;
+
+        // Store the access token in the oauth2tokens table
+        const { data, error } = await supabase.from('oauth2tokens').insert([{ user_id: user_id, platform: 'tiktok', access_token: accessToken }]);
+
+        if (error) {
+          console.error('Error storing access token:', error);
+        } else {
+          console.log('Access token stored successfully:', data);
+        }
+
+        // Close the authentication popup
+        authWindow?.close();
+
+        setConnected(true);
+        setUserInfo(accessToken);
+      }
+    });
+  };
 
   return (
     <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Platform</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>TikTok</td>
-            <td>{accessToken ? "Connected" : <ConnectButton supabase={supabase} user_id={user_id} />}</td>
-          </tr>
-          {/* Add rows for other social media platforms */}
-        </tbody>
-      </table>
+      {!connected ? (
+        <Button onClick={connectToTikTok}>Connect TikTok</Button>
+      ) : (
+        <div>
+          <h1>User Profile</h1>
+          {accessToken}
+        </div>
+      )}
     </div>
   );
-};
-
-export default Dashboard;
+}

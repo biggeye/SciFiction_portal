@@ -15,7 +15,7 @@ const ConnectButton = ({ supabase, user_id }) => {
         const accessToken = event.data.access_token;
 
         // Store the access token in the oauth2tokens table
-        const { data, error } = await supabase.from('oauth2tokens').insert([{ user_id: user_id, platform: 'tiktok', access_token: accessToken }]);
+        const { data, error } = await supabase.from('oauth2_tokens').insert([{ user_id: user_id, platform: 'tiktok', access_token: accessToken }]);
 
         if (error) {
           console.error('Error storing access token:', error);

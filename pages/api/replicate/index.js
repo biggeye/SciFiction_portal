@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs'
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs'
 
 export const config = {
   api: {
@@ -9,7 +9,7 @@ export const config = {
 
 export default async function handler(req, res) {
     // Create authenticated Supabase Client
-    const supabase = createServerSupabaseClient({ req, res })
+    const supabase = createPagesServerClient({ req, res })
     // Check if we have a session
     const {
       data: { session },

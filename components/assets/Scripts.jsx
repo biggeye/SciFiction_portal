@@ -10,7 +10,6 @@ export default function Scripts() {
   const [script, setScript] = useState("");
   const [title, setTitle] = useState("");
   const [deleteScriptUuid, setDeleteScriptUuid] = useState("");
-
   const user = useUser();
   const supabaseClient = useSupabaseClient();
   

@@ -24,7 +24,7 @@ import {
   Button,
   Image
 } from "@chakra-ui/react";
-import WarningModal from "../shared/WarningModal";
+import WarningModal from "../WarningModal";
 
 export default function Gallery() {
   const [selectedImage, setSelectedImage] = useState(null);

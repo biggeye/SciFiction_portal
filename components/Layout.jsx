@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Box, Main } from "@chakra-ui/react";
-
+import Navbar from "./Navbar";
 
 const Layout = ({ children }) => {
   return (

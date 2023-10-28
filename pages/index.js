@@ -15,6 +15,8 @@ import Dashboard from "../components/social/Dashboard";
 // Vendors
 import DID from "../components/creators/did/DID";
 import ElevenLabs from "../components/creators/xilabs/ElevenLabs";
+import Img2Img from "../components/creators/replicate/Img2Img";
+import Txt2Img from "../components/creators/replicate/Txt2Img";
 
 // Assets
 import Videos from "../components/assets/Videos";
@@ -56,9 +58,6 @@ export default function Home() {
 
   return (
     <Layout overflowX="none">
-    <Box layerStyle="main" minH="100vh" overflowX="none" overflowY="auto" minW={400}>
-      <Navbar handlePageChange={handlePageChange}  /> 
-
       {/*Assets*/}
       {currentPage === "Avatars" && <Avatars />}
       {currentPage === "Voiceovers" && <Voiceovers />}
@@ -68,13 +67,14 @@ export default function Home() {
       {/*Vendors*/}
       {currentPage === "ElevenLabs" && <ElevenLabs  />}
       {currentPage === "DID" && <DID />}
+      {currentPage === "Txt2Img" && <Txt2Img />}
+      {currentPage === "Img2Img" && <Img2Img />}
 
       {/*Social Media*/}
 
       {currentPage === "Dashboard" && <Dashboard />}
     
       {currentPage === "TikTok" && <TikTok />}
-    </Box>
-  </Layout>
+      </Layout>
   );
 }

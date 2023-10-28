@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@chakra-ui/react';
-import fetchUserInfo from "./tiktok/profile";
-import createClientComponentClient from '@supabase/auth-helpers-nextjs';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default function Dashboard() {
   const supabase = createClientComponentClient();

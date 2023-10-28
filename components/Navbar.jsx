@@ -133,8 +133,16 @@ import { useProfile } from '../contexts/UserContext';
           action: () => handlePageChange("ElevenLabs"),
         },
         {
-          name: "D-ID",
+          name: "D-ID 2",
           action: () => handlePageChange("DID"),
+        },
+        {
+          name: "Img2Img",
+          action: () => handlePageChange("Img2Img"),
+        },
+        {
+          name: "Txt2Img",
+          action: () => handlePageChange("Txt2Img")
         }
       ],
     },

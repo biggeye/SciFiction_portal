@@ -12,8 +12,10 @@ const Layout = ({ children }) => {
 
         <link rel="icon" href="/bigeye_100.png" />
       </Head>
-
-        <Box>{children}</Box>
+      <Box layerStyle="main" minH="100vh" overflowX="none" overflowY="auto" minW={400}>
+      <Navbar handlePageChange={handlePageChange}  /> 
+      {children}
+      </Box>
 
     </div>
   );

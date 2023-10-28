@@ -10,7 +10,7 @@ export default async function uploadPrediction(
     const imageModelId = modelId;
     const imagePredictionId = predictionId;
 
-    const url = `https://pckovrpqrkyqinifydcs.supabase.co/storage/v1/object/public/production_replicate/${imagePredictionId}`;
+    const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/production_replicate/${imagePredictionId}`;
     const user_id = userId;
 
     const response = await fetch(fileUrl);

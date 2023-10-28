@@ -7,6 +7,7 @@ import {
   Link, // Import Link for placeholder links
 } from "@chakra-ui/react";
 import Layout from "../components/Layout";
+import Gallery from "../components/shared/Gallery";
 
 // Social Media
 import Dashboard from "../components/social/Dashboard";
@@ -57,6 +58,8 @@ export default function Home() {
 
   return (
     <Layout overflowX="none" handlePageChange={handlePageChange}>
+    
+      {currentPage === "Gallery" && <Gallery />}
       {/*Assets*/}
       {currentPage === "Avatars" && <Avatars />}
       {currentPage === "Voiceovers" && <Voiceovers />}

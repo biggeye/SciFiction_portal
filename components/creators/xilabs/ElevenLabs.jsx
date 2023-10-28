@@ -43,6 +43,7 @@ import axios from "axios";
 import AudioPlayer from "../../shared/AudioPlayer";
 import AudioRecorder from "../../shared/AudioRecorder";
 import XilabsVoiceovers from "./XilabsVoiceovers";
+import VoiceModelSelector from "./VoiceModelSelector";
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
 export default function ElevenLabs() {
@@ -84,25 +85,11 @@ const supabaseClient = useSupabaseClient();
     fontSize: "sm",
   };
 
-  useEffect(() => {
-    fetchYourData().then((fetchedData) => {
-      setData(fetchedData);
-    });
-  }, []);
-  const fetchYourData = async () => {
-    const response = await axios.get(
-      "https://flask-vercel-silk.vercel.app/api/xilabs/get_voices"
-    );
-    const voices = response.data.voices;
+  const handleVoiceModelSelect = (selectedVoiceModel) => {
+    // Handle the selected voice model here
+    console.log("Selected Voice Model:", selectedVoiceModel);
+};
 
-    const tableData = voices.map((voice) => ({
-      name: voice.name,
-      voice_id: voice.voice_id,
-      sample: voice.preview_url,
-    }));
-
-    return tableData;
-  };
   const handleFormInputChange = (e) => {
     setScript(e.target.value);
   };
@@ -240,59 +227,14 @@ const supabaseClient = useSupabaseClient();
         justifyContent="center"
         flexWrap="wrap" // allow cards to wrap to new lines
       >
-        {data.map((token, tid) => (
-          <Card
-            key={tid}
-              layerStyle="miniCard"
-          >
-            <Box p={4}>
-              {Object.keys(token).map((x) => {
-                if (x === "voice_id") return null;
+        <VoiceModelSelector voiceModels={data} onSelect={handleVoiceModelSelect} onOpen={onOpen} />
 
-                return (
-                  <Text key={`${tid}${x}`}>
-                    {x === "sample" ? (
-                      <AudioPlayer src={token[x]} />
-                    ) : (
-                      <Text size="md" as="b">
-                        {token[x]}
-                      </Text>
-                    )}
-                  </Text>
-                );
-              })}
-            </Box>
-
-            <Flex justifyContent="flex-end" p={1}>
-              <IconButton
-                tooltip="Create Voiceover"
-                size="xs"
-                colorScheme="blue"
-                icon={<BsBoxArrowUpRight />}
-                aria-label="Up"
-                onClick={() => {
-                  setCurrentName(token["name"]);
-                  setCurrentVoiceId(token["voice_id"]);
-                  onOpen();
-                }}
-              />
-              <IconButton
-                tooltip="Delete"
-                size="xs"
-                colorScheme="red"
-                icon={<RiDeleteBin2Line />}
-                aria-label="Up"
-                onClick={() => {
-                  setCurrentName(token["name"]);
-                  setCurrentVoiceId(token["voice_id"]);
-                  deleteVoice(token["voice_id"]);
-                }}
-              />
-            </Flex>
-          </Card>
-        ))}
-      </Flex>
+              </Flex>
+              <Flex p={50}
+              alignItems="center"
+              justifyContent="center">
       <XilabsVoiceovers />
+      </Flex>
       <Drawer
         size={sizes}
         isOpen={isOpen}

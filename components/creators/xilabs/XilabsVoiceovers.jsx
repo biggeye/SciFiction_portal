@@ -10,7 +10,12 @@ import {
   Spacer,
   HStack,
   Divider,
-  Card
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td
 } from "@chakra-ui/react";
 import {
   RiDeleteBin2Line,
@@ -22,7 +27,7 @@ import sliceWords from "../../../utils/sliceWords";
 import convertDate from "../../../utils/convertDate";
 import { downloadFile } from "../../../utils/downloadFile";
 import { upload_voiceover } from "../../../utils/production/upload";
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 export default function XilabsVoiceovers() {
   const userId = useUser();
@@ -113,50 +118,55 @@ export default function XilabsVoiceovers() {
   };
 };
 
-  return (
-
-       <Flex
-   p={50}
-   alignItems="center"
-   justifyContent="center"
-   flexWrap="wrap" // allow cards to wrap to new lines
->
-      {data.map((token, tid) => (
-        <Card  
-         key={tid}
-          layerStyle="miniCard"
-        >
-          <Flex direction="column">
-            <HStack display="flex" justifyContent="space-between"> <Text size="md" as="b">{token.voice}</Text>
-            <Text size="xs" as="i">{token.date}</Text>
-            </HStack>
-          
-            <Text size="sm">{token.script}</Text>
-            </Flex>
-
-          <Flex justifyContent="flex-end" p={1}>
-            <Spacer />
-            <IconButton
-            tooltip="Download"
-              size="xs"
-              colorScheme="blue"
-              icon={<RiDownloadCloud2Line />}
-              aria-label="Up"
-              onClick={() => downloadRow(token["voiceover_id"])}
-            />
-         
-            <IconButton
-            tooltip="Delete"
-              size="xs"
-              colorScheme="red"
-              icon={<RiDeleteBin2Line />}
-              aria-label="Up"
-              onClick={() => deleteRow(token["voiceover_id"])}
-            />
-          </Flex>
-        </Card>
-      ))}
-    </Flex>
-
-  );
-}
+return (
+  <Box width="full" maxW="90vw" overflowX="none">
+    <Table variant="simple">
+      <Thead>
+        <Tr>
+          <Th>Voice</Th>
+          <Th>Date</Th>
+          <Th>Script</Th>
+          <Th>Actions</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {data.map((token, tid) => (
+          <Tr key={tid}>
+            <Td>{token.voice}</Td>
+            <Td>{token.date}</Td>
+            <Td>{token.script}</Td>
+            <Td>
+              <HStack spacing={2}>
+                <IconButton
+                  tooltip="Play"
+                  size="xs"
+                  colorScheme="green"
+                  icon={<RiPlayCircleLine />}
+                  aria-label="Play"
+                  onClick={() => playRow(token["voiceover_id"])}
+                />
+                <IconButton
+                  tooltip="Download"
+                  size="xs"
+                  colorScheme="blue"
+                  icon={<RiDownloadCloud2Line />}
+                  aria-label="Download"
+                  onClick={() => downloadRow(token["voiceover_id"])}
+                />
+                <IconButton
+                  tooltip="Delete"
+                  size="xs"
+                  colorScheme="red"
+                  icon={<RiDeleteBin2Line />}
+                  aria-label="Delete"
+                  onClick={() => deleteRow(token["voiceover_id"])}
+                />
+              </HStack>
+            </Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+  </Box>
+);
+        }

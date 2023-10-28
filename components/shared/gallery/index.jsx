@@ -77,11 +77,12 @@ export default function Gallery() {
         .order("created_at", { ascending: false })
         .range(page * rowsPerPage, (page + 1) * rowsPerPage - 1);
 
-      if (error) console.log("error", error);
-      else {
-        setData(cards);
-        setTotal(Math.ceil(count / rowsPerPage)); // update total page count
-      }
+        if (error) console.log("error", error);
+        else {
+          setData(cards);
+          dispatch(setImages(cards)); // Dispatch images to Redux store
+          setTotal(Math.ceil(count / rowsPerPage)); // update total page count
+        }
     }
 
     fetchCards();

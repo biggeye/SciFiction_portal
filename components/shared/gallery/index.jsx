@@ -3,7 +3,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Card from "./Card";
 import Pagination from "./Pagination";
 import { useSelector, useDispatch } from 'react-redux';
-import { selectImages, setImages, addImage, removeImage } from '../../components/utils/redux/gallerySlice';
+import { selectImages, setImages, addImage, removeImage } from '@/components/utils/redux/gallerySlice';
 import {
   Box,
   Wrap,

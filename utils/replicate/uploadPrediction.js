@@ -10,15 +10,16 @@ export default async function uploadPrediction(
     const imageModelId = modelId;
     const imagePredictionId = predictionId;
 
-    const url = `https://pckovrpqrkyqinifydcs.supabase.co/storage/v1/object/public/replicate_predictions/${imagePredictionId}`;
+    const url = `https://pckovrpqrkyqinifydcs.supabase.co/storage/v1/object/public/production_replicate/${imagePredictionId}`;
     const user_id = userId;
 
     const response = await fetch(fileUrl);
     const imageBlob = await response.blob();
     
 
+
     const { bucket, error } = await supabase.storage
-      .from('replicate_predictions')
+      .from('production_replicate')
       .upload(`${imagePredictionId}`, imageBlob, { cacheControl: '3600', upsert: false });
 
     if (error) {
@@ -42,7 +43,7 @@ export default async function uploadPrediction(
 
     if (error2) {
       console.error('Error posting image data to Supabase:', error2);
-      throw new Error('Error posting image data to Supabase');  
+      throw new Error('Error posting image data to Supabase!');  
     }
 
     return url;

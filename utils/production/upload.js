@@ -7,12 +7,14 @@ async function upload_avatar(image, name, description, user, supabaseClient) {
   const uuid = uuidv4();
   const url = `https://xqdkoozsrecjixhnpoou.supabase.co/storage/v1/object/public/production_avatars/${uuid}.png`;
 
+  
   const { imageData, imageError } = await supabaseClient.storage
     .from("production_avatars")
     .upload(`${uuid}.png`, imageBlob);
   if (imageError) {
     return;
   }
+
 
   let { imageTableData, imageTableError } = await supabaseClient.rpc(
     "add_avatar",

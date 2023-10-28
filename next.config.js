@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 
+const path = require('path');
+
+
   nextConfig = {
   reactStrictMode: true,
   images: {
@@ -29,6 +32,6 @@ module.exports = {
   },
   serverRuntimeConfig: {
     // Increase max body size to 10MB (default is 1MB)
-    maxBodySize: '4mb',
+    maxBodySize: '10mb',
   },
 };

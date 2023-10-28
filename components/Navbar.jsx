@@ -31,6 +31,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import {
+  RiGalleryLine,
   RiChatVoiceLine,
   RiVipCrown2Line,
   RiBallPenLine,
@@ -69,6 +70,14 @@ import { useProfile } from '../contexts/UserContext';
 */
 
    const headerItems = [
+    {
+      name: "Gallery",
+      icon: RiGalleryLine,
+      action: () => {
+        setTabList("Gallery");
+        handlePageChange("Gallery");
+      },
+    },
     {
       name: "Social Media",
       icon: RiVipCrown2Line,

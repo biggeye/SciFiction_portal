@@ -9,6 +9,9 @@ const PagButton = (props) => {
     color: "white",
   };
 
+  // Destructure the active prop from props
+  const { active, ...restProps } = props;
+
   return (
     <chakra.button
       px={4}
@@ -20,9 +23,9 @@ const PagButton = (props) => {
       opacity={props.disabled && 0.6}
       _hover={!props.disabled && activeStyle}
       cursor={props.disabled && "not-allowed"}
-      {...(props.active && activeStyle)}
-      display={props.p && !props.active && { base: "none", sm: "block" }}
-      {...props}
+      {...(active && activeStyle)}
+      display={props.p && !active && { base: "none", sm: "block" }}
+      {...restProps}  // Spread the rest of the props
     >
       {props.children}
     </chakra.button>

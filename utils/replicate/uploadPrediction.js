@@ -28,18 +28,19 @@ export default async function uploadPrediction(
     }
 
     console.log('Image uploaded successfully:');
-
+    console.log( user_id, imageModelId, imagePredictionId, imagePrompt, url);
     const { table, error2 } = await supabase
-      .from('replicate_predictions')
-      .insert([
-        {
-          user_id: user_id,
-          modelId: imageModelId,
-          predictionId: imagePredictionId,
-          prompt: imagePrompt,
-          url: url,
-        },
-      ]);
+    .from('replicate_predictions')
+    .insert([
+      {
+        user_id: user_id,
+        modelid: imageModelId,  // changed from modelId
+        predictionid: imagePredictionId,  // changed from predictionId
+        prompt: imagePrompt,
+        url: url,
+      },
+    ]);
+  
 
     if (error2) {
       console.error('Error posting image data to Supabase:', error2);

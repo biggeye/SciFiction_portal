@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import galleryReducer from './gallerySlice';
+import galleryReducer from '../../utils/redux/gallerySlice';
 
 export const store = configureStore({
   reducer: {

@@ -2,7 +2,7 @@ import Head from "next/head";
 import { Box, Main } from "@chakra-ui/react";
 import Navbar from "./Navbar";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, handlePageChange }) => {
   return (
     <div>
       <Head>
@@ -17,7 +17,7 @@ const Layout = ({ children }) => {
       {children}
       </Box>
 
-    </div>
+    </div>  
   );
 };
 

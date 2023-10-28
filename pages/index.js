@@ -6,7 +6,6 @@ import {
   Spacer, // Import Spacer to align content
   Link, // Import Link for placeholder links
 } from "@chakra-ui/react";
-import Navbar from "../components/Navbar";
 import Layout from "../components/Layout";
 
 // Social Media
@@ -57,7 +56,7 @@ export default function Home() {
 
 
   return (
-    <Layout overflowX="none">
+    <Layout overflowX="none" handlePageChange={handlePageChange}>
       {/*Assets*/}
       {currentPage === "Avatars" && <Avatars />}
       {currentPage === "Voiceovers" && <Voiceovers />}

@@ -1,7 +1,4 @@
 import axios from 'axios';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -15,7 +12,7 @@ export default async function handler(req, res) {
     const url = `https://api.elevenlabs.io/v1/text-to-speech/${voice_id}`;
     const headers = {
       'accept': 'audio/mpeg',
-      'xi-api-key': process.env.XI_API_KEY,
+      'xi-api-key': process.env.NEXT_PUBLIC_XILABS_API_KEY,
       'Content-Type': 'application/json',
     };
     const data = {

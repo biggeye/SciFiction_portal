@@ -105,7 +105,7 @@ const supabaseClient = useSupabaseClient();
     };
   
     const apiCall = axios.post(
-      "https://flask-vercel-silk.vercel.app/api/xilabs/tts",
+      "@/api/xilabs/tts",
       data,
       {
         headers: {

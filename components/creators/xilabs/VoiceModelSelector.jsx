@@ -11,7 +11,7 @@ function VoiceModelSelector({ onSelect, onOpen, setCurrentName, setCurrentVoiceI
   useEffect(() => {
     const fetchYourData = async () => {
       const response = await axios.get(
-        "https://flask-vercel-silk.vercel.app/api/xilabs/get_voices"
+        "@/api/xilabs/get_voices"
       );
       const voices = response.data.voices;
       const tableData = voices.map((voice) => ({

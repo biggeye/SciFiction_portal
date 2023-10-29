@@ -62,8 +62,8 @@ export default function Img2Img({ currentPage }) {
   const toast = useToast();
   // FUNCTIONS
   const sortedImg2Img = [...img2img].sort((a, b) =>
-  a.friendlyName.localeCompare(b.friendlyName, 'en', { sensitivity: 'base' })
-);
+    a.friendlyName.localeCompare(b.friendlyName, "en", { sensitivity: "base" })
+  );
 
   const handleModelChange = (modelId, friendlyName, shortDesc, example) => {
     setSelectedModel({ modelId, friendlyName, shortDesc, example });
@@ -215,16 +215,20 @@ export default function Img2Img({ currentPage }) {
       justifyContent="center"
     >
       <VStack mb={100}>
-      <Box
-        fontSize={["sm", "md", "lg", "xl"]}
-        p={[".25rem", ".5rem"]}
-        position="fixed"
-        bottom="0rem"
-        width="100%"
-        opacity={0.9}
-        backdropFilter="blur(10px)"
-      >
-        <InputGroup>
+        <Box
+          fontSize={["sm", "md", "lg", "xl"]}
+          p={[".25rem", ".5rem"]}
+          width="100%"
+          opacity={0.9}
+          backdropFilter="blur(10px)"
+        >
+          <Input size="md" type="file" accept="image/*" onChange={handleImageChange} />
+          <ModelSelect
+            handleModelChange={handleModelChange}
+            models={sortedImg2Img}
+          />
+          
+          <InputGroup>
           <Input
             color="black"
             name="prompt"
@@ -234,17 +238,16 @@ export default function Img2Img({ currentPage }) {
             value={userInput}
             onChange={handleUserInputChange}
           />
-
-          <InputRightAddon>
-            <IconButton
-              icon={<ArrowRightIcon />}
-              isLoading={isLoading}
-              onClick={handleUserInputSubmit}
-              size="xs"
-            />
-          </InputRightAddon>
-        </InputGroup>
-      </Box>
+            <InputRightAddon>
+              <IconButton
+                icon={<ArrowRightIcon />}
+                isLoading={isLoading}
+                onClick={handleUserInputSubmit}
+                size="xs"
+              />
+            </InputRightAddon>
+          </InputGroup>
+        </Box>
         <Card w="80vw" mt={5}>
           <Box display="flex" justifyContent="center">
             <Flex
@@ -252,15 +255,6 @@ export default function Img2Img({ currentPage }) {
               direction="column"
               alignItems="center"
             >
-              <ModelSelect
-                handleModelChange={handleModelChange}
-                models={sortedImg2Img}
-              />
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
               {prediction && (
                 <Box>
                   <CircularProgress
@@ -392,8 +386,6 @@ export default function Img2Img({ currentPage }) {
           </Card>
         </Card>
       </VStack>
-
-     
     </Box>
   );
 }

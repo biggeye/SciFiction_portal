@@ -2,10 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  ButtonGroup,
-  Card,
-  Center,
-  Container,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -13,18 +9,22 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  Flex,
   FormControl,
-  FormLabel,
-  IconButton,
   Input,
   Text,
   useDisclosure,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
 } from "@chakra-ui/react";
 import { upload_video } from "../../utils/production/upload";
 import VideoPlayer from "../shared/VideoPlayer";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import WarningModal from "../shared/WarningModal";
+
 
 const convertToDataURI = (file) =>
   new Promise((resolve, reject) => {
@@ -108,36 +108,38 @@ export default function Videos() {
     onClose();
   };
 
+ 
   return (
     <Box layerStyle="subPage">
-            <Box overflowX="none" position="absolute" mt={2} ml={2}>
-        <Button
+     <Button
           size="xs"
           colorScheme="blue"
-          onClick={() => {
-            onOpen();
-          }}
+          onClick={onOpen}
         >
           Upload
         </Button>
+      <Box overflowX="none" position="absolute" mt={2} ml={2}>
+       
       </Box>
-      <Flex
-        p={50}
-        alignItems="center"
-        justifyContent="center"
-        flexWrap="wrap" // allow cards to wrap to new lines
-      >
-        {videos &&
-          videos.map((video) => (
-            <Box layerStyle="videoCard" key={video.uuid} p={5}>
- 
-                <VideoPlayer s3Url={video.url}/>
-                <Center>
-                  {video.name}
-                  <br />
-                  {video.title}
-                </Center>
-                <Flex justifyContent="flex-end">
+      <Table variant="simple" mt={10}>
+        <Thead>
+          <Tr>
+            <Th>Video</Th>
+            <Th>Name</Th>
+            <Th>Title</Th>
+            <Th>Action</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {videos &&
+            videos.map((video) => (
+              <Tr key={video.uuid}>
+                <Td>
+                  <VideoPlayer s3Url={video.url} />
+                </Td>
+                <Td>{video.name}</Td>
+                <Td>{video.title}</Td>
+                <Td>
                   <Button
                     isLoading={isLoading}
                     size="xs"
@@ -145,45 +147,39 @@ export default function Videos() {
                   >
                     delete
                   </Button>
-                </Flex>
- 
-            </Box>
-          ))}
-          
-<WarningModal
-            isOpen={isDeleteVideoOpen}
-            onClose={onDeleteVideoClose}
-            onConfirm={handleDeleteConfirm}
-            title="Confirm Delete"
-            content="Are you sure you want to delete this Video?"
-          />
-        <hr />
-      </Flex>
+                </Td>
+              </Tr>
+            ))}
+        </Tbody>
+      </Table>
+      <WarningModal
+        isOpen={isDeleteVideoOpen}
+        onClose={onDeleteVideoClose}
+        onConfirm={handleDeleteConfirm}
+        title="Confirm Delete"
+        content="Are you sure you want to delete this Video?"
+      />
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>Upload Video</DrawerHeader>
-
           <DrawerBody>
             <FormControl>
               <form id="uploadVideo" onSubmit={uploadVideo}>
-                <Flex direction="column">
+                <Box direction="column">
                   <Text>Name</Text>
                   <Input
                     type="text"
                     value={uploadVideoName}
                     onChange={(e) => setUploadVideoName(e.target.value)}
                   />
-
                   <Text>Title</Text>
                   <Input
                     type="text"
                     value={uploadVideoTitle}
                     onChange={(e) => setUploadVideoTitle(e.target.value)}
                   />
-                </Flex>
-                <Card>
                   <Text>Video Upload</Text>
                   <Box w="20vw">
                     <input
@@ -192,7 +188,7 @@ export default function Videos() {
                       onChange={handleVideoUpload}
                     />
                   </Box>
-                </Card>
+                </Box>
                 <DrawerFooter>
                   <Button
                     type="submit"

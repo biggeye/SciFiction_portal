@@ -217,7 +217,28 @@ const EyeReplicate = ({ currentPage }) => {
         alignItems="center"
         justifyContent="center"
       >
-        <Card mt={5} w="80vw" align="center">
+      <Flex direction="column">
+          <InputGroup>
+            <Input
+              color="black"
+              name="prompt"
+              placeholder="Describe your image here"
+              size="md"
+              resize="none"
+              value={userInput}
+              onChange={handleUserInputChange}
+            />
+            <InputRightAddon>
+              <IconButton
+                icon={<ArrowRightIcon />}
+                isLoading={isLoading}
+                onClick={handleUserInputSubmit}
+                size="xs"
+              />
+            </InputRightAddon>
+          </InputGroup>
+        
+        <Card w="80vw" align="center">
           <CardHeader>
             <ModelSelect
               handleModelChange={handleModelChange}
@@ -303,6 +324,7 @@ const EyeReplicate = ({ currentPage }) => {
           </CardBody>
           <CardFooter></CardFooter>
         </Card>
+        </Flex>
       </Box>
       <Box
         fontSize={["sm", "md", "lg", "xl"]}
@@ -313,27 +335,7 @@ const EyeReplicate = ({ currentPage }) => {
         opacity={0.9}
         backdropFilter="blur(10px)"
       >
-        <Flex>
-          <InputGroup>
-            <Input
-              color="black"
-              name="prompt"
-              placeholder="Describe your image here"
-              size="md"
-              resize="none"
-              value={userInput}
-              onChange={handleUserInputChange}
-            />
-            <InputRightAddon>
-              <IconButton
-                icon={<ArrowRightIcon />}
-                isLoading={isLoading}
-                onClick={handleUserInputSubmit}
-                size="xs"
-              />
-            </InputRightAddon>
-          </InputGroup>
-        </Flex>
+        
       </Box>
     </>
   );

@@ -45,18 +45,21 @@ import { AiOutlineClose, AiOutlineMenu, AiFillHome } from "react-icons/ai";
 import { useState, useEffect } from "react";
 import AccountForm from "./auth/AccountForm";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
-import { useProfile } from '../contexts/UserContext';
+import { useProfile } from "../contexts/UserContext";
 
- export default function Navbar({ handlePageChange }) {
-  
+export default function Navbar({ handlePageChange }) {
   const { profile, updateProfile } = useProfile();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const mobileNav = useDisclosure();
   const userProfileModalDisclosure = useDisclosure();
-   const [currentTab, setTabList] = useState("");
+  const [currentTab, setTabList] = useState("");
   const supabaseClient = useSupabaseClient();
+  const getCurrentTabIndex = () => {
+    const tabIndex = tabs.findIndex((tab) => tab.name === currentTab);
+    return tabIndex !== -1 ? tabIndex : 0; // default to 0 if not found
+  };
 
-/*
+  /*
    const [session, setSession] = useState(null);
    const profileSession = async () => {
     const session = await supabaseClient.auth.getSession();
@@ -64,15 +67,12 @@ import { useProfile } from '../contexts/UserContext';
   };
 */
 
-   const headerItems = [
-    
-   
+  const headerItems = [
     {
       name: "Create",
       icon: RiBallPenLine,
       action: () => {
-        setTabList("Create"),
-          handlePageChange("ElevenLabs");
+        setTabList("Create"), handlePageChange("ElevenLabs");
       },
     },
     {
@@ -146,15 +146,12 @@ import { useProfile } from '../contexts/UserContext';
           name: "Videos",
           action: () => handlePageChange("DID"),
         },
-       
-        
       ],
     },
   ];
-   const selectedTab = tabs.find((tab) => tab.name === currentTab);
+  const selectedTab = tabs.find((tab) => tab.name === currentTab);
 
-
-   return (
+  return (
     <Box>
       <chakra.header
         borderColor="brand.700"
@@ -164,7 +161,12 @@ import { useProfile } from '../contexts/UserContext';
         py={2}
       >
         <Flex alignItems="center" justifyContent="space-between" mx="auto">
-          <HStack color="brand.900" spacing={4} display="flex" alignItems="center">
+          <HStack
+            color="brand.900"
+            spacing={4}
+            display="flex"
+            alignItems="center"
+          >
             <Box display={{ base: "inline-flex", md: "none" }}>
               <IconButton
                 display={{ base: "flex", md: "none" }}
@@ -227,7 +229,11 @@ import { useProfile } from '../contexts/UserContext';
             </chakra.a>
           </HStack>
           <HStack spacing={3} display="flex" alignItems="center">
-            <HStack color="brand.900" spacing={3} display={{ base: "none", md: "inline-flex" }}>
+            <HStack
+              color="brand.900"
+              spacing={3}
+              display={{ base: "none", md: "inline-flex" }}
+            >
               {headerItems.map((item, index) => (
                 <Button
                   key={index}
@@ -241,8 +247,9 @@ import { useProfile } from '../contexts/UserContext';
                 </Button>
               ))}
             </HStack>
-             <Avatar
-             src={profile?.avatar_url} alt="User avatar"
+            <Avatar
+              src={profile?.avatar_url}
+              alt="User avatar"
               onClick={userProfileModalDisclosure.onOpen}
               zIndex="1"
               size="sm"
@@ -250,34 +257,27 @@ import { useProfile } from '../contexts/UserContext';
           </HStack>
         </Flex>
       </chakra.header>
-      <Flex
-      layerStyle="navSubMenu"
-      >
+      <Flex layerStyle="navSubMenu">
         <Tabs
-          defaultIndex={0}
+          defaultIndex={getCurrentTabIndex()}
           borderBottomColor="transparent"
           layerStyle="navSubMenu"
           colorScheme="darkGray"
         >
           {selectedTab && (
             <TabList>
-              {selectedTab.tabList.map(
-                (
-                  item,
-                  index
-                ) => (
-                  <Tab
-                    size="xs"
-                    key={index}
-                    py={1}
-                    m={0}
-                    _focus={{ boxShadow: "none" }}
-                    onClick={item.action}
-                  >
-                    {item.name}
-                  </Tab>
-                )
-              )}
+              {selectedTab.tabList.map((item, index) => (
+                <Tab
+                  size="xs"
+                  key={index}
+                  py={1}
+                  m={0}
+                  _focus={{ boxShadow: "none" }}
+                  onClick={item.action}
+                >
+                  {item.name}
+                </Tab>
+              ))}
             </TabList>
           )}
         </Tabs>
@@ -293,7 +293,7 @@ import { useProfile } from '../contexts/UserContext';
           <ModalHeader>User Profile</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <AccountForm  />
+            <AccountForm />
           </ModalBody>
           <ModalFooter>
             <Button onClick={userProfileModalDisclosure.onClose}>Close</Button>

@@ -215,6 +215,36 @@ export default function Img2Img({ currentPage }) {
       justifyContent="center"
     >
       <VStack mb={100}>
+      <Box
+        fontSize={["sm", "md", "lg", "xl"]}
+        p={[".25rem", ".5rem"]}
+        position="fixed"
+        bottom="0rem"
+        width="100%"
+        opacity={0.9}
+        backdropFilter="blur(10px)"
+      >
+        <InputGroup>
+          <Input
+            color="black"
+            name="prompt"
+            placeholder="Describe modifications..."
+            size="md"
+            resize="none"
+            value={userInput}
+            onChange={handleUserInputChange}
+          />
+
+          <InputRightAddon>
+            <IconButton
+              icon={<ArrowRightIcon />}
+              isLoading={isLoading}
+              onClick={handleUserInputSubmit}
+              size="xs"
+            />
+          </InputRightAddon>
+        </InputGroup>
+      </Box>
         <Card w="80vw" mt={5}>
           <Box display="flex" justifyContent="center">
             <Flex
@@ -363,36 +393,7 @@ export default function Img2Img({ currentPage }) {
         </Card>
       </VStack>
 
-      <Box
-        fontSize={["sm", "md", "lg", "xl"]}
-        p={[".25rem", ".5rem"]}
-        position="fixed"
-        bottom="0rem"
-        width="100%"
-        opacity={0.9}
-        backdropFilter="blur(10px)"
-      >
-        <InputGroup>
-          <Input
-            color="black"
-            name="prompt"
-            placeholder="Describe modifications..."
-            size="md"
-            resize="none"
-            value={userInput}
-            onChange={handleUserInputChange}
-          />
-
-          <InputRightAddon>
-            <IconButton
-              icon={<ArrowRightIcon />}
-              isLoading={isLoading}
-              onClick={handleUserInputSubmit}
-              size="xs"
-            />
-          </InputRightAddon>
-        </InputGroup>
-      </Box>
+     
     </Box>
   );
 }

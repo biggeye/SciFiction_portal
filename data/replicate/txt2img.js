@@ -76,4 +76,18 @@ export const txt2img = [
         friendlyName: "PixRay Text2Image (future branch)",
         example: "https://replicate.delivery/mgxm/45a98ca0-d763-471e-b3a6-538edac70a8d/tempfile.png",
     },
+    {
+        name: "luosiallen/latent-consistency-model",
+        id: "553803fd018b3cf875a8bc774c99da9b33f36647badfd88a6eec90d61c5f62fc",
+        shortDesc: "Synthesizing High-Resolution Images with Few-Step Inference",
+        friendlyName: "Luosiallen High-Res",
+        example: "https://pbxt.replicate.delivery/lE1UZOlbLiY7DpYlLvdUmyyt0Z0pu7tTTpgFn8a0ug3Jb4bE/out-0.png",
+    },
+    {
+        name: "yorickvp/llava-13b",
+        id: "2facb4a474a0462c15041b78b1ad70952ea46b5ec6ad29583c0b29dbd4249591",
+        shortDesc: "Visual instruction tuning towards large language and vision models with GPT-4 level capabilities",
+        friendlyName: "yorickvp GPT4",
+        example: "https://replicate.delivery/pbxt/JfvBi04QfleIeJ3ASiBEMbJvhTQKWKLjKaajEbuhO1Y0wPHd/view.jpg",
+    }
 ]

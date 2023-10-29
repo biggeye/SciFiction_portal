@@ -105,7 +105,7 @@ const supabaseClient = useSupabaseClient();
     };
   
     const apiCall = axios.post(
-      "@/api/xilabs/tts",
+      "/api/xilabs/tts",
       data,
       {
         headers: {
@@ -142,7 +142,7 @@ const supabaseClient = useSupabaseClient();
     formData.append("description", newVoiceDescription);
     formData.append("file1", newVoiceFile);
     const response = await axios.post(
-      "https://flask-vercel-silk.vercel.app/api/xilabs/create_new_voice",
+      "/api/xilabs/create_new_voice",
       formData,
       {
         headers: {
@@ -167,7 +167,7 @@ const supabaseClient = useSupabaseClient();
 
     try {
       const response = await axios.post(
-        "https://flask-vercel-silk.vercel.app/api/xilabs/edit_voice",
+        "/api/xilabs/edit_voice",
         formData,
         {
           headers: {
@@ -191,7 +191,7 @@ const supabaseClient = useSupabaseClient();
       setIsLoading(true);
 
       const response = await axios.post(
-        "https://flask-vercel-silk.vercel.app/api/xilabs/delete_voice",
+        "/api/xilabs/delete_voice",
         { voice_id: voice_id }
       );
       if (response.status === 200) {

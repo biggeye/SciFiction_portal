@@ -14,7 +14,7 @@ export default async function handler(req, res) {
       'accept': 'audio/mpeg',
       'xi-api-key': process.env.NEXT_PUBLIC_XILABS_API_KEY,
       'Content-Type': 'application/json',
-    };
+    }; 
     const data = {
       model_id,
       text: script,

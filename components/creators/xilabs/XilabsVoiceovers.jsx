@@ -56,7 +56,7 @@ export default function XilabsVoiceovers() {
 
   const fetchYourData = async () => {
     const response = await axios.get(
-      "https://flask-vercel-silk.vercel.app/api/xilabs/get_history"
+      "/api/xilabs/get_history"
     );
     const voiceovers = response.data;
 
@@ -85,7 +85,7 @@ export default function XilabsVoiceovers() {
   const downloadRow = async (voiceoverId) => {
     const voData = { voiceoverId: voiceoverId };
     const response = await axios.post(
-      "https://flask-vercel-silk.vercel.app/api/xilabs/download_voiceover",
+      "/api/xilabs/download_voiceover",
       
       voData
     );
@@ -102,7 +102,7 @@ export default function XilabsVoiceovers() {
 
     const voData = { voiceoverId: voiceoverId };
     const response = await axios.post(
-      "https://flask-vercel-silk.vercel.app/api/xilabs/delete_voiceover",
+      "/api/xilabs/delete_voiceover",
       voData
     );
     if (response.status === 200) {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import nextConnect from 'next-connect';
+import { nextConnect } from 'next-connect';
 import dotenv from 'dotenv';
 
 dotenv.config();

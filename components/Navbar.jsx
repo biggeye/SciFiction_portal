@@ -72,7 +72,7 @@ export default function Navbar({ handlePageChange }) {
       name: "Create",
       icon: RiBallPenLine,
       action: () => {
-        setTabList("Create"), handlePageChange("ElevenLabs");
+        setTabList("Create"), handlePageChange("Txt2Img");
       },
     },
     {
@@ -88,7 +88,7 @@ export default function Navbar({ handlePageChange }) {
       icon: RiBriefcase2Line,
       action: () => {
         setTabList("Gallery");
-        handlePageChange("Avatars");
+        handlePageChange("Images");
       },
     },
   ];

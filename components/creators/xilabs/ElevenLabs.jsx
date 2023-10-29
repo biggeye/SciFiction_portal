@@ -323,7 +323,7 @@ const supabaseClient = useSupabaseClient();
                         <Input
                           type="text"
                           value={currentName}
-                          isDisabled="true"
+                          isDisabled={true}
                           onChange={(e) => setEditVoiceName(e.target.value)}
                         />
                       </FormControl>

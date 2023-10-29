@@ -47,11 +47,6 @@ import AccountForm from "./auth/AccountForm";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useProfile } from '../contexts/UserContext';
 
-
-
-
-
-
  export default function Navbar({ handlePageChange }) {
   
   const { profile, updateProfile } = useProfile();
@@ -70,42 +65,36 @@ import { useProfile } from '../contexts/UserContext';
 */
 
    const headerItems = [
+    
+   
     {
-      name: "Gallery",
-      icon: RiGalleryLine,
+      name: "Create",
+      icon: RiBallPenLine,
       action: () => {
-        setTabList("Gallery");
-        handlePageChange("Gallery");
+        setTabList("Create"),
+          handlePageChange("ElevenLabs");
       },
     },
     {
-      name: "Social Media",
+      name: "Publish",
       icon: RiVipCrown2Line,
       action: () => {
-        setTabList("Social");
+        setTabList("Publish");
         handlePageChange("DashBoard");
       },
     },
     {
-      name: "Assets",
+      name: "Gallery",
       icon: RiBriefcase2Line,
       action: () => {
-        setTabList("Assets");
+        setTabList("Gallery");
         handlePageChange("Avatars");
-      },
-    },
-    {
-      name: "Vendors",
-      icon: RiBallPenLine,
-      action: () => {
-        setTabList("Vendors"),
-          handlePageChange("ElevenLabs");
       },
     },
   ];
   const tabs = [
     {
-      name: "Social",
+      name: "Publish",
       tabList: [
         {
           name: "Dashboard",
@@ -114,8 +103,12 @@ import { useProfile } from '../contexts/UserContext';
       ],
     },
     {
-      name: "Assets",
+      name: "Gallery",
       tabList: [
+        {
+          name: "Images",
+          action: () => handlePageChange("Images"),
+        },
         {
           name: "Avatars",
           action: () => handlePageChange("Avatars"),
@@ -135,24 +128,26 @@ import { useProfile } from '../contexts/UserContext';
       ],
     },
     {
-      name: "Vendors",
+      name: "Create",
       tabList: [
         {
-          name: "Eleven Labs",
-          action: () => handlePageChange("ElevenLabs"),
+          name: "Create Images",
+          action: () => handlePageChange("Txt2Img"),
         },
         {
-          name: "D-ID 2",
-          action: () => handlePageChange("DID"),
-        },
-        {
-          name: "Img2Img",
+          name: "Edit Images",
           action: () => handlePageChange("Img2Img"),
         },
         {
-          name: "Txt2Img",
-          action: () => handlePageChange("Txt2Img")
-        }
+          name: "Voiceovers",
+          action: () => handlePageChange("ElevenLabs"),
+        },
+        {
+          name: "Videos",
+          action: () => handlePageChange("DID"),
+        },
+       
+        
       ],
     },
   ];

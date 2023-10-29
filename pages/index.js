@@ -7,7 +7,7 @@ import {
   Link, // Import Link for placeholder links
 } from "@chakra-ui/react";
 import Layout from "../components/Layout";
-import Gallery from "../components/shared/gallery";
+
 
 // Social Media
 import Dashboard from "../components/social/Dashboard";
@@ -19,6 +19,7 @@ import Img2Img from "../components/creators/replicate/Img2Img";
 import Txt2Img from "../components/creators/replicate/Txt2Img";
 
 // Assets
+import Images from "../components/shared/imageGallery";
 import Videos from "../components/assets/Videos";
 import Avatars from "../components/assets/Avatars";
 import Scripts from "../components/assets/Scripts";
@@ -59,23 +60,22 @@ export default function Home() {
   return (
     <Layout overflowX="none" handlePageChange={handlePageChange}>
 
-      {currentPage === "Gallery" && <Gallery />}
-      {/*Assets*/}
+     
+      {/*Gallery*/}
+      {currentPage === "Images" && <Images />}
       {currentPage === "Avatars" && <Avatars />}
       {currentPage === "Voiceovers" && <Voiceovers />}
       {currentPage === "Scripts" && <Scripts />}
       {currentPage === "Videos" && <Videos />}
 
-      {/*Vendors*/}
+      {/*Create*/}
       {currentPage === "ElevenLabs" && <ElevenLabs  />}
       {currentPage === "DID" && <DID />}
       {currentPage === "Txt2Img" && <Txt2Img />}
       {currentPage === "Img2Img" && <Img2Img />}
 
-      {/*Social Media*/}
-
+      {/*Publish*/}
       {currentPage === "Dashboard" && <Dashboard />}
-    
       {currentPage === "TikTok" && <TikTok />}
       </Layout>
   );

@@ -3,6 +3,12 @@ import axios from "axios";
 import AudioPlayer from "../shared/AudioPlayer";
 import { upload_voiceover } from "../../utils/production/upload";
 import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
   Box,
   Button,
   ButtonGroup,
@@ -43,6 +49,8 @@ import {
 } from "@chakra-ui/react";
 import WarningModal from "../shared/WarningModal";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+import Waveform from "../shared/Waveform";
+
 
 const convertToDataURI = (file) =>
   new Promise((resolve, reject) => {
@@ -143,45 +151,44 @@ export default function Voiceovers() {
         <Button
           size="xs"
           colorScheme="blue"
-          onClick={() => {
-            onOpen();
-          }}
+          onClick={onOpen}
         >
           Upload
         </Button>
       </Box>
-      <Flex
-        p={50}
-        alignItems="center"
-        justifyContent="center"
-        flexWrap="wrap" // allow cards to wrap to new lines
-      >
-        {voiceovers.map((voiceover) => (
-          <Box key={voiceover.uuid} layerStyle="voiceoverCard">
-            <AudioPlayer src={voiceover.url} />
-
-            <Text> {voiceover.name}</Text>
-
-            <Text size="sm">{voiceover.title}</Text>
-            <Button
-              isLoading={isLoading}
-              size="xs"
-              onClick={() => handleDelete(voiceover.uuid)}
-            >
-              delete
-            </Button>
-          </Box>
-        ))}
-
-<WarningModal
-            isOpen={isDeleteVoiceoverOpen}
-            onClose={onDeleteVoiceoverClose}
-            onConfirm={handleDeleteConfirm}
-            title="Confirm Delete"
-            content="Are you sure you want to delete this Voiceover?"
-          />
-
-      </Flex>
+  
+      <Box p={50}>
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              <Th>Voiceover</Th>
+              <Th>Name</Th>
+              <Th>Description</Th>
+              <Th>Action</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {voiceovers.map((voiceover) => (
+              <Tr key={voiceover.uuid}>
+                <Td>
+                  <AudioPlayer src={voiceover.url} />
+                </Td>
+                <Td>{voiceover.name}</Td>
+                <Td>{voiceover.title}</Td>
+                <Td>
+                  <Button
+                    isLoading={isLoading}
+                    size="xs"
+                    onClick={() => handleDelete(voiceover.uuid)}
+                  >
+                    Delete
+                  </Button>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>

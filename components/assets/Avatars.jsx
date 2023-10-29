@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import WarningModal from "../shared/WarningModal";
 
 import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
   Box,
   Button,
   Flex,
@@ -135,8 +141,8 @@ export default function Avatars() {
     }
   };
 console.log(galleryImages);
-  return (
-    <Box layerStyle="subPage" position="relative">
+return (
+  <Box layerStyle="subPage" position="relative">
     <Button
       size="xs"
       colorScheme="blue"
@@ -147,28 +153,43 @@ console.log(galleryImages);
     >
       New
     </Button>
-  
-    <Flex
-      p={50}
-      alignItems="center"
-      justifyContent="center"
-      flexWrap="wrap"
-    >
-      {avatars?.map((avatar) => (
-        <Box layerStyle="card" key={avatar.uuid} m={4}>
-          <Image h="200" src={avatar.url} alt="Avatar Image" mb={2} />
-          <Text fontWeight="bold">{avatar.name}</Text>
-          <Text fontStyle="italic" mb={2}>{avatar.title}</Text>
-          <Button
-            isLoading={isLoading}
-            size="xs"
-            onClick={() => handleDelete(avatar.uuid)}
-          >
-            Delete
-          </Button>
-        </Box>
-      ))}
-    </Flex>
+
+    <Box p={50}>
+      <Table variant="simple">
+        <Thead>
+          <Tr>
+            <Th>Avatar</Th>
+            <Th>Name</Th>
+            <Th>Description</Th>
+            <Th>Action</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {avatars?.map((avatar) => (
+            <Tr key={avatar.uuid}>
+              <Td>
+                <Image h="200" src={avatar.url} alt="Avatar Image" />
+              </Td>
+              <Td>
+                <Text fontWeight="bold">{avatar.name}</Text>
+              </Td>
+              <Td>
+                <Text fontStyle="italic">{avatar.title}</Text>
+              </Td>
+              <Td>
+                <Button
+                  isLoading={isLoading}
+                  size="xs"
+                  onClick={() => handleDelete(avatar.uuid)}
+                >
+                  Delete
+                </Button>
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </Box>
   
     <WarningModal
       isOpen={isDeleteAvatarOpen}

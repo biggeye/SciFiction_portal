@@ -123,10 +123,10 @@ return (
     <Table variant="simple">
       <Thead>
         <Tr>
-          <Th>Voice</Th>
-          <Th>Date</Th>
-          <Th>Script</Th>
-          <Th>Actions</Th>
+          <Th><b>Voice</b></Th>
+          <Th><b>Date</b></Th>
+          <Th><b>Script</b></Th>
+          <Th><b>Actions</b></Th>
         </Tr>
       </Thead>
       <Tbody>

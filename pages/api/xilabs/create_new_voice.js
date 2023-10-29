@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     const url = "https://api.elevenlabs.io/v1/voices/add";
     const headers = {
       "Accept": "application/json",
-      "xi-api-key": process.env.XI_API_KEY
+      "xi-api-key": process.env.NEXT_PUBLIC_XILABS_API_KEY
     };
     const formData = new FormData();
     formData.append('name', name);

@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     const url = 'https://api.elevenlabs.io/v1/voices';
     const headers = {
       'accept': 'application/json',
-      'xi-api-key': process.env.XI_API_KEY,
+      'xi-api-key': process.env.NEXT_PUBLIC_XILABS_API_KEY,
     };
 
     try {

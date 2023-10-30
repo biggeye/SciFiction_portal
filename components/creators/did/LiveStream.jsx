@@ -1,5 +1,5 @@
 'use strict';
-export async function LiveStream() {
+export default async function LiveStream() {
 
     const RTCPeerConnection = (
       window.RTCPeerConnection ||

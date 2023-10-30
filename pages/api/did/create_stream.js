@@ -1,13 +1,4 @@
-const sessionResponse = await fetchWithRetries(`https://api.d-id.com/talks/streams`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Basic {YOUR_DID_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      source_url: `{AVATAR_IMAGE_URL}`,
-    }),
-  });
+
 
 /*. example response
 {
@@ -52,7 +43,6 @@ async function createPeerConnection(offer, iceServers) {
 
   return sessionClientAnswer;
 }
-...
 const sdpResponse = await fetch(`https://api.d-id.com/talks/streams/${streamId}/sdp`, {
     method: 'POST',
     headers: {
@@ -64,7 +54,7 @@ const sdpResponse = await fetch(`https://api.d-id.com/talks/streams/${streamId}/
       session_id: sessionId,
     }),
   });
-};
+
 
 /*Once the SDP answer is sent, you must gather ICE candidates and send them to the server to complete the WebRTC handshake. ICE candidates allow the peers to discover and establish an optimal network path for communication.
 
@@ -92,6 +82,7 @@ function onIceCandidate(event) {
     });
   }
 }
+
 /*
 Waiting for Connection Readiness:
 

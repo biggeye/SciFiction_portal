@@ -1,4 +1,4 @@
-const sessionResponse = await fetchWithRetries(`https://api.d-id.com/talks/streams`, {
+/* const sessionResponse = await fetchWithRetries(`https://api.d-id.com/talks/streams`, {
     method: 'POST',
     headers: {
       Authorization: `Basic ${process.env.NEXT_PUBLIC_DID_API_KEY}`,
@@ -18,4 +18,4 @@ const sessionResponse = await fetchWithRetries(`https://api.d-id.com/talks/strea
     },
   };
   
-  
+  */

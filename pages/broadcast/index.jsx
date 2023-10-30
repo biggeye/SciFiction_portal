@@ -2,7 +2,7 @@ import Layout from "/components/Layout";
 import Navbar from "/components/Navbar";
 import LiveStream from "/components/creators/did/LiveStream";
 
-export async function Broadcast() {
+export default async function Broadcast() {
 
     return(
         <Layout>

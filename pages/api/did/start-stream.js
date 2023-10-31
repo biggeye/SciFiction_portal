@@ -1,21 +1,29 @@
-/* const sessionResponse = await fetchWithRetries(`https://api.d-id.com/talks/streams`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Basic ${process.env.NEXT_PUBLIC_DID_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      source_url: `{AVATAR_IMAGE_URL}`,
-    }),
-  });
+export default (req, res) => {
+    // Handle the request here
+const express = require('express');
+const axios = require('axios');
 
-  const sessionResponseState = {
-    streamInfo: {
-      id: '',
-      session_id: '',
-      offer: '',
-      ice_servers: [],
-    },
-  };
-  
-  */
+const app = express();
+const PORT = 3000;
+
+app.use(express.json());
+
+app.post('/proxy', async (req, res) => {
+    try {
+        const response = await axios({
+            method: 'POST',
+            url: 'https://api.d-id.com/talks/streams',
+            headers: req.headers,
+            data: req.body
+        });
+        res.json(response.data);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch data from external API' });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+};

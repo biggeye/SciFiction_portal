@@ -12,7 +12,7 @@ export default async function createStream() {
   };
 
   // Change the fetch URL to your backend proxy endpoint
-  fetch('http://localhost:3000/api/did/start-stream', options)
+  fetch('https://promo.scifiction.com/api/did/start-stream', options)
       .then(response => response.json())
       .then(response => console.log(response))
       .catch(err => console.error(err));

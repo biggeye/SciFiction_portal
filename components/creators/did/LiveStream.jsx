@@ -60,7 +60,7 @@ export default function LiveStream() {
       try {
         const streamResponse = await createStream();
         // Handle the response as needed
-        console.log(streamResponse);
+        console.log("this is the streamResponse:", streamResponse);
     } catch (error) {
         console.error("Error creating stream:", error);
     }

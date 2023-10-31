@@ -1,10 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
+
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+// Define the async thunk
 
 export const gallerySlice = createSlice({
   name: 'gallery',
   initialState: {
-    images: []
-  },
+    images: null,
+    loading: true,
+    error: null
+  },  
   reducers: {
     setImages: (state, action) => {
       state.images = action.payload;

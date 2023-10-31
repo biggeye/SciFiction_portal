@@ -91,8 +91,25 @@ export default function Navbar({ handlePageChange }) {
         handlePageChange("Images");
       },
     },
+    {
+      name: "Broadcast",
+      icon: "",
+      action: () => {
+        setTabList("Broadcast");
+        handlePageChange("LiveStream");
+      },
+    },
   ];
   const tabs = [
+    {
+      name: "Broadcast",
+      tabList: [
+        {
+          name: "LiveStream",
+          action: () => handlePageChange("LiveStream")
+        },
+      ],
+    },
     {
       name: "Publish",
       tabList: [

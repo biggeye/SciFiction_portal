@@ -11,9 +11,10 @@ import Layout from "../components/Layout";
 
 // Social Media
 import Dashboard from "../components/social/Dashboard";
+import LiveStream from "../components/creators/did/LiveStream";
 
 // Vendors
-import DID from "../components/creators/did/DID";
+import D_ID from "../components/creators/did/DID";
 import ElevenLabs from "../components/creators/xilabs/ElevenLabs";
 import Img2Img from "../components/creators/replicate/Img2Img";
 import Txt2Img from "../components/creators/replicate/Txt2Img";
@@ -70,13 +71,16 @@ export default function Home() {
 
       {/*Create*/}
       {currentPage === "ElevenLabs" && <ElevenLabs  />}
-      {currentPage === "DID" && <DID />}
+      {currentPage === "DID" && <D_ID />}
       {currentPage === "Txt2Img" && <Txt2Img />}
       {currentPage === "Img2Img" && <Img2Img />}
 
       {/*Publish*/}
       {currentPage === "Dashboard" && <Dashboard />}
       {currentPage === "TikTok" && <TikTok />}
+
+      {/*Broadcast*/}
+      {currentPage === "LiveStream" && <LiveStream />}
       </Layout>
   );
 }

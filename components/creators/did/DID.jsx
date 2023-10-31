@@ -30,7 +30,7 @@ import AudioPlayer from "../../shared/AudioPlayer";
 import { downloadUrl } from "../../../utils/downloadUrl";
 import { upload_video } from "../../../utils/production/upload";
 
-export default function DID() {
+export default function D_ID() {
   const [isLoading, setIsLoading] = useState(false);
   const btnRef = React.useRef();
   //Mappings & Values

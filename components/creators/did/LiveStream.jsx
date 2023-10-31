@@ -11,9 +11,6 @@ import {
 import createStream from './createStream';
 
 
-let streamId;
-let sessionId;
-
 export default function LiveStream() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -59,13 +56,11 @@ export default function LiveStream() {
 
       try {
         const streamResponse = await createStream();
-        // Handle the response as needed
         console.log("this is the streamResponse:", streamResponse);
-    } catch (error) {
-        console.error("Error creating stream:", error);
-    }
-
-      try {
+    
+        // Extract the offer from the streamResponse
+        const { offer } = streamResponse;
+    
         sessionClientAnswer = await createPeerConnection(offer, iceServers);
       } catch (e) {
         console.log("error during streaming setup", e);
@@ -74,12 +69,13 @@ export default function LiveStream() {
         return;
       }
 
+
       const sdpResponse = await fetch(
         `https://api.d-id.com/talks/streams/${streamId}/sdp`,
         {
           method: "POST",
           headers: {
-            Authorization: `Basic ${DID_API.key}`,
+            Authorization: `Bearer ${DID_API.key}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({

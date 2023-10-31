@@ -12,7 +12,7 @@ export default async function createStream() {
   };
 
   // Change the fetch URL to your backend proxy endpoint
-  fetch(process.env.NEXT_PUBLIC_START-STREAM, options)
+  fetch(process.env.NEXT_PUBLIC_STARTSTREAM, options)
       .then(response => response.json())
       .then(response => console.log(response))
       .catch(err => console.error(err));

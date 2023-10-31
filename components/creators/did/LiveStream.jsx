@@ -8,12 +8,12 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useSelector, useDispatch } from 'react-redux';
-import { selectImages } from '../../../utils/redux/gallerySlice';
-import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+
+let streamId;
+let sessionId;
+
 
 export default function LiveStream() {
-  const supabase = useSupabaseClient();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,14 +26,10 @@ export default function LiveStream() {
   const connectButtonRef = useRef(null);
   const talkButtonRef = useRef(null);
   const destroyButtonRef = useRef(null);
-  const iceGatheringStatusLabelRef = useRef(null); 
+  const iceGatheringStatusLabelRef = useRef(null);
   const signalingStatusLabelRef = useRef(null);
   const streamingStatusLabelRef = useRef(null);
   let statsIntervalId;
-
-//  const gallery = useSelector(selectImages);
-  const galleryImages = useSelector(selectImages);
-  const [streaming_avatar, setStreamingAvatar] = useState("");
 
   useEffect(() => {
     if (talkVideoRef.current) {
@@ -65,23 +61,26 @@ export default function LiveStream() {
         {
           method: "POST",
           headers: {
-            Authorization: `Basic ${process.env.NEXT_PUBLIC_DID_API_KEY}`,
-            "Content-Type": "application/json",
+            accept: "application/json",
+            "content-type": "application/json",
+            authorization:
+              "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik53ek53TmV1R3ptcFZTQjNVZ0J4ZyJ9.eyJodHRwczovL2QtaWQuY29tL2ZlYXR1cmVzIjoidGFsa3MiLCJodHRwczovL2QtaWQuY29tL3N0cmlwZV9wcm9kdWN0X2lkIjoicHJvZF9MemxmZWNpR1ppWktMbSIsImh0dHBzOi8vZC1pZC5jb20vc3RyaXBlX2N1c3RvbWVyX2lkIjoiY3VzX09FNUhIRUs5amRlS21iIiwiaHR0cHM6Ly9kLWlkLmNvbS9zdHJpcGVfcHJvZHVjdF9uYW1lIjoicHJvIiwiaHR0cHM6Ly9kLWlkLmNvbS9zdHJpcGVfc3Vic2NyaXB0aW9uX2lkIjoic3ViXzFOUmQ2bUp4RUtaMnpBeW5SejBqaVlLYiIsImh0dHBzOi8vZC1pZC5jb20vc3RyaXBlX2JpbGxpbmdfaW50ZXJ2YWwiOiJtb250aCIsImh0dHBzOi8vZC1pZC5jb20vc3RyaXBlX3BsYW5fZ3JvdXAiOiJkZWlkLXBybyIsImh0dHBzOi8vZC1pZC5jb20vc3RyaXBlX3ByaWNlX2lkIjoicHJpY2VfMU1EbHRwSnhFS1oyekF5bkdiZ1dqWnVhIiwiaHR0cHM6Ly9kLWlkLmNvbS9zdHJpcGVfcHJpY2VfY3JlZGl0cyI6IjgwIiwiaHR0cHM6Ly9kLWlkLmNvbS9jaGF0X3N0cmlwZV9zdWJzY3JpcHRpb25faWQiOiIiLCJodHRwczovL2QtaWQuY29tL2NoYXRfc3RyaXBlX3ByaWNlX2NyZWRpdHMiOiIiLCJodHRwczovL2QtaWQuY29tL2NoYXRfc3RyaXBlX3ByaWNlX2lkIjoiIiwiaHR0cHM6Ly9kLWlkLmNvbS9wcm92aWRlciI6ImF1dGgwIiwiaHR0cHM6Ly9kLWlkLmNvbS9pc19uZXciOmZhbHNlLCJodHRwczovL2QtaWQuY29tL2FwaV9rZXlfbW9kaWZpZWRfYXQiOiIyMDIzLTA1LTE2VDE4OjQyOjM1LjQ2N1oiLCJodHRwczovL2QtaWQuY29tL29yZ19pZCI6IiIsImh0dHBzOi8vZC1pZC5jb20vYXBwc192aXNpdGVkIjpbIlN0dWRpbyJdLCJodHRwczovL2QtaWQuY29tL2N4X2xvZ2ljX2lkIjoiIiwiaHR0cHM6Ly9kLWlkLmNvbS9jcmVhdGlvbl90aW1lc3RhbXAiOiIyMDIzLTA0LTAxVDIyOjU2OjAyLjgwOFoiLCJodHRwczovL2QtaWQuY29tL2FwaV9nYXRld2F5X2tleV9pZCI6IiIsImh0dHBzOi8vZC1pZC5jb20vaGFzaF9rZXkiOiJxZnJGWFkxOTJRYjdyN19ZMmdsdngiLCJodHRwczovL2QtaWQuY29tL3ByaW1hcnkiOiJjdXNfT0U1SEhFSzlqZGVLbWIiLCJodHRwczovL2QtaWQuY29tL2VtYWlsIjoib3dlbkBzY2lmaWN0aW9uLmNvbSIsImlzcyI6Imh0dHBzOi8vYXV0aC5kLWlkLmNvbS8iLCJzdWIiOiJhdXRoMHw2NDI4YjY4MjFlNjAwNmI2NTdlYWUzZjkiLCJhdWQiOlsiaHR0cHM6Ly9kLWlkLnVzLmF1dGgwLmNvbS9hcGkvdjIvIiwiaHR0cHM6Ly9kLWlkLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2OTg3MTcxMjUsImV4cCI6MTY5ODgwMzUyNSwiYXpwIjoiR3pyTkkxT3JlOUZNM0VlRFJmM20zejNUU3cwSmxSWXEiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIHJlYWQ6Y3VycmVudF91c2VyIHVwZGF0ZTpjdXJyZW50X3VzZXJfbWV0YWRhdGEgb2ZmbGluZV9hY2Nlc3MifQ.N0P0Jzyovted8d45YxxlR9guj35CuK9Duajrdojejl4GyejjzXSCUyqe19Zq6SGVqjJfiP5W9YjFr1RArSnK1eUz2Q9HfmL9YKbQplvqIeZyDKgQdGXRF_TYoKQ6Wkn3nmAxBh71vRj_q8b0QCRLJjqWN2SUy1NpA50lfUks255sce8tJzJq7HslhGEL907cECgVt1w3mrDAKsy5n3-0wQ6qlTNHj_13YG7Obvl-CDI9blI9vKwj3k_rbD0Bjeuv1BSCc_d5c-k9FfBFRyusogGun4Aroda82EbcqI30ze6CmyBvuqPbEPEqyvy3kzA36NH8O2glkIccnnxXvbbeow",
           },
           body: JSON.stringify({
-            source_url: { streaming_avatar },
+            face: { overlap: "UNKNOWN" },
+            config: { stitch: false },
+            source_url:
+              "https://promo.scifiction.com/ub3wg6rbgdkf4ncryvxvomg5pi.png",
           }),
         }
       );
 
       const {
-        id: newStreamId,
+        id: streamId,
         offer,
         ice_servers: iceServers,
-        session_id: newSessionId,
+        session_id: sessionId,
       } = await sessionResponse.json();
-      streamId = newStreamId;
-      sessionId = newSessionId;
 
       try {
         sessionClientAnswer = await createPeerConnection(offer, iceServers);
@@ -111,8 +110,8 @@ export default function LiveStream() {
     talkButtonRef.current.onclick = async () => {
       // connectionState not supported in firefox
       if (
-        peerConnection?.signalingState === "stable" ||
-        peerConnection?.iceConnectionState === "connected"
+        peerConnectionRef.current?.signalingState === "stable" ||
+        peerConnectionRef.current?.iceConnectionState === "connected"
       ) {
         const talkResponse = await fetchWithRetries(
           `https://api.d-id.com/talks/streams/${streamId}`,
@@ -159,7 +158,7 @@ export default function LiveStream() {
 
   function onIceGatheringStateChange() {
     iceGatheringStatusLabelRef.current.innerText =
-      peerConnectionRef.current.iceGatheringState;
+    peerConnectionRef.current.iceGatheringState;
     iceGatheringStatusLabelRef.current.className =
       "iceGatheringState-" + peerConnectionRef.current.iceGatheringState;
   }
@@ -187,7 +186,8 @@ export default function LiveStream() {
     }
   }
   function onIceConnectionStateChange() {
-    iceStatusLabel.innerText = peerConnection.iceConnectionState;
+    iceStatusLabel.innerText = peerConnectionRef.current.iceConnectionState;
+ 
     iceStatusLabel.className =
       "iceConnectionState-" + peerConnection.iceConnectionState;
     if (
@@ -199,13 +199,12 @@ export default function LiveStream() {
     }
   }
   function onConnectionStateChange() {
-    // not supported in firefox
-    peerStatusLabel.innerText = peerConnection.connectionState;
+    peerStatusLabel.innerText = peerConnectionRef.current.connectionState;
     peerStatusLabel.className =
       "peerConnectionState-" + peerConnection.connectionState;
   }
   function onSignalingStateChange() {
-    signalingStatusLabel.innerText = peerConnection.signalingState;
+    signalingStatusLabel.innerText = peerConnectionRef.current.signalingState;
     signalingStatusLabel.className =
       "signalingState-" + peerConnection.signalingState;
   }
@@ -238,8 +237,8 @@ export default function LiveStream() {
     if (!event.track) return;
 
     statsIntervalId = setInterval(async () => {
-      const stats = await peerConnection.getStats(event.track);
-      stats.forEach((report) => {
+      const stats = await peerConnectionRef.current.getStats(event.track);
+       stats.forEach((report) => {
         if (report.type === "inbound-rtp" && report.mediaType === "video") {
           const videoStatusChanged =
             videoIsPlaying !== report.bytesReceived > lastBytesReceived;
@@ -255,8 +254,8 @@ export default function LiveStream() {
   }
 
   async function createPeerConnection(offer, iceServers) {
-    if (!peerConnection) {
-      peerConnection = new RTCPeerConnection({ iceServers });
+    if (!peerConnectionRef.current) {
+        peerConnectionRef.current = new RTCPeerConnection({ iceServers });
       peerConnection.addEventListener(
         "icegatheringstatechange",
         onIceGatheringStateChange,
@@ -281,13 +280,13 @@ export default function LiveStream() {
       peerConnection.addEventListener("track", onTrack, true);
     }
 
-    await peerConnection.setRemoteDescription(offer);
+    await peerConnectionRef.current.setRemoteDescription(offer);
     console.log("set remote sdp OK");
 
-    const sessionClientAnswer = await peerConnection.createAnswer();
+    const sessionClientAnswer = await peerConnectionRef.current.createAnswer();
     console.log("create local sdp OK");
 
-    await peerConnection.setLocalDescription(sessionClientAnswer);
+    await peerConnectionRef.current.setLocalDescription(sessionClientAnswer);
     console.log("set local sdp OK");
 
     return sessionClientAnswer;
@@ -384,7 +383,7 @@ export default function LiveStream() {
     }
   }
 
-  console.log(galleryImages);
+
 
   return (
     <Box>
@@ -416,18 +415,6 @@ export default function LiveStream() {
         </Text>
       </VStack>
 
-      <SimpleGrid columns={3} spacing={4}>
-      {galleryImages.map((image, index) => (
-              <Box
-                key={index}
-                border={streaming_avatar === image.url ? "2px solid blue" : "none"}
-                onClick={() => setStreamingAvatar(image.url)}
-                p={2}
-              >
-                <Image src={image.url} alt="Gallery Image" />
-              </Box>
-            ))}
-      </SimpleGrid>
     </Box>
   );
 }

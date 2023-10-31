@@ -104,8 +104,7 @@ export default function Avatars() {
       // Reset selectedGalleryImage when a new image is uploaded
       setSelectedGalleryImage(null);
     }
-  };
-  
+  }; 
   const createNewAvatar = async (event) => {
     setIsLoading(true);
     event.preventDefault();

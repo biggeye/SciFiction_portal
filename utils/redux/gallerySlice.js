@@ -1,15 +1,33 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 
-// Define the async thunk
+export const fetchGalleryImages = createAsyncThunk(
+  'gallery/fetchImages',
+  async () => {
+    const { data, error } = await createServerComponentClient() 
+        .from("replicate_predictions")
+        .select("*", { count: "exact" })
+        .order("created_at", { ascending: false })
+        .range(page * rowsPerPage, (page + 1) * rowsPerPage - 1);
 
-export const gallerySlice = createSlice({
+    if (error) {
+        console.log("error", error);
+        throw new Error(error.message);
+    }
+    
+    return data;
+  }
+);
+
+
+const gallerySlice = createSlice({
   name: 'gallery',
   initialState: {
-    images: null,
-    loading: true,
+    images: [],
+    status: 'idle',
     error: null
-  },  
+  },
   reducers: {
     setImages: (state, action) => {
       state.images = action.payload;
@@ -20,6 +38,20 @@ export const gallerySlice = createSlice({
     removeImage: (state, action) => {
       state.images = state.images.filter(image => image.id !== action.payload.id);
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchGalleryImages.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchGalleryImages.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.images = action.payload;
+      })
+      .addCase(fetchGalleryImages.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      });
   }
 });
 

@@ -51,10 +51,11 @@ function LiveStream() {
 
   async function createTalkStream(streamId, sessionId, details) {
     try {
-      const response = await fetch(`/api/d-id/talks/streams/${streamId}`, {
+      const response = await fetch(`https://api.d-id.com/api/d-id/talks/streams/${streamId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          
         },
         body: JSON.stringify({
           ...details,

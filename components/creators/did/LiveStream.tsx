@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Box, Button, VStack, Text, Input } from '@chakra-ui/react';
+import { Box, Button, VStack, Text, Input, Checkbox } from '@chakra-ui/react';
 
 function LiveStream() {
   const [sourceUrl, setSourceUrl] = useState(null); // Replace with your source URL
@@ -49,20 +49,33 @@ function LiveStream() {
     }
   }
 
-  async function createTalkStream(streamId, sessionId, details) {
+  const [scriptInput, setScriptInput] = useState('Hello world');
+  const [fluent, setFluent] = useState(false);
+  const [padAudio, setPadAudio] = useState('0.0');
+
+  async function createTalkStream(streamIdValue, sessionId, audioOrTextDetails) {
     try {
-      const response = await fetch(`https://api.d-id.com/api/d-id/talks/streams/${streamId}`, {
+      const options = {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          
+          accept: 'application/json',
+          'content-type': 'application/json',
+          authorization: 'Bearer YOUR_BEARER_TOKEN', // Replace with your token
         },
         body: JSON.stringify({
-          ...details,
-          session_id: sessionId
+          script: {
+            type: 'text',
+            subtitles: 'false',
+            provider: { type: 'elevenlabs', voice_id: '21m00Tcm4TlvDq8ikWAM' },
+            ssml: 'false',
+            input: scriptInput,
+          },
+          config: { fluent: fluent.toString(), pad_audio: padAudio },
+          session_id: sessionId,
         }),
-      });
+      };
 
+      const response = await fetch(`https://api.d-id.com/talks/streams/${streamIdValue}`, options);
       const data = await response.json();
       console.log(data);
       setStatus('Talk stream created successfully!');
@@ -89,20 +102,32 @@ function LiveStream() {
 
   return (
     <VStack spacing={4}>
-      <Input 
-        placeholder="Enter source URL" 
-        value={sourceUrl || ''} 
-        onChange={(e) => setSourceUrl(e.target.value)} 
-      />
-      <Button onClick={initializeStream}>Start Stream</Button>
-      <Button onClick={handleTalkClick}>Talk</Button>
-      <Text>{status}</Text>
-      <Box id="video-wrapper">
-        <video ref={talkVideoRef} width="400" height="400" autoPlay></video>
-      </Box>
-    </VStack>
-  );
-  
+    <Input
+      placeholder="Enter source URL"
+      value={sourceUrl || ''}
+      onChange={(e) => setSourceUrl(e.target.value)}
+    />
+    <Input
+      placeholder="Enter script input"
+      value={scriptInput}
+      onChange={(e) => setScriptInput(e.target.value)}
+    />
+    <Checkbox isChecked={fluent} onChange={(e) => setFluent(e.target.checked)}>
+      Fluent
+    </Checkbox>
+    <Input
+      placeholder="Enter pad audio value"
+      value={padAudio}
+      onChange={(e) => setPadAudio(e.target.value)}
+    />
+    <Button onClick={initializeStream}>Start Stream</Button>
+    <Button onClick={handleTalkClick}>Talk</Button>
+    <Text>{status}</Text>
+    <Box id="video-wrapper">
+      <video ref={talkVideoRef} width="400" height="400" autoPlay></video>
+    </Box>
+  </VStack>
+);
 }
 
 export default LiveStream;

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Box, Button, VStack, Text, Input, Checkbox } from '@chakra-ui/react';
 
 function LiveStream() {
@@ -48,6 +48,65 @@ function LiveStream() {
       setStatus('Error initializing stream.');
     }
   }
+  const peerConnection = useRef(null);
+
+  useEffect(() => {
+    // Initialize RTCPeerConnection
+    peerConnection.current = new RTCPeerConnection({ iceServers: iceServers });
+
+    // Handle ICE Candidate events
+    peerConnection.current.onicecandidate = (event) => {
+      if (event.candidate) {
+        // Send the ICE candidate to the server
+        (async () => {
+          const { candidate, sdpMid, sdpMLineIndex } = event.candidate;
+          try {
+            const response = await fetch(`https://api.d-id.com/talks/streams/${streamIdValue}/ice`, {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_DID_BEARER_TOKEN}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                candidate,
+                sdpMid,
+                sdpMLineIndex,
+                session_id: sessionId,
+              }),
+            });
+
+            if (!response.ok) {
+              console.error('Failed to send ICE candidate:', await response.text());
+            }
+          } catch (error) {
+            console.error('Error sending ICE candidate:', error);
+          }
+        })();
+      }
+    };
+  }, [iceServers, streamIdValue, sessionId]);
+
+  const startStream = async () => {
+    try {
+      // Create an SDP offer
+      const offer = await peerConnection.current.createOffer();
+      await peerConnection.current.setLocalDescription(offer);
+
+      // Send the offer to the server and get the answer
+      const response = await fetch('/api/did/start_stream', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ offer: offer }),
+      });
+      const data = await response.json();
+
+      // Set the received answer as the remote description
+      const remoteAnswer = new RTCSessionDescription(data.answer);
+      await peerConnection.current.setRemoteDescription(remoteAnswer);
+    } catch (error) {
+      console.error('Error starting stream:', error);
+    }
+  };
 
   const [scriptInput, setScriptInput] = useState('Hello world');
   const [fluent, setFluent] = useState(false);

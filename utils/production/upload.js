@@ -41,7 +41,7 @@ async function upload_script(content, title, user, supabaseClient) {
 
   // Create a row in the "script_" table
   const { data, error } = await supabaseClient
-    .from("script_")
+    .from("master_content")
     .insert([{ uuid, content, title, created_by: userId.id.toString() }]);
 
   if (error) {
@@ -69,7 +69,7 @@ async function upload_voiceover(audio, name, title, user, supabaseClient) {
     return;
   } else {
     const { audioTableData, audioTableError } = await supabaseClient
-      .from("voiceover_")
+      .from("master_content")
       .insert([{ uuid, name, title, url, created_by: userId.id.toString() }]);
 
     if (audioTableError) {
@@ -100,7 +100,7 @@ async function upload_video(result_url, name, title, user, supabaseClient) {
   if (videoError) {
     return;
   } else {
-    const { videoTableData, videoTableError } = await supabaseClient.from("videos_")
+    const { videoTableData, videoTableError } = await supabaseClient.from("master_content")
     .insert([{
       uuid,
       name,

@@ -100,7 +100,7 @@ export default function Voiceovers() {
   const fetchVoiceovers = async (supabaseClient) => {
     try {
       const { data, error } = await supabaseClient
-        .from("voiceover_")
+        .from("master_content")
         .select("*");
       if (error) throw error;
       setVoiceovers(data);
@@ -135,7 +135,7 @@ export default function Voiceovers() {
   const deleteVoiceover = async () => {
     setIsLoading(true);
     const { data, error } = await supabaseClient
-      .from("voiceover_")
+      .from("master_content")
       .delete()
       .eq("uuid", deleteVoiceoverUuid);
     if (!error) {

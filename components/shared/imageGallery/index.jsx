@@ -61,7 +61,7 @@ export default function Gallery() {
 
   const deleteImage = async () => {
     setIsLoading(true);
-    const { data, error } = await supabase.from("replicate_predictions").delete().eq("url", deleteImageUrl);
+    const { data, error } = await supabase.from("master_content").delete().eq("url", deleteImageUrl);
     if (!error) {
       setIsLoading(false);
       onDeleteImageClose();
@@ -72,7 +72,7 @@ export default function Gallery() {
   useEffect(() => {
     async function fetchCards() {
       let { count, data: cards, error } = await supabase
-        .from("replicate_predictions")
+        .from("master_content")
         .select("*", { count: "exact" }) // fetch total count
         .order("created_at", { ascending: false })
         .range(page * rowsPerPage, (page + 1) * rowsPerPage - 1);

@@ -86,7 +86,7 @@ export default function Avatars() {
   }, []);
   const fetchAvatars = async (supabaseClient) => {
     try {
-      const { data, error } = await supabaseClient.from("avatar_").select("*");
+      const { data, error } = await supabaseClient.from("master_content").select("*");
       if (error) throw error;
       setAvatars(data);
     } catch (error) {
@@ -130,7 +130,7 @@ export default function Avatars() {
   const deleteAvatar = async (event) => {
     setIsLoading(true);
     const { data, error } = await supabaseClient
-      .from("avatar_")
+      .from("master_content")
       .delete()
       .eq("uuid", deleteAvatarUuid);
     if (!error) {

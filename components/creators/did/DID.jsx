@@ -58,7 +58,7 @@ export default function D_ID() {
 
   const sizes = ["xs", "sm", "md", "lg", "xl"];
 
-  const didBearerToken = process.env.NEXT_PUBLIC_DID_BEARER_TOKEN;
+  const didBearerToken = process.env.NEXT_PUBLIC_DID_API_KEY;
   const supabaseClient = useSupabaseClient();
   const user = useUser();
   // fetch data used to populate selections for avatar & voiceover
@@ -87,7 +87,7 @@ export default function D_ID() {
   const fetchAvatars = async () => {
     try {
       const { data: avatarData, error } = await supabaseClient
-        .from("avatar_")
+        .from("master_content")
         .select("*");
       if (error) throw error;
       return avatarData;
@@ -99,7 +99,7 @@ export default function D_ID() {
   const fetchVoiceovers = async () => {
     try {
       const { data: voiceoverData, error } = await supabaseClient
-        .from("voiceover_")
+        .from("master_content")
         .select("*");
       if (error) throw error;
       return voiceoverData;
@@ -114,7 +114,7 @@ export default function D_ID() {
       method: "GET",
       headers: {
         accept: "application/json",
-        authorization: process.env.NEXT_PUBLIC_DID_BEARER_TOKEN,
+        authorization: process.env.NEXT_PUBLIC_DID_API_KEY,
       },
     };
     let apiData;
@@ -151,7 +151,7 @@ export default function D_ID() {
       headers: {
         accept: "application/json",
         "content-type": "application/json",
-        authorization: process.env.NEXT_PUBLIC_DID_BEARER_TOKEN,
+        authorization: process.env.NEXT_PUBLIC_DID_API_KEY,
       },
       data: {
         script: {

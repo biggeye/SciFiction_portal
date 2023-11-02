@@ -44,7 +44,7 @@ export default function Scripts() {
 
   const fetchScripts = async () => {
     try {
-      const { data, error } = await supabaseClient.from("script_").select("*");
+      const { data, error } = await supabaseClient.from("master_content").select("*");
       if (error) throw error;
       setScripts(data);
     } catch (error) {

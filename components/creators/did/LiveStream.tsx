@@ -65,7 +65,7 @@ function LiveStream() {
             const response = await fetch(`https://api.d-id.com/talks/streams/${streamIdValue}/ice`, {
               method: 'POST',
               headers: {
-                Authorization: `Bearer ${process.env.NEXT_PUBLIC_DID_BEARER_TOKEN}`,
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_DID_API_KEY}`,
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({

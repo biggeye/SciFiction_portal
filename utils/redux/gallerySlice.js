@@ -6,7 +6,7 @@ export const fetchGalleryImages = createAsyncThunk(
   'gallery/fetchImages',
   async () => {
     const { data, error } = await createServerComponentClient() 
-        .from("replicate_predictions")
+        .from("master_content")
         .select("*", { count: "exact" })
         .order("created_at", { ascending: false })
         .range(page * rowsPerPage, (page + 1) * rowsPerPage - 1);

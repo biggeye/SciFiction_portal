@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     headers: {
       accept: 'application/json',
       'content-type': 'application/json',
-      authorization: process.env.NEXT_PUBLIC_DID_BEARER_TOKEN,
+      authorization: process.env.NEXT_PUBLIC_DID_API_KEY,
     body: JSON.stringify({ source_url }),
   }};
   

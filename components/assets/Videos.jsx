@@ -54,7 +54,7 @@ export default function Videos() {
   }, []);
   const fetchVideos = async (supabaseClient) => {
     try {
-      const { data, error } = await supabaseClient.from("videos_").select("*");
+      const { data, error } = await supabaseClient.from("master_content").select("*");
       if (error) throw error;
       setVideos(data);
     } catch (error) {
@@ -77,7 +77,7 @@ export default function Videos() {
   const deleteVideo = async (event) => {
     setIsLoading(true);
     const { data, error } = await supabaseClient
-      .from("videos_")
+      .from("master_content")
       .delete()
       .eq("uuid", deleteVideoUuid);
     if (!error) {

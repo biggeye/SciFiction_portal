@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const sdpResponse = await fetch(`https://api.d-id.com/talks/streams/${streamId}/sdp`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_DID_BEARER_TOKEN}`,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_DID_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

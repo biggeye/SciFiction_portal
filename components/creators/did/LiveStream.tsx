@@ -22,6 +22,7 @@ function LiveStream() {
       });
 
       const data = await response.json();
+      console.log(data);
       setOffer(data.offer);
       setSessionId(data.sessionId);
       setStreamIdValue(data.streamId);

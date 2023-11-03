@@ -156,6 +156,10 @@ export default function Navbar({ handlePageChange }) {
           action: () => handlePageChange("Img2Img"),
         },
         {
+          name: "Chat",
+          action: () => handlePageChange("Chat"),
+        },
+        {
           name: "Voiceovers",
           action: () => handlePageChange("ElevenLabs"),
         },

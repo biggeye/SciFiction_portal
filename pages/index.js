@@ -18,6 +18,7 @@ import D_ID from "../components/creators/did/DID";
 import ElevenLabs from "../components/creators/xilabs/ElevenLabs";
 import Img2Img from "../components/creators/replicate/Img2Img";
 import Txt2Img from "../components/creators/replicate/Txt2Img";
+import Chat from "../components/creators/openai/Chat";
 
 // Assets
 import Images from "../components/shared/imageGallery";
@@ -74,6 +75,7 @@ export default function Home() {
       {currentPage === "DID" && <D_ID />}
       {currentPage === "Txt2Img" && <Txt2Img />}
       {currentPage === "Img2Img" && <Img2Img />}
+      {currentPage === "Chat" && <Chat />}
 
       {/*Publish*/}
       {currentPage === "Dashboard" && <Dashboard />}

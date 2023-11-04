@@ -74,7 +74,7 @@ function LiveStream() {
       if (event.candidate) {
         // Update ICE status when ICE candidate is found
         setIceStatus('inProgress');
-
+         console.log('ICE Candidate events', peerConnection);
         const { candidate, sdpMid, sdpMLineIndex } = event.candidate;
         try {
           const response = await fetch(`https://api.d-id.com/talks/streams/${streamIdValue}/ice`, {
@@ -93,6 +93,7 @@ function LiveStream() {
           });
 
           if (response.ok) {
+            console.log('response ok', response);
             // Update ICE status to reflect that the candidate was successfully sent
             setIceStatus('sent');
           } else {

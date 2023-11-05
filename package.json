@@ -44,6 +44,7 @@
     "twitter-lite": "^1.1.0",
     "use-supabase": "^2.0.1",
     "uuid": "^9.0.0",
+    "uuidv4": "^6.2.13",
     "video.js": "^8.3.0",
     "wavesurfer.js": "^6.6.4"
   }

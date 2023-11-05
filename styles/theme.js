@@ -15,9 +15,29 @@ const colors = {
   },
 };
 
+// Define your breakpoints for responsive design, if you want to customize them
+const breakpoints = {
+  sm: '320px',
+  md: '768px',
+  lg: '960px',
+  xl: '1200px',
+  '2xl': '1536px',
+};
+
+// Define the color mode config
 const config = {
   initialColorMode: "light",
-  
+  useSystemColorMode: true, // set to true if you want to use the system color mode
+};
+
+// Define styles that respond to color mode
+const styles = {
+  global: (props) => ({
+    body: {
+      bg: props.colorMode === 'dark' ? 'brand.800' : 'brand.50',
+      color: props.colorMode === 'dark' ? 'brand.100' : 'brand.900',
+    },
+  }),
 };
 
 const baseCardStyle = {
@@ -86,10 +106,16 @@ const layerStyles = {
             justifyContent: "space-between",
       borderWidth: '0',
       overflowX: "auto"
-    }
+    },
+    navbarStyle: {
+
+      fontSize: '12px', // Set the font size to 12px
+      color: 'brand.900', // Use color from theme
+    
+  },
+
+    
   };
-
-
 
 const theme = extendTheme({ colors, config, layerStyles });
 

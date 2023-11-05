@@ -29,6 +29,7 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  useTheme
 } from "@chakra-ui/react";
 import {
   RiGalleryLine,
@@ -58,7 +59,7 @@ export default function Navbar({ handlePageChange }) {
     const tabIndex = tabs.findIndex((tab) => tab.name === currentTab);
     return tabIndex !== -1 ? tabIndex : 0; // default to 0 if not found
   };
-
+  const theme = useTheme();
   /*
    const [session, setSession] = useState(null);
    const profileSession = async () => {
@@ -178,13 +179,13 @@ export default function Navbar({ handlePageChange }) {
         borderColor="brand.700"
         borderBottomWidth={1}
         w="full"
-        px={{ base: 1, sm: 3 }}
-        py={2}
+        px={{ base: 0.5, sm: 1 }}
+        py={0.5}
       >
         <Flex alignItems="center" justifyContent="space-between" mx="auto">
           <HStack
             color="brand.900"
-            spacing={4}
+            spacing={3}
             display="flex"
             alignItems="center"
           >
@@ -192,7 +193,7 @@ export default function Navbar({ handlePageChange }) {
               <IconButton
                 display={{ base: "flex", md: "none" }}
                 aria-label="Open menu"
-                fontSize="20px"
+                fontSize="12px"
                 color="brand.900"
                 _dark={{ color: "inherit" }}
                 variant="ghost"
@@ -208,7 +209,7 @@ export default function Navbar({ handlePageChange }) {
                 flexDirection="column"
                 p={2}
                 pb={4}
-                mt={15}
+                mt={5}
                 bg="brand.200"
                 spacing={3}
                 rounded="sm"
@@ -261,8 +262,7 @@ export default function Navbar({ handlePageChange }) {
                   variant="ghost"
                   size="sm"
                   onClick={item.action}
-                  color="brand.900"
-                  layerStyle="navHeader"
+           // Apply the custom navbar style
                 >
                   {item.name}
                 </Button>
@@ -280,6 +280,7 @@ export default function Navbar({ handlePageChange }) {
       </chakra.header>
       <Flex layerStyle="navSubMenu">
         <Tabs
+               style={theme.navbarStyle} 
           defaultIndex={getCurrentTabIndex()}
           borderBottomColor="transparent"
           layerStyle="navSubMenu"
@@ -289,6 +290,7 @@ export default function Navbar({ handlePageChange }) {
             <TabList>
               {selectedTab.tabList.map((item, index) => (
                 <Tab
+                       style={theme.navbarStyle} 
                   size="xs"
                   key={index}
                   py={1}

@@ -27,11 +27,7 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { v4 as uuidv4 } from "uuid";
 
 export default function Chat() {
-  const supabase = useSupabaseClient();
-  const user = useUser(); 
-  const [userId, setUserId] = useState(null);
-  const [chatId, setChatId] = useState(null);
-
+  
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { messages, handleSubmit, input, handleInputChange } = useChat();
   const isDrawer = useBreakpointValue({ base: true, md: false });
@@ -39,15 +35,6 @@ export default function Chat() {
   const bg = useColorModeValue("gray.50", "gray.700");
   const responseBg = useColorModeValue("gray.100", "gray.600");
 
-  useEffect(() => {
-    setUserId(user.id);
-  }, [user.id]);
-
-  useEffect(() => {
-    if (!chatId) {
-      setChatId(uuidv4());
-    }
-  }, [chatId]);
 
   return (
     <Flex direction={{ base: 'column', md: 'row' }}>
@@ -59,7 +46,7 @@ export default function Chat() {
         aria-label="Open Menu"
       />
     ) : (
-      <Text>Hello.</Text>
+      <Text>History</Text>
     )}
   
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>

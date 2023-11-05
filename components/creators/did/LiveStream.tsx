@@ -1,3 +1,4 @@
+/*
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Badge, Box, Button, VStack, Text, Input, Checkbox } from '@chakra-ui/react';
 
@@ -219,6 +220,7 @@ function LiveStream() {
       </Box>
 
       {/* Video Element */}
+/*
       <Box id="video-wrapper">
         <video ref={talkVideoRef} width="400" height="400" autoPlay playsInline></video>
       </Box>
@@ -231,3 +233,4 @@ function LiveStream() {
 }
 
 export default LiveStream;
+*/

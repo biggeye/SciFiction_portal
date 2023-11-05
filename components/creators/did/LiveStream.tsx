@@ -219,7 +219,7 @@ function LiveStream() {
         {renderStatusBadge(streamingStatus)}
       </Box>
 
-      {/* Video Element */}
+      {/* Video Element */
 /*
       <Box id="video-wrapper">
         <video ref={talkVideoRef} width="400" height="400" autoPlay playsInline></video>

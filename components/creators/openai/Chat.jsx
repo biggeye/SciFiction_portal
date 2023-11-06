@@ -1,35 +1,7 @@
-import React, { useState } from "react";
-import {
-  ChakraProvider,
-  Box,
-  VStack,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
-  IconButton,
-  Button,
-  FormControl,
-  Input,
-  InputGroup,
-  useBreakpointValue,
-  Flex,
-  Heading,
-  Collapse,
-  Container,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import React, { useState } from 'react';
+import { Grid, GridItem, Button, useDisclosure, IconButton, VStack, Input, Collapse, Box, Heading, Text } from '@chakra-ui/react';
+import { HamburgerIcon } from '@chakra-ui/icons';
 import { MdImage, MdAudiotrack, MdTextFields, MdOndemandVideo } from 'react-icons/md';
-import { useChat } from "ai/react";
-// import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"; // Uncomment if these are used elsewhere
-
-// Assuming `card` is a CSS module or should be a string like 'card'
-const card = "card"; // replace with actual import or definition
 
 const ToolIcons = {
   Image: MdImage,
@@ -66,7 +38,6 @@ export default function Chat() {
         return <Text>Select a tool from the toolbox.</Text>;
     }
   };
-
   return (
     <ChakraProvider>
       <Flex direction={{ base: 'column', md: 'row' }}>
